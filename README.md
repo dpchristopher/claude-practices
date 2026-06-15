@@ -38,7 +38,7 @@ Built from a real production Claude Code project (June 2026).
 ## The 3 Most Important Practices
 
 1. **Skills First** — before building, check if a skill exists
-2. **Context Budget** — keep main session under 80%; subagents for batch work
+2. **Context Budget** — Claude will flag when context is climbing and suggest next steps; subagents for batch work
 3. **Plan → Fresh Session** — invest in planning, execute in a clean context
 
 ## Session Naming Convention

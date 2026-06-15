@@ -203,7 +203,7 @@ Skills (workflow playbooks loaded on demand)
 
 ### The Context Budget Rule
 
-Keep main session context under 80% utilization. Start thinking about compacting around 60% — not as a hard rule, but as a prompt to ask: am I doing batch work here that should be a subagent or standalone script?
+There is no hard limit. When context is getting high, Claude should flag it and ask if you want to address it — not act unilaterally. If you say yes, it suggests the best path forward: `/compact` with a hint, offloading batch work to a subagent, or starting a fresh session with the plan file as context. The right move depends on what you're doing, not the number.
 
 - Use `/compact` proactively with a hint before autocompact kicks in
 - Delegate research and exploration to subagents — only summaries return
@@ -471,7 +471,7 @@ what you need.
 
 ### Pattern 4: Context Budget Management
 
-- Watch context at 60% — ask if any work should move to subagents; hard limit ~80%
+- When context climbs, flag it and ask — don't act unilaterally; suggest `/compact`, subagents, or fresh session
 - `/compact` proactively with a summary hint: `/compact We're fixing the auth bug in user.py`
 - Use subagents to offload research and exploration
 - Start fresh sessions for new tasks — don't carry context from prior work
