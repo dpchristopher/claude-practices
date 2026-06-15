@@ -21,6 +21,9 @@
 
 ---
 
+## How to Operate
+Invoke `session-workflow` at the start of every session — it covers conversational execution, plan-as-living-log, skills-first rule, and documentation standards.
+
 ## Skills First
 
 Before building anything, check if a skill exists for the task. If a skill matches, invoke it before writing any code.
