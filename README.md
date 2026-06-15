@@ -2,8 +2,6 @@
 
 Portable best practices starter kit for Claude Code projects.
 
-Built from the Opaa Food Management bid automation project (June 2026).
-
 ## Contents
 
 ```
