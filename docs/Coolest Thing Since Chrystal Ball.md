@@ -113,15 +113,15 @@ foreach ($s in @("sql-pro","mcp-developer","pandas-pro","the-fool","debugging-wi
 | Extension ID | What it does |
 |---|---|
 | `anthropic.claude-code` | Claude Code IDE integration |
-| `bagaducedigital.deluge-lang` | Deluge syntax highlighting (Zoho scripting) |
+| `bagaducedigital.deluge-lang` | Deluge syntax highlighting (low-code platform scripting) |
 | `dbaeumer.vscode-eslint` | ESLint linting for JS/React |
 | `dsznajder.es7-react-js-snippets` | React/JSX shorthand snippets |
 | `eamodio.gitlens` | Git blame, history, and branch visualization |
 | `esbenp.prettier-vscode` | Auto-format JS/TS/HTML/CSS on save |
 | `formulahendry.auto-rename-tag` | Auto-rename matching HTML/JSX tags |
 | `gdp.delugelang` | Second Deluge extension (backup highlighting) |
-| `humao.rest-client` | HTTP request runner (.http files) — Zoho API testing |
-| `ms-mssql.mssql` | MSSQL connection, query runner (BOSS database) |
+| `humao.rest-client` | HTTP request runner (.http files) — REST API testing |
+| `ms-mssql.mssql` | MSSQL connection, query runner (SQL Server databases) |
 | `ms-python.black-formatter` | Black auto-format Python on save |
 | `ms-python.python` | Core Python extension |
 | `ms-python.vscode-pylance` | Python intellisense and type checking |
@@ -203,7 +203,7 @@ Skills (workflow playbooks loaded on demand)
 
 ### The Context Budget Rule
 
-Keep main session context under 40% utilization. Target 30% for complex work.
+Keep main session context under 80% utilization. Start thinking about compacting around 60% — not as a hard rule, but as a prompt to ask: am I doing batch work here that should be a subagent or standalone script?
 
 - Use `/compact` proactively with a hint before autocompact kicks in
 - Delegate research and exploration to subagents — only summaries return
@@ -471,7 +471,7 @@ what you need.
 
 ### Pattern 4: Context Budget Management
 
-- Target <40% context utilization (experienced: <30%)
+- Watch context at 60% — ask if any work should move to subagents; hard limit ~80%
 - `/compact` proactively with a summary hint: `/compact We're fixing the auth bug in user.py`
 - Use subagents to offload research and exploration
 - Start fresh sessions for new tasks — don't carry context from prior work
@@ -554,7 +554,7 @@ Don't document what's already in the code. Document the WHY that isn't visible i
 | Build without checking for skills | Reinvents workflow playbooks already encoded | Skills First rule |
 | Skip plan mode | Scope drift, rework | Always plan → then implement in fresh session |
 | Use subagents for concurrent file edits | Merge conflicts, unpredictable state | Worktrees for parallel code changes |
-| Invoke the API directly for BOSS data in Claude Code | Bypasses the MCP tool interface | Use MCP tools (they handle auth, formatting, error handling) |
+| Call external APIs directly when an MCP tool exists | Bypasses the MCP tool interface | Use MCP tools (they handle auth, formatting, error handling) |
 
 ---
 
@@ -665,5 +665,5 @@ accumulating and need a long-lived analyst.
 
 ---
 
-*This starter kit was built from the Opaa Food Management bid automation project.
+*This starter kit was built from a real production Claude Code project.
 It is intentionally project-agnostic — everything here applies to any Claude Code project.*

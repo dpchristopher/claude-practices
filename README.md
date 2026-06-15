@@ -2,6 +2,7 @@
 
 Portable best practices starter kit for Claude Code projects.
 
+Built from a real production Claude Code project (June 2026).
 ## Contents
 
 ```
@@ -32,12 +33,12 @@ Portable best practices starter kit for Claude Code projects.
    copy skills\assumption-archaeologist-SKILL.md "$base\assumption-archaeologist\SKILL.md"
    ```
 3. Create `META_ARCHITECTURE.md` once you have 2+ working tools (use the template)
-4. Read `/docs/BEST_PRACTICES.md` — especially sections 1 (Mental Models) and 5 (Key Patterns)
+4. Read `/docs/Coolest Thing Since Chrystal Ball.md` — especially sections 1 (Mental Models) and 5 (Key Patterns)
 
 ## The 3 Most Important Practices
 
 1. **Skills First** — before building, check if a skill exists
-2. **Context Budget** — keep main session under 40%; subagents for batch work
+2. **Context Budget** — keep main session under 80%; subagents for batch work
 3. **Plan → Fresh Session** — invest in planning, execute in a clean context
 
 ## Session Naming Convention
