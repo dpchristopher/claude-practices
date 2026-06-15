@@ -9,15 +9,21 @@ Built from a real production Claude Code project (June 2026).
 /docs/Coolest Thing Since Chrystal Ball.md  — Complete reference: personal loadout, mental models, patterns, anti-patterns
 /templates/CLAUDE.md        — CLAUDE.md template (fill in blanks, keep under 200 lines)
 /templates/META_ARCHITECTURE.md  — META_ARCHITECTURE.md template
-/skills/thinking-partner-SKILL.md       — Thinking partner skill (ideation/exploration)
-/skills/socratic-examiner-SKILL.md      — Socratic examiner skill (stress-test plans)
+/skills/thinking-partner-SKILL.md       — Thinking partner (ideation/exploration)
+/skills/socratic-examiner-SKILL.md      — Socratic examiner (stress-test plans)
 /skills/assumption-archaeologist-SKILL.md — Assumption archaeologist (surface premises)
+  Note: these three are designed as a linked system — thinking-partner opens up the
+  problem space, socratic-examiner stress-tests what emerged, assumption-archaeologist
+  digs up what both missed. Use them in sequence on any non-trivial decision.
 ```
 
 ## Quick Start
 
 1. Copy `/templates/CLAUDE.md` to your project root — fill in the blanks
 2. Register the thinking-partner skills globally (one-time per machine):
+   > Note: there's a popular community `thinking-partner` skill (mattnowdev, 110+ stars)
+   > that uses a structured mental models framework. This one is different — more
+   > conversational, less prescriptive. Both are worth knowing about.
    ```bash
    # macOS/Linux
    mkdir -p ~/.claude/skills/{thinking-partner,socratic-examiner,assumption-archaeologist}
