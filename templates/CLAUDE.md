@@ -20,17 +20,25 @@
 
 ---
 
-## Session Start Protocol
+## Session Start Protocol — Mandatory, No Exceptions
 
-At the start of every session Claude must:
+**When starting a new project or any new session, invoke BOTH skills in this order before doing anything else:**
 
-1. Read `META_ARCHITECTURE.md` — what exists, tools, data flow, known gaps
-2. Check `.claude/plans/` — is there an active plan? Read it.
-3. Read `.claude/HANDOFF.md` — last session blockers and next action
-4. Check skills — does the task match a registered skill? Invoke it before writing code.
-5. Name the session — historical event on today's date, theme connects to the work
+1. Invoke `/session-workflow` — establishes protocol, reads META Toolkit, names which skills go in which plan phases
+2. Invoke `/superpowers:brainstorming` — explores the project vision, creates tasks, drafts approach using the toolkit context from step 1
 
-If META_ARCHITECTURE.md or CLAUDE.md don't exist yet, create them before starting work.
+Do not skip either. Do not reorder. Do not choose one over the other. Both together, in that order.
+
+**Then Claude must:**
+
+3. Read `META_ARCHITECTURE.md` — what exists, tools, data flow, known gaps
+4. Check `.claude/plans/` — is there an active plan? Read it.
+5. Read `.claude/HANDOFF.md` — last session blockers and next action
+6. Name the session — historical event on today's date, theme connects to the work
+
+If META_ARCHITECTURE.md doesn't exist yet: create it before starting work. If no plan exists: create one before building anything.
+
+**This rule overrides all other skill auto-triggering. Session-workflow + superpowers:brainstorming first, always.**
 
 ---
 

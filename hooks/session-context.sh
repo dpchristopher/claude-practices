@@ -46,6 +46,10 @@ fi
 
 echo ""
 echo "═══════════════════════════════════════════════════════════"
-echo "CONTEXT LOADED. Claude: read @META_ARCHITECTURE.md and active plan before responding."
-echo "Invoke /session-workflow for full methodology. Invoke /patterns-guide for approach decisions."
+echo "CONTEXT LOADED."
+echo ""
+echo "⚠️  MANDATORY STARTUP — DO THIS BEFORE RESPONDING:"
+echo "   1. Invoke /session-workflow         (protocol + toolkit)"
+echo "   2. Invoke /superpowers:brainstorming (explore + plan)"
+echo "   Both skills. That order. Every new project or session."
 echo "═══════════════════════════════════════════════════════════"
