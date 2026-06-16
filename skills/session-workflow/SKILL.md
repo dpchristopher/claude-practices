@@ -1,47 +1,56 @@
 ---
 name: session-workflow
-description: Meta-operational playbook for how to run a Claude Code session. Apply at
-  the start of any session or when starting a new project. Covers conversational
-  execution, plan-as-living-log, skills-first rule, and documentation standards.
+description: Meta-operational playbook for how to run a Claude Code session. Apply at the start of any session, when starting a new project, or when you need to know how to work methodically. Covers session start/end protocol, skills-first rule, conversational execution, plan-as-living-log, TDD, ML eval discipline, and documentation standards.
 triggers:
   - starting a new session
   - new project setup
   - beginning a plan
   - how should we work
   - session workflow
+  - what's the protocol
+  - how do I approach this
 ---
 
 # Session Workflow
 
 This skill defines how to operate within a Claude Code session — not what to build, but how to work.
 
-## 1. Session Start Checklist
+## 1. Session Start — Non-Negotiable
 
 When starting any session:
 
-1. **Read CLAUDE.md** — project rules, hard constraints, tech stack
+1. **Read CLAUDE.md** — rules, hard constraints, tech stack
 2. **Read META_ARCHITECTURE.md** — what exists, data flow, known gaps, decision tree
-3. **Check for a plan file** — `.claude/plans/` or project root; if one exists, read it before doing anything
-4. **Check skills** — does the task match any registered skill? Invoke before writing code
-5. **Name the session** — historical event on today's date, theme connects to the work
+3. **Check `.claude/plans/`** — if a plan exists, read it before doing anything
+4. **Read `.claude/HANDOFF.md`** — last session blockers and next priority action
+5. **Check skills** — does the task match a registered skill? Invoke before writing code
+6. **Name the session** — historical event on today's date, theme connects to the work
 
-If CLAUDE.md or META_ARCHITECTURE.md don't exist yet, create them before starting work.
+If CLAUDE.md or META_ARCHITECTURE.md don't exist yet: create them before starting work.
 
-## 2. Skills First Rule
+---
 
-Before building anything, writing any code, or making any architectural decision — check if a skill exists for the task.
+## 2. Skills First — The Non-Negotiable Rule
 
-**Key skills to check:**
-- `thinking-partner` — ideation, exploration, before committing to an approach
-- `socratic-examiner` — stress-test a plan before building it
-- `assumption-archaeologist` — surface hidden premises in a plan
-- `labarr-ml` — any machine learning, forecasting, or analytics work
-- `sql-pro` — complex SQL queries, CTEs, window functions
-- `pandas-pro` — DataFrame pipelines, data cleaning
-- `debugging-wizard` — when stuck on a bug
-- `the-fool` — adversarial challenge before a major design decision
+Before building anything, check if a skill exists for the task.
+
+| Task involves... | Invoke |
+|---|---|
+| Ideation or exploration | `thinking-partner` |
+| Committing to a plan | `socratic-examiner` |
+| Something feels off | `assumption-archaeologist` |
+| Any ML, forecasting, analytics | `labarr-ml` |
+| Complex SQL | `sql-pro` |
+| DataFrame / data pipelines | `pandas-pro` |
+| Stuck on a bug | `debugging-wizard` |
+| Major design decision | `the-fool` |
+| Choosing an approach or pattern | `patterns-guide` |
+
+**Trio handoff:** thinking-partner (explore) → socratic-examiner (stress-test) → assumption-archaeologist (excavate hidden premises). Claude manages handoffs automatically.
 
 If a skill matches even 1% of the task, invoke it.
+
+---
 
 ## 3. Conversational Execution Pattern
 
@@ -51,47 +60,114 @@ The correct pattern:
 - Surface findings at each phase transition before moving on
 - When something unexpected comes up, say it out loud — don't just note it in a doc
 - Ask "does this change anything?" at phase transitions
-- Give the user natural pause points to redirect or ask questions
-- If you were lazy or incomplete, the conversational style lets the user catch it
+- Give natural pause points to redirect or ask questions
+- Reshape the plan mid-stream when findings change what matters
 
-**The test:** Could the user catch a lazy step? If execution was silent, probably not. If conversational, yes.
+**The test:** Could the user catch a lazy step? Silent execution hides it. Conversational execution exposes it.
+
+---
 
 ## 4. Plan File as Living Log
 
-A plan file is not just a checklist. It is a running log that survives context compression.
+A plan file is not a checklist — it is a running log that survives context compression.
 
 - After completing each phase, write key findings into the plan's Running Notes section before moving on
-- Write what Phase N+1 will need to know: surprises, priority changes, things that contradict the original plan
-- If the session ended right now and someone started fresh with only the plan file, could they pick up Phase N+1 without repeating Phase N? If yes, the notes are good.
+- Write what Phase N+1 needs to know: surprises, priority changes, contradictions
+- If the session ended right now and someone started fresh with only the plan file, could they pick up Phase N+1 without repeating Phase N? If yes, notes are good.
 
-**The test:** Notes should be good enough that a fresh session can resume cold.
+---
 
-## 5. Documentation Standards
+## 5. TDD Pattern
 
-- **CLAUDE.md** — rules, constraints, tech stack. Keep under 200 lines. Never put tool inventory here.
+**For code:**
+1. Write failing test defining expected behavior
+2. Write minimum implementation to pass
+3. Refactor — don't change tests
+
+**For ML:**
+1. Define eval metric and acceptance threshold *before* training (e.g., "F1 > 0.82 on holdout")
+2. Write evaluation code first
+3. Train baseline
+4. Evaluate against threshold — pass/fail
+5. Tune only if you failed — never tune before establishing a baseline
+
+Holdout test set is never touched during development. Used once: final evaluation before production.
+
+---
+
+## 6. Documentation Standards
+
+- **CLAUDE.md** — rules, constraints, tech stack. Under 200 lines. No tool inventory.
 - **META_ARCHITECTURE.md** — what exists, data flow, decision tree, known gaps. Update after every session that changes the system.
-- **Session docs** — `session_YYYY-MM-DD-[name].md` in project root or `docs/`
-- **Plan files** — `.claude/plans/[session-name].md`
+- **`.claude/plans/[session-name].md`** — active plan, living log with running notes
+- **`.claude/HANDOFF.md`** — replaced each session; last session blockers + next action
+- **`.claude/rules/*.md`** — detailed rules that auto-load; keep CLAUDE.md lean by moving detail here
 
-Update META_ARCHITECTURE.md before closing any session that added or changed a tool.
+---
 
-## 6. New Project Setup
+## 7. New Project Setup
 
 When starting a new project from scratch:
 
-1. Create `CLAUDE.md` from template (in `Desktop/claude-practices/templates/CLAUDE.md`)
-2. Create `META_ARCHITECTURE.md` from template (in `Desktop/claude-practices/templates/META_ARCHITECTURE.md`)
-3. Create `.gitignore` — always include `.env`, `venv/`, `__pycache__/`, `*.pyc`, raw data folders
-4. Initialize git and create first branch — never work directly on main
-5. Create `requirements.txt` and `venv/` before writing any Python
+1. Create `CLAUDE.md` from template (`claude-practices/templates/CLAUDE.md`)
+2. Create `META_ARCHITECTURE.md` from template (`claude-practices/templates/META_ARCHITECTURE.md`)
+3. Copy `.claude/rules/` from template (`claude-practices/templates/.claude/rules/`)
+4. Create `.gitignore` — always include `.env`, `venv/`, `__pycache__/`, `*.pyc`, raw data folders
+5. Initialize git and create first branch — never work directly on main
+6. Create `requirements.txt` with pinned versions before writing any Python
+7. For ML projects: create `experiments/` directory structure
 
-## 7. Context Management
+---
 
-There is no hard context limit. When context is climbing, flag it and ask — don't act unilaterally.
+## 8. Context Management
 
-If the user wants to address it, suggest the right move based on what's happening:
-- `/compact` with a summary hint — for general context bloat
-- Offload batch work to a subagent — for repetitive processing tasks
-- Fresh session with plan file as context — for major phase transitions
+There is no hard limit. When context is climbing, flag it and ask — never act unilaterally.
 
-Never process large batches (50+ files) sequentially in the main session — use standalone scripts or subagents.
+Options when context is high:
+- `/compact` with a summary hint — for general bloat
+- Offload batch work to a subagent — for repetitive processing
+- Fresh session with plan file + HANDOFF as context — for major phase transitions
+
+Never process 50+ files sequentially in the main session — use standalone scripts or subagents.
+
+---
+
+## 9. Session End — Every Session
+
+Before closing any session:
+
+1. Update `META_ARCHITECTURE.md` if any tool, data flow, or gap changed
+2. Run `/code-review` if significant code was written
+3. Write `.claude/HANDOFF.md` (replace, not append):
+   ```
+   ## Completed
+   - [bullet]
+   ## Blockers / didn't work
+   - [bullet]
+   ## Next action (priority 1)
+   - [bullet]
+   ## Test state
+   - [bullet]
+   ## Data/artifact state (if ML)
+   - [bullet]
+   ```
+4. Commit with session name in commit message: `"[session-name]: [what and why]"`
+
+---
+
+## 10. ML / Automation Sessions
+
+**Additional start steps for ML sessions:**
+- Invoke `/labarr-ml` before designing any pipeline
+- Review `experiments/manifest.json` for current best model
+- Check `data_manifest.json` in latest experiment for dataset version
+
+**Additional end steps for ML sessions:**
+- Save experiment artifacts to `experiments/NNN-name/` before closing
+- Update `experiments/manifest.json` with this run's results
+- Document findings in `experiments/NNN-name/README.md`
+
+**For automation sessions:**
+- Test all scripts locally before scheduling (see `.claude/rules/automation.md`)
+- Verify idempotence before marking done
+- Update automation pipeline table in `META_ARCHITECTURE.md`
