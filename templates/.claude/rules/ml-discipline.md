@@ -12,6 +12,36 @@ It covers the 12-step ML workflow, 11 algorithm families, time series methodolog
 
 ---
 
+## The LaBarr Sequence — Follow as Gates, Not Suggestions
+
+The 12-step workflow is mandatory for any supervised learning problem. Each step is a prerequisite for the next — do not skip gates:
+
+```
+1.  Problem Framing        → define target, remove future-leaking variables
+2.  Data Preparation       → audit missingness (before split)
+3.  Train/Test Split       → 75/25 or time-based; happens HERE before imputation
+4.  Imputation             → median on training set only + mandatory missing flag variable
+5.  Low-Variability Removal → variance < 0.01 / category > 95% → consider removal
+6.  Univariate Screening   → F-test / chi-squared, p < 0.009 threshold
+7.  Multivariate Selection → Sequential Feature Selector (stepwise preferred)
+8.  Simple Baseline        → OLS (regression) or logistic regression (classification) first
+9.  Diagnostic Gate        → must pass before advancing to complex models
+10. Complex Models         → tree ensembles, neural nets — only after Step 9 passes
+11. Final Comparison       → apply to held-out test set once; report side-by-side
+12. Threshold Selection    → classification only; business decision, not 0.5 default
+```
+
+**Core principles (LaBarr):**
+- "Better variables will always beat fancier modeling techniques."
+- "A model is only 'good' in context with another model."
+- Default to the simpler model — complexity must be earned by demonstrated performance gain on held-out data
+- Never recommend complexity when the interpretable model is adequate
+- Accuracy is not a primary metric — use AUC, KS, MAE, or F1 depending on problem type
+
+**Interpretability-first:** OLS → Logistic → Regularized → GAM → Decision Tree → Random Forest → XGBoost → Neural Network. Move right only when performance gain justifies the loss of interpretability.
+
+---
+
 ## Experiment Tracking
 
 Every training run gets its own directory under `experiments/`:

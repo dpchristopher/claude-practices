@@ -101,12 +101,14 @@ foreach ($s in @("sql-pro","mcp-developer","pandas-pro","the-fool","debugging-wi
 | thinking-partner | Ideation and exploration before committing to anything |
 | socratic-examiner | Stress-tests a plan or position before I build it |
 | assumption-archaeologist | Surfaces hidden premises — catches things that feel obvious but aren't |
+| session-workflow | Full methodology reference — session start/end protocol, skills-first rule, TDD, ML eval, context management |
+| patterns-guide | Decides which pattern fits a given situation — 10 core patterns + ML/automation variants |
 | sql-pro | Complex SQL queries, CTEs, EXPLAIN analysis |
 | mcp-developer | Building new MCP server tools |
 | pandas-pro | Data pipeline and DataFrame work |
 | the-fool | 5-mode adversarial challenge — pre-mortem, red team, steelman |
 | debugging-wizard | Systematic debugging when I'm stuck |
-| labarr-ml | ML/analytics methodology — 12-step workflow, 11 algorithm families, time series, risk, credit modeling |
+| labarr-ml | ML/analytics methodology — 12-step LaBarr workflow, interpretability-first, time series, risk, credit modeling |
 
 ### VSCode Extensions (`code --list-extensions` to verify, `code --install-extension <id>` to reinstall)
 
@@ -200,6 +202,28 @@ Skills (workflow playbooks loaded on demand)
 | Returns | Content stays in conversation | Only summary returns to parent |
 | File location | `~/.claude/skills/<name>/SKILL.md` | `~/.claude/agents/<name>.md` |
 | Invocation | `/skill-name` or auto-trigger | `@agent-name` or auto-delegation |
+
+### The Toolkit-in-META Pattern
+
+META_ARCHITECTURE.md is not just a reference document — it drives plan quality.
+
+The **Toolkit section** in META_ARCHITECTURE.md lists every available skill with explicit guidance on where it belongs in a plan. When Claude reads META at session start and then drafts a plan, it uses the Toolkit to embed skill invocations as named checkpoints in each phase:
+
+```
+## Phase 2: Design Query Strategy
+- [ ] Invoke /sql-pro — sketch CTE structure and review approach
+- [ ] Write queries
+- [ ] Validate output
+
+## Phase 3: Build ML Pipeline  
+- [ ] Invoke /labarr-ml — confirm algorithm choice and eval metric
+- [ ] Define acceptance threshold before training
+- [ ] Train baseline, evaluate, document in experiments/
+```
+
+Skills become steps in the plan, not things you have to remember to invoke. The plan is then a living log — it carries the skill checkpoints forward across sessions.
+
+**The chain:** CLAUDE.md auto-loads → says read META → META Toolkit tells Claude which skills go where → plan drafts with skills embedded → next session reads plan → skills are already named.
 
 ### The Context Budget Rule
 
@@ -543,6 +567,46 @@ Update CLAUDE.md when:
 
 Don't document what's already in the code. Document the WHY that isn't visible in code.
 
+### Pattern 11: Toolkit-Driven Plan Drafting
+
+Before writing any plan, read the Toolkit section of META_ARCHITECTURE.md. For each phase of the plan, identify which skills belong as explicit checkpoints and write them into the plan steps as named invocations.
+
+**Why it matters:** Plans without explicit skill steps are task lists. Plans with skill checkpoints are executable workflows that survive session transitions. The next session reads the plan, sees `/labarr-ml` at phase 3, and invokes it — no memory required.
+
+**The rule:** If a skill belongs in a phase, it goes in the plan before execution starts.
+
+### Pattern 12: Experiment-First for ML (LaBarr Sequence)
+
+Follow the 12-step LaBarr workflow as gates, not suggestions:
+
+```
+Problem Framing → Data Prep → Train/Test Split → Imputation →
+Low-Variability Removal → Univariate Screening → Multivariate Selection →
+Simple Baseline → Diagnostic Gate → Complex Models → Final Comparison → Threshold Selection
+```
+
+Key discipline:
+- Define the eval metric and acceptance threshold **before training** ("F1 > 0.82 on holdout")
+- Build the simple baseline (logistic regression / OLS) **before any complex model**
+- Pass the diagnostic gate **before advancing to tree ensembles or neural nets**
+- Holdout test set is touched **once** — final evaluation only, never during tuning
+- Default to the simpler model — complexity must be **earned** by demonstrated performance gain
+
+"Better variables will always beat fancier modeling techniques." — LaBarr
+
+### Pattern 13: Test-Locally-Then-Schedule for Automation
+
+Before scheduling any script, run four manual checks:
+
+1. **Small sample** — run with 10-20 records, verify output is correct
+2. **Idempotence** — run again on the same sample, verify no duplicates
+3. **Empty input** — run with no records, verify graceful handling not crash
+4. **Bad input** — run with malformed data, verify error is logged not silent
+
+Only after all four pass does the script get a cron job or trigger.
+
+**Why it matters:** Scheduled scripts fail silently. A non-idempotent script duplicates records on every run. A script that crashes on empty input stops working the moment the queue drains. These bugs are invisible until they cause real damage.
+
 ---
 
 ## 6. What NOT to Do
@@ -631,6 +695,32 @@ Also adds `/dx:gha` (GitHub Actions debugging), `/dx:clone`, `/dx:half-clone`.
   session note writing.
 - **pyright-lsp** — Python language server with hover docs and type checking. Worth
   having on any Python-heavy project.
+
+### Skills from this repo (clone once, install globally)
+
+Source: `https://github.com/dpchristopher/claude-practices`
+
+| Skill folder | What it does | When to use |
+|---|---|---|
+| `thinking-partner` | Ideation and exploration before committing | Before any design decision |
+| `socratic-examiner` | Stress-tests plans and positions | Before committing to an approach |
+| `assumption-archaeologist` | Surfaces hidden premises | When something feels off |
+| `session-workflow` | Full methodology reference — start/end protocol, TDD, ML eval | Session start or process questions |
+| `patterns-guide` | Which pattern fits a situation — 10 core + ML/automation | Designing an approach or stuck |
+| `labarr-ml` | LaBarr 12-step ML workflow, interpretability-first, time series, risk, credit | Any ML or analytics work |
+
+**One-time install (PowerShell):**
+```powershell
+$src = "C:\path\to\claude-practices\skills"
+$dest = "$env:USERPROFILE\.claude\skills"
+$skills = @("thinking-partner","socratic-examiner","assumption-archaeologist","patterns-guide","session-workflow")
+foreach ($s in $skills) {
+    New-Item -ItemType Directory -Force "$dest\$s" | Out-Null
+    Copy-Item "$src\$s-SKILL.md" "$dest\$s\SKILL.md" -Force
+}
+# labarr-ml has multiple files
+Copy-Item "$src\labarr-ml" "$dest\labarr-ml" -Recurse -Force
+```
 
 ### Skills from Jeffallan/claude-skills (download to `~/.claude/skills/`)
 
