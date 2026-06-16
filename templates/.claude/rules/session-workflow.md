@@ -16,6 +16,14 @@ If META_ARCHITECTURE.md doesn't exist yet, create it. If no plan exists, create 
 
 ---
 
+## Plan Drafting — Embed Skills Explicitly
+
+When drafting any plan, read the **Toolkit section of META_ARCHITECTURE.md** first. For each phase of the plan, identify which skills belong as explicit checkpoints and write them into the plan steps as `- [ ] Invoke /skill-name — [what to do with it]`.
+
+Skills are not optional extras — they are named steps in the plan. If a skill belongs in a phase, it goes in the plan explicitly before execution starts. This is what makes plans reproducible: the next session reads the plan and knows exactly which skills to invoke and when.
+
+---
+
 ## Skills First — The Non-Negotiable Rule
 
 Before building anything, ask: "Is there a skill for this?"
