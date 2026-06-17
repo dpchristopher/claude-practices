@@ -1,9 +1,9 @@
 # [Project Name] — Meta Architecture
 
-> **Read this first** when starting any new session on this project.  
-> Last updated: [date] ([session name])
+> **One-liner:** [What this project is and what it does — complete this before anything else.]  
+> **Read this first** at every session start. Last updated: [date] ([session name])
 
-This document maps every built tool, how they connect, when to use each one, and what still needs to be built. CLAUDE.md covers rules — this covers **what exists and how to navigate it**.
+Tool map, data flow, decision tree, known gaps. CLAUDE.md covers rules — this covers **what exists and how to navigate it**.
 
 ---
 

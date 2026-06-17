@@ -45,6 +45,17 @@ docs/
 
 ---
 
+## Professional Setup (Multi-Project)
+
+If you're running multiple client engagements or projects, the setup has two layers:
+
+- **Global `~/.claude/CLAUDE.md`** — toolkit map + session protocol that fires every turn, every project. Fill in `templates/global-CLAUDE.md` and place it there. **Never commit this file** — it's personal to your machine.
+- **Per-project `.claude/`** — lean CLAUDE.md, META_ARCHITECTURE.md, rules, plans, HANDOFF. Use `/init` or copy templates manually for each new project.
+
+See [docs/multi-project-setup.md](docs/multi-project-setup.md) for the full guide, first-session checklist, and how to verify the hook is firing.
+
+---
+
 ## Quick Start
 
 ### 1. Copy templates to your project
