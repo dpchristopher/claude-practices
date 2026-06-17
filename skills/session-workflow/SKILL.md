@@ -137,8 +137,9 @@ Never process 50+ files sequentially in the main session — use standalone scri
 Before closing any session:
 
 1. Update `META_ARCHITECTURE.md` if any tool, data flow, or gap changed
-2. Run `/code-review` if significant code was written
-3. Write `.claude/HANDOFF.md` (replace, not append):
+2. **If any skills were added, removed, or renamed:** update the Toolkit table in `META_ARCHITECTURE.md` — add the new row, remove the stale one. The table is the single source of truth for which skills apply to this project. A stale table means plans won't embed the right skills next session.
+3. Run `/code-review` if significant code was written
+4. Write `.claude/HANDOFF.md` (replace, not append):
    ```
    ## Completed
    - [bullet]
@@ -151,7 +152,7 @@ Before closing any session:
    ## Data/artifact state (if ML)
    - [bullet]
    ```
-4. Commit with session name in commit message: `"[session-name]: [what and why]"`
+5. Commit with session name in commit message: `"[session-name]: [what and why]"`
 
 ---
 

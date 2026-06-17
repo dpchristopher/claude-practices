@@ -1,150 +1,76 @@
 # [Project Name] — Developer Context
 
-> **At the start of every session:** Read @META_ARCHITECTURE.md, check `.claude/plans/` for an active plan, and read `.claude/HANDOFF.md` for last session blockers. Do this before asking what to work on.
+> **Session start:** Read META_ARCHITECTURE.md → check `.claude/plans/` → read `.claude/HANDOFF.md`. Do this before asking what to work on.
 
 ---
 
-## Who I am
-[Your role, company, what the project does. 1-2 sentences.]
+## Project
+
+[One sentence: what this project does and who it's for.]
+
+**Stack:** [language/version] · [framework] · [database] · [key libs]
 
 ---
 
-## Hard Rules — Never Break These
+## Hard Rules
 
-- **NEVER commit .env files or API keys to GitHub**
-- **NEVER hardcode credentials, connection strings, or tokens in any file**
-- **NEVER push directly to main — always use a feature branch**
-- **ALWAYS add .env, venv/, __pycache__/, raw data dirs to .gitignore before first commit**
-- **NEVER process 50+ items sequentially in the main Claude Code session — use scripts or subagents**
+- NEVER commit `.env` files or credentials
+- NEVER push directly to main — always use a feature branch
+- NEVER process 50+ items sequentially — use scripts or subagents
+- ALWAYS add `.env`, `venv/`, `__pycache__/`, raw data dirs to `.gitignore`
 - [Add project-specific rules here]
 
 ---
 
-## Session Start Protocol — Mandatory, No Exceptions
+## Session Start — Mandatory
 
-**When starting a new project or any new session, invoke BOTH skills in this order before doing anything else:**
-
-1. Invoke `/session-workflow` — establishes protocol, reads META Toolkit, names which skills go in which plan phases
-2. Invoke `/superpowers:brainstorming` — explores the project vision, creates tasks, drafts approach using the toolkit context from step 1
-
-Do not skip either. Do not reorder. Do not choose one over the other. Both together, in that order.
-
-**Then Claude must:**
-
-3. Read `META_ARCHITECTURE.md` — what exists, tools, data flow, known gaps
-4. Check `.claude/plans/` — is there an active plan? Read it.
-5. Read `.claude/HANDOFF.md` — last session blockers and next action
-6. Name the session — historical event on today's date, theme connects to the work
-
-If META_ARCHITECTURE.md doesn't exist yet: create it before starting work. If no plan exists: create one before building anything.
-
-**This rule overrides all other skill auto-triggering. Session-workflow + superpowers:brainstorming first, always.**
+1. Invoke `/session-workflow` — reads Toolkit, sets protocol
+2. Invoke `/superpowers:brainstorming` — explore before building
+3. Read `META_ARCHITECTURE.md`, active plan, `HANDOFF.md`
+4. Name the session — historical event on today's date, theme connects to the work
 
 ---
 
-## Skills First
+## Toolkit — Skills for This Project
 
-Before building anything, check if a skill exists. If a skill matches even 1% of the task, invoke it.
+> Before building anything: check if a skill applies. Invoke if there's even a 1% chance it fits.
 
-| Skill | When to invoke |
+| When... | Invoke |
 |---|---|
-| `thinking-partner` | Ideation, exploration, before committing to any approach |
-| `socratic-examiner` | Stress-test a plan before building it |
-| `assumption-archaeologist` | Something feels off but you can't name why |
-| `labarr-ml` | Any ML, forecasting, analytics, or modeling work |
-| `sql-pro` | Complex queries, CTEs, window functions, EXPLAIN |
-| `pandas-pro` | DataFrame pipelines, data cleaning, memory optimization |
-| `debugging-wizard` | Stuck on a bug — reproduce → isolate → hypothesize → fix |
-| `the-fool` | Adversarial challenge before any major design decision |
-| `patterns-guide` | Designing an approach and need to know which pattern fits |
-| `session-workflow` | Need the full methodology reference for this session |
-
-**Trio handoff:** thinking-partner (explore) → socratic-examiner (stress-test) → assumption-archaeologist (excavate hidden premises). Claude manages the handoffs — you don't need to.
+| Ideation, exploring options | `/thinking-partner` |
+| Stress-testing a plan | `/socratic-examiner` |
+| Something feels off | `/assumption-archaeologist` |
+| Any ML, forecasting, analytics | `/labarr-ml` |
+| Claude API / AI integration | `/claude-api` |
+| Data pipelines, pandas | `/pandas-pro` |
+| Complex SQL | `/sql-pro` |
+| Stuck on a bug | `/debugging-wizard` |
+| Major design decision | `/the-fool` |
+| Significant code written | `/code-review` |
+| [Project-specific task] | `/[skill]` |
 
 ---
 
-## Session End Protocol
+## Session End
 
-At the end of every session, write `.claude/HANDOFF.md`:
+Write `.claude/HANDOFF.md` (replace, not append):
 
-```markdown
-# Handoff — [Date] [Session Name]
+```
 ## Completed
-- [bullet]
-## Blockers / didn't work
-- [bullet]
+## Blockers
 ## Next action (priority 1)
-- [bullet]
 ## Test state
-- [bullet]
-## Data/artifact state (if ML)
-- [bullet]
 ```
 
-This file is replaced each session. It is the first thing read at the next session start.
+Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
 ---
 
 ## Division of Responsibility
 
-- **Claude Code** → builds tools, runs scripts, queries databases, edits files, runs tests
-- **[Other tool/system]** → [what it handles that Claude Code cannot]
-- When a task requires [external system] — stop and flag it
+- **Claude Code** → builds, scripts, queries, edits, tests
+- **[External system]** → [what it handles]
 
 ---
 
-## Tech Stack
-
-- **[Primary language]** — [version, key libs]
-- **[Database]** — [connection method, driver]
-- **[Framework]** — [what it does in this project]
-- **[Other]** — [purpose]
-
----
-
-## Session Naming Convention
-
-Historical event on today's date. Theme connects to the work.  
-Add to commit messages and session doc filenames.
-
-Example: June 16 → "House Divided" (foundational restructuring session)
-
----
-
-## [Language] Rules
-
-- [Formatting tool] for formatting
-- Virtual environment for every project
-- ALL credentials in .env — load with python-dotenv
-- requirements.txt in every project with pinned versions
-
----
-
-## ML / Automation Rules
-
-- See `.claude/rules/ml-discipline.md` for experiment tracking, reproducibility, pitfalls
-- See `.claude/rules/automation.md` for idempotence, error handling, scheduling
-- Always invoke `/labarr-ml` before designing any ML pipeline
-- Experiment artifacts live in `./experiments/NNN-name/` — never scattered
-
----
-
-## Key Terminology
-
-| Term | Meaning |
-|---|---|
-| [term] | [definition] |
-
----
-
-## File Conventions
-
-- Session docs → `session_YYYY-MM-DD-[name].md`
-- Plans → `.claude/plans/[session-name].md`
-- Handoff → `.claude/HANDOFF.md` (replaced each session)
-- Rules → `.claude/rules/*.md` (auto-loaded with CLAUDE.md)
-- Experiments → `experiments/NNN-name/` (if ML project)
-
----
-
-*See META_ARCHITECTURE.md for tool map, data flow, decision tree, and known gaps.*
+*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 80 lines.*

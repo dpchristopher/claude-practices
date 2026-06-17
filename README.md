@@ -33,11 +33,26 @@ skills/
   assumption-archaeologist-SKILL.md ← Surface hidden premises
   patterns-guide-SKILL.md          ← Which pattern to use for any situation
   session-workflow/SKILL.md        ← Full methodology reference
+  init/SKILL.md                    ← Scaffold a new project from this template
   labarr-ml/                       ← ML methodology (12-step workflow, algorithm families)
 
+hooks/
+  session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
+
 docs/
-  Coolest Thing Since Chrystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
+  Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
 ```
+
+---
+
+## Professional Setup (Multi-Project)
+
+If you're running multiple client engagements or projects, the setup has two layers:
+
+- **Global `~/.claude/CLAUDE.md`** — toolkit map + session protocol that fires every turn, every project. Fill in `templates/global-CLAUDE.md` and place it there. **Never commit this file** — it's personal to your machine.
+- **Per-project `.claude/`** — lean CLAUDE.md, META_ARCHITECTURE.md, rules, plans, HANDOFF. Use `/init` or copy templates manually for each new project.
+
+See [docs/multi-project-setup.md](docs/multi-project-setup.md) for the full guide, first-session checklist, and how to verify the hook is firing.
 
 ---
 
@@ -69,19 +84,20 @@ Replace every `[bracketed]` section with your project's specifics. Keep it under
 ```bash
 # macOS/Linux
 dest=~/.claude/skills
-mkdir -p $dest/{thinking-partner,socratic-examiner,assumption-archaeologist,patterns-guide,session-workflow,labarr-ml}
+mkdir -p $dest/{thinking-partner,socratic-examiner,assumption-archaeologist,patterns-guide,session-workflow,init,labarr-ml}
 cp skills/thinking-partner-SKILL.md $dest/thinking-partner/SKILL.md
 cp skills/socratic-examiner-SKILL.md $dest/socratic-examiner/SKILL.md
 cp skills/assumption-archaeologist-SKILL.md $dest/assumption-archaeologist/SKILL.md
 cp skills/patterns-guide-SKILL.md $dest/patterns-guide/SKILL.md
 cp skills/session-workflow/SKILL.md $dest/session-workflow/SKILL.md
+cp skills/init/SKILL.md $dest/init/SKILL.md
 cp -r skills/labarr-ml $dest/
 ```
 
 ```powershell
 # Windows (PowerShell)
 $dest = "$env:USERPROFILE\.claude\skills"
-$skills = @("thinking-partner","socratic-examiner","assumption-archaeologist","patterns-guide","session-workflow")
+$skills = @("thinking-partner","socratic-examiner","assumption-archaeologist","patterns-guide","session-workflow","init")
 foreach ($s in $skills) {
     New-Item -ItemType Directory -Force "$dest\$s" | Out-Null
 }
@@ -90,12 +106,28 @@ Copy-Item skills\socratic-examiner-SKILL.md "$dest\socratic-examiner\SKILL.md"
 Copy-Item skills\assumption-archaeologist-SKILL.md "$dest\assumption-archaeologist\SKILL.md"
 Copy-Item skills\patterns-guide-SKILL.md "$dest\patterns-guide\SKILL.md"
 Copy-Item skills\session-workflow\SKILL.md "$dest\session-workflow\SKILL.md"
+Copy-Item skills\init\SKILL.md "$dest\init\SKILL.md"
 Copy-Item skills\labarr-ml "$dest\labarr-ml" -Recurse
 ```
 
-### 4. (Optional) Add the SessionStart hook
+### 4. Install the SessionStart hook (this IS continuation)
 
-Add to your project's `.claude/settings.json` to auto-inject context at session start:
+The `hooks/session-context.sh` hook is the continuation mechanism. Every session start it automatically loads CLAUDE.md, META_ARCHITECTURE.md, your active plan, and HANDOFF.md — then tells Claude to invoke `/session-workflow` and `/superpowers:brainstorming`. You don't build continuation; you install this hook.
+
+```bash
+# macOS/Linux
+mkdir -p ~/.claude/hooks
+cp hooks/session-context.sh ~/.claude/hooks/session-context.sh
+chmod +x ~/.claude/hooks/session-context.sh
+```
+
+```powershell
+# Windows (PowerShell)
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
+Copy-Item hooks\session-context.sh "$env:USERPROFILE\.claude\hooks\session-context.sh"
+```
+
+Then add to your project's `.claude/settings.json`:
 
 ```json
 {
@@ -110,15 +142,17 @@ Add to your project's `.claude/settings.json` to auto-inject context at session 
 }
 ```
 
-Copy the hook script from this repo:
-```bash
-cp hooks/session-context.sh ~/.claude/hooks/session-context.sh
-chmod +x ~/.claude/hooks/session-context.sh
+### 5. Start a new project with /init
+
+For brand-new projects, use the `/init` skill instead of copying templates manually. It asks three questions, scaffolds the full directory structure, fills in CLAUDE.md, inits git, and hands off to brainstorming.
+
+```
+/init
 ```
 
-### 5. Start working
+### 6. Start working
 
-Open a Claude Code session in your project. Claude will read CLAUDE.md and the `.claude/rules/` files automatically. It will know to check META_ARCHITECTURE.md, the active plan, and HANDOFF.md.
+Open a Claude Code session in your project. The hook fires automatically — context loads before you type the first message. Claude already knows the project state.
 
 At session end: write `.claude/HANDOFF.md`. Next session picks up exactly where you left off.
 
@@ -130,11 +164,11 @@ Only two things auto-load at Claude Code session start:
 - `CLAUDE.md`
 - `.claude/rules/*.md`
 
-Everything else (META_ARCHITECTURE, plans, HANDOFF) must be explicitly referenced. This kit handles that by:
+Everything else (META_ARCHITECTURE, plans, HANDOFF) must be explicitly referenced. This kit handles that three ways:
 
 1. **CLAUDE.md** includes an instruction to read META_ARCHITECTURE.md, `.claude/plans/`, and `.claude/HANDOFF.md` at session start
 2. **`.claude/rules/session-workflow.md`** auto-loads and reinforces the full protocol
-3. **SessionStart hook** (optional) pre-outputs summaries of all three into Claude's context
+3. **SessionStart hook** pre-outputs summaries of all three into Claude's context before the first message — this is the primary continuation mechanism
 
 Result: open a session, describe the work, and Claude already knows the project state.
 
