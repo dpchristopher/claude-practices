@@ -1,6 +1,17 @@
 # [Project Name] — Developer Context
 
-> **Session start:** Read META_ARCHITECTURE.md → check `.claude/plans/` → read `.claude/HANDOFF.md`. Do this before asking what to work on.
+## Reading Order — Session Start
+
+> **MANDATORY (the SessionStart hook puts these in context — confirm they're current):**
+> 1. `CLAUDE.md` (this file) — rules, stack, hard rules
+> 2. `META_ARCHITECTURE.md` (summary) — what exists, data flow, known gaps
+> 3. Active plan in `.claude/plans/` — current work
+> 4. `INVARIANTS.md` (in full) — durable contracts that must NOT break
+> 5. `.claude/HANDOFF.md` (in full) — last session blockers + next action
+>
+> **ON-DEMAND (named here; read when the work touches them):**
+> - `.claude/rules/*.md` — auto-load with this file; detailed doctrine
+> - `experiments/`, `docs/` — ML artifacts, deeper references
 
 ---
 
