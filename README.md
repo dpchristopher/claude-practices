@@ -28,10 +28,10 @@ templates/
       tool-discipline.md           ← Tool priority, subagents, context budget (auto-loads)
 
 skills/
-  thinking-partner-SKILL.md        ← Ideation and exploration
-  socratic-examiner-SKILL.md       ← Stress-test a plan before building
-  assumption-archaeologist-SKILL.md ← Surface hidden premises
-  patterns-guide-SKILL.md          ← Which pattern to use for any situation
+  thinking-partner/SKILL.md        ← Ideation and exploration
+  socratic-examiner/SKILL.md       ← Stress-test a plan before building
+  assumption-archaeologist/SKILL.md ← Surface hidden premises
+  patterns-guide/SKILL.md          ← Which pattern to use for any situation
   session-workflow/SKILL.md        ← Full methodology reference
   init/SKILL.md                    ← Scaffold a new project from this template
   labarr-ml/                       ← ML methodology (12-step workflow, algorithm families)
