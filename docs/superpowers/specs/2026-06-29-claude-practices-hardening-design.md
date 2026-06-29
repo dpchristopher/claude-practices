@@ -95,10 +95,26 @@ Work is staged so each step is independently verifiable. **The clean-up pass lan
 - Hands off to `debugging-wizard` or `labarr-ml` when a gap reveals a real defect.
 - Grounded in retrieval-practice research (Karpicke & Blunt 2011, *Science*; Koh/Lee/Lim 2018; Bjork; Ebbinghaus 1885).
 
-### 6.3 Committed `.claude/agents/` — first three
-- `verifier.md` — fresh-context adversarial reviewer; checks diff against plan + invariants; **reports only correctness/requirement gaps** with the leniency caveat baked in ("a reviewer asked for gaps will invent them — flag only gaps affecting correctness"). Tools: Read/Grep/Glob/Bash. The maker≠checker leg.
-- `security-reviewer.md` — secret/credential hygiene + fiduciary-data checks (serves the trustee/compliance angle). Read-heavy, no Write.
-- `explorer.md` — cheap codebase search on `model: haiku` to control cost on large repos.
+### 6.3 Committed `.claude/agents/` — first three (Minion-themed)
+Agents are **named once by Claude, reviewed by the operator, committed, reused forever** — the operator does not hand-author them. Theme: each gets a Minion name with its role beside it. The `name` frontmatter field stays a machine-friendly slug (drives `/invocation` + auto-delegation); the friendly "Name (role)" label lives in `description`. Literal parentheses in `name` risk breaking invocation, so we use the slug form.
+
+- **Bob (verifier)** → `bob-verifier` — fresh-context adversarial reviewer; checks diff against plan + invariants; **reports only correctness/requirement gaps** with the leniency caveat baked in ("a reviewer asked for gaps will invent them — flag only gaps affecting correctness"). Tools: Read/Grep/Glob/Bash. `model: opus`. The maker≠checker leg.
+- **Kevin (security-reviewer)** → `kevin-security` — secret/credential hygiene + fiduciary-data checks (serves the trustee/compliance angle). Read-heavy, no Write. `model: opus`.
+- **Stuart (explorer)** → `stuart-explorer` — cheap light-research / codebase search on `model: haiku` to control cost on large repos. The designated cheap-lookup agent (see §6.5 rubric).
+
+Implementation note: the plan includes a short "agent design interview" (3–4 questions on the operator's standards — what "done" means, security non-negotiables) so the agents come out tuned, not generic, on first draft.
+
+### 6.5 Light vs heavy research rubric → `tool-discipline.md`
+A rule teaching when to route research to a cheap model (Stuart/Haiku) vs. a heavy one (Opus, or Sonnet mid). **The tell: if a wrong answer would be immediately obvious, it's light (Haiku); if a wrong answer would quietly mislead a decision, it's heavy (Opus).**
+
+| | Light (Stuart / Haiku) | Heavy (Opus, or Sonnet mid) |
+|---|---|---|
+| Question shape | "Where is X?" "Which file does Y?" | "Best approach across these sources?" "Verify + recommend." |
+| Sources | One known place | Many, needs synthesis |
+| Output | A fact / path / yes-no | A judgment / ranked recommendation / accuracy verdict |
+| Failure cost | Low (obvious if wrong) | High (quietly misleads) |
+
+*(Worked example for the rule: the multi-source research that produced this very spec — accuracy-checking, cross-source synthesis, ranked recommendations — was a heavy/Opus job and was correctly run on Opus.)*
 
 ### 6.4 Committed `.claude/settings.json` — operationalize hard rules
 - `deny`: `Read(.env)`, `Read(**/*.key)`, secret paths — keeps secrets out of context entirely (deny-from-any-scope cannot be overridden).
