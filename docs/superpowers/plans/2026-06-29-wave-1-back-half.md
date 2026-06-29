@@ -23,7 +23,7 @@
 - `templates/.claude/rules/invariants.md` — auto-load rule explaining the ledger discipline
 - `hooks/session-context.ps1` — Windows-native hook sibling
 - `skills/feynman-explainer/SKILL.md` — comprehension-gate skill
-- `templates/.claude/agents/bob-verifier.md`, `kevin-security.md`, `stuart-explorer.md`
+- `templates/.claude/agents/bob-verifier.md`, `kevin-security.md`, `stuart-explorer.md`, `dave-researcher.md`, `phil-test-author.md`
 - `templates/.claude/settings.json` — deny secrets / allow safe commands
 
 **Modified:**
@@ -447,7 +447,113 @@ git commit -m "Wave 1: add Stuart (explorer) agent"
 
 ---
 
-## Task 7: `settings.json` template — deny secrets / allow safe commands
+## Task 7: Dave (researcher) agent
+
+**Files:**
+- Create: `templates/.claude/agents/dave-researcher.md`
+
+- [ ] **Step 1: Create the agent**
+
+```markdown
+---
+name: dave-researcher
+description: "Dave (researcher) — heavy multi-source research and synthesis. Use for 'best approach across these sources / verify these claims and recommend' questions where a wrong answer would quietly mislead a decision. Read + web."
+tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
+model: opus
+---
+
+You are Dave, the heavy researcher — the Opus counterpart to Stuart (who does cheap
+lookups). You take on questions that need synthesis across many sources, accuracy
+verification, and a judgment or recommendation at the end.
+
+## What you're for (heavy research)
+- "What's the best approach across these sources?" / "Verify these claims and recommend."
+- Multi-source synthesis where the answer is a judgment, not a lookup.
+- Anything where a wrong answer would quietly mislead a decision (high failure cost).
+
+## Discipline
+- Prefer primary sources. Cite the exact URL you actually read for each claim.
+- NEVER fabricate quotes, statistics, citations, or IDs. If you cannot verify something,
+  say so explicitly — flag it rather than guessing.
+- Clearly separate "what the source says" (with URL) from "your recommendation."
+- If the question is actually a simple lookup, say so and recommend Stuart instead.
+
+## Report format
+- Per source: one-line summary, the 2–4 most actionable points, verdict (adopt/adapt/skip).
+- A ranked synthesis at the end.
+- An explicit list of anything you could NOT verify.
+```
+
+- [ ] **Step 2: Verify**
+
+Run: `test -f templates/.claude/agents/dave-researcher.md && grep -c "name: dave-researcher" templates/.claude/agents/dave-researcher.md && grep -c "model: opus" templates/.claude/agents/dave-researcher.md`
+Expected: exists; 1 and 1.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add templates/.claude/agents/dave-researcher.md
+git commit -m "Wave 1: add Dave (researcher) agent"
+```
+
+---
+
+## Task 8: Phil (test-author) agent
+
+**Files:**
+- Create: `templates/.claude/agents/phil-test-author.md`
+
+- [ ] **Step 1: Create the agent**
+
+```markdown
+---
+name: phil-test-author
+description: "Phil (test-author) — writes tests that verify real behavior. Use to add coverage to an area, or as the maker half to Bob's checker. Follows TDD; runs the tests."
+tools: Read, Grep, Glob, Edit, Write, Bash
+model: sonnet
+---
+
+You are Phil, the test-author. You create test coverage — you write tests, you do not
+"fix" source code to make a test pass without flagging it.
+
+## What you do
+1. Read the code under test and understand its actual behavior and contracts.
+2. Write tests that verify REAL behavior, not mock behavior — assert on outputs, shapes,
+   value ranges, and error paths, not just "it didn't throw."
+3. Cover the obvious path AND the edge cases (empty input, malformed input, boundaries).
+4. Run the tests and report real output (pass/fail counts).
+5. If a test reveals a likely bug in the source, STOP and report it — do not silently
+   change source to make the test green. That decision belongs to the human/implementer.
+
+## Discipline
+- Follow existing test conventions in the repo (framework, fixtures, naming).
+- One behavior per test; clear names that say what is verified.
+- Do not over-test the trivial; prioritize behavior whose breakage would not be obvious.
+
+## Report format
+- What you tested and why those cases.
+- Test run output (counts, any failures).
+- Any suspected source bugs surfaced (do not fix them — report).
+```
+
+- [ ] **Step 2: Verify**
+
+Run: `test -f templates/.claude/agents/phil-test-author.md && grep -c "name: phil-test-author" templates/.claude/agents/phil-test-author.md && grep -c "real behavior" templates/.claude/agents/phil-test-author.md`
+Expected: exists; 1 and ≥1.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add templates/.claude/agents/phil-test-author.md
+git commit -m "Wave 1: add Phil (test-author) agent"
+```
+
+> **Note:** Carl (evals-judge) — the binary pass/fail LLM-as-judge agent — is intentionally
+> deferred to Wave 2, where it ships alongside the `evals` rule it depends on.
+
+---
+
+## Task 9: `settings.json` template — deny secrets / allow safe commands
 
 **Files:**
 - Create: `templates/.claude/settings.json`
@@ -498,7 +604,7 @@ git commit -m "Wave 1: add settings.json template (deny secrets, allow safe git)
 
 ---
 
-## Task 8: Light/heavy research rubric → `tool-discipline.md` (spec §6.5)
+## Task 10: Light/heavy research rubric → `tool-discipline.md` (spec §6.5)
 
 **Files:**
 - Modify: `templates/.claude/rules/tool-discipline.md`
@@ -541,7 +647,7 @@ git commit -m "Wave 1: add light/heavy research rubric to tool-discipline"
 
 ---
 
-## Task 9: Session-end discipline — invariants re-verify + Feynman gate
+## Task 11: Session-end discipline — invariants re-verify + Feynman gate
 
 **Files:**
 - Modify: `skills/session-workflow/SKILL.md`
@@ -574,7 +680,7 @@ git commit -m "Wave 1: session-end re-verifies invariants + Feynman comprehensio
 
 ---
 
-## Task 10: Docs, version bump, and Wave 1 verification gate
+## Task 12: Docs, version bump, and Wave 1 verification gate
 
 **Files:**
 - Modify: `README.md`, `CHANGELOG.md`, `VERSION`
@@ -596,7 +702,7 @@ Insert this block immediately after the changelog header paragraph (before the `
 ### Added
 - `INVARIANTS.md` ledger template + `invariants` auto-load rule (cross-session contract tracking).
 - `feynman-explainer` skill — comprehension gate completing the thinking trio.
-- Minion agents in `templates/.claude/agents/`: Bob (verifier), Kevin (security-reviewer), Stuart (explorer/Haiku).
+- Minion agents in `templates/.claude/agents/`: Bob (verifier), Kevin (security-reviewer), Stuart (explorer/Haiku), Dave (researcher/Opus), Phil (test-author).
 - `settings.json` template — deny secrets, allow safe git commands.
 - Windows-native `session-context.ps1` hook sibling.
 - Light vs heavy research rubric in `tool-discipline.md`.
@@ -612,7 +718,7 @@ In `README.md`, under the `templates/` portion of the Contents tree, add a line 
 
 ```markdown
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
-  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer)
+  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author)
   .claude/settings.json            ← Deny secrets, allow safe commands
 ```
 
@@ -626,7 +732,8 @@ echo "=== files present ==="
 for f in templates/INVARIANTS.md templates/.claude/rules/invariants.md \
          hooks/session-context.ps1 skills/feynman-explainer/SKILL.md \
          templates/.claude/agents/bob-verifier.md templates/.claude/agents/kevin-security.md \
-         templates/.claude/agents/stuart-explorer.md templates/.claude/settings.json; do
+         templates/.claude/agents/stuart-explorer.md templates/.claude/agents/dave-researcher.md \
+         templates/.claude/agents/phil-test-author.md templates/.claude/settings.json; do
   test -f "$f" && echo "ok: $f" || echo "MISSING: $f"
 done
 echo "=== hook loads invariants ==="; grep -c "INVARIANTS.md" hooks/session-context.sh
@@ -641,7 +748,7 @@ Expected: all "ok:", grep ≥1, settings "ok", both hooks listed, VERSION 0.3.0,
 
 ## Self-Review (completed at authoring)
 
-- **Spec coverage:** §6.1 → Tasks 1,2,9; §6.2 → Tasks 3,9; §6.3 → Tasks 4,5,6 (tuned per interview); §6.4 → Task 7; §6.5 → Task 8; docs/version → Task 10. All covered.
+- **Spec coverage:** §6.1 → Tasks 1,2,11; §6.2 → Tasks 3,11; §6.3 → Tasks 4,5,6 + new 7 (Dave) + 8 (Phil), tuned per interview; §6.4 → Task 9; §6.5 → Task 10; docs/version → Task 12. Carl (evals-judge) deferred to Wave 2. All covered.
 - **Placeholders:** none — every file's full content is inline (agents tuned to the interview answers, not generic).
 - **Consistency:** agent `name` fields are slugs (`bob-verifier`/`kevin-security`/`stuart-explorer`) with "Name (role)" in description, matching spec §6.3; hook block is inserted before HANDOFF in both `.sh` and `.ps1`; install scripts updated in Task 2 to carry the `.ps1` hook that Task 10's gate checks for.
 - **Note:** Task 9 assumes the Session End section exists in `skills/session-workflow/SKILL.md` (verified present in the repo). If its checklist wording differs, insert the two items adjacent to the HANDOFF step regardless.
