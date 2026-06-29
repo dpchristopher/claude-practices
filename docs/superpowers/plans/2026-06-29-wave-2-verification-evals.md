@@ -217,6 +217,8 @@ git commit -m "Wave 2: add Carl (evals-judge) agent"
 # Defense-in-depth alongside the Read(.env) deny rules. Exit 2 blocks the tool call.
 input="$(cat)"
 path="$(printf '%s' "$input" | grep -oE '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed -E 's/.*"([^"]*)"$/\1/')"
+# Carve-out: allow safe scaffolding templates (no real secrets in these)
+if printf '%s' "$path" | grep -qiE '\.(example|template|sample)$'; then exit 0; fi
 if printf '%s' "$path" | grep -qiE '(^|/)\.env($|\.)|\.key$|\.pem$|/secrets/|credentials'; then
   echo "Blocked: refusing to write to a secrets file ($path). Edit it manually if truly intended." >&2
   exit 2
@@ -269,6 +271,8 @@ chmod +x hooks/guard-secrets.sh hooks/post-edit-format.sh hooks/stop-verify.sh
 printf '{"tool_input":{"file_path":".env"}}' | bash hooks/guard-secrets.sh; echo "env-exit=$?"
 # guard allows a normal file (expect exit 0):
 printf '{"tool_input":{"file_path":"src/app.py"}}' | bash hooks/guard-secrets.sh; echo "src-exit=$?"
+# guard allows .env.example scaffolding (expect exit 0):
+printf '{"tool_input":{"file_path":".env.example"}}' | bash hooks/guard-secrets.sh; echo "example-exit=$?"
 # formatter no-op-safe on a nonexistent/无formatter path (expect exit 0):
 printf '{"tool_input":{"file_path":"README.md"}}' | bash hooks/post-edit-format.sh; echo "fmt-exit=$?"
 # stop hook no-op when unconfigured (expect exit 0):
