@@ -3,6 +3,18 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [0.4.0] — 2026-06-29 (Wave 2 — Verification & Evals)
+### Added
+- `verification` rule — evidence over assertion, verification taxonomy (rules > visual > LLM-judge), the trust-then-verify failure mode.
+- `evals` rule — binary pass/fail, read-traces-to-saturation, regression-cases-from-failures, data flywheel.
+- Carl (evals-judge) agent — binary pass/fail grader; the checker, never the maker.
+- Verification hooks: `guard-secrets.sh` (PreToolUse, blocks writes to secret files, allows `.env.example`/`.template`/`.sample`), `post-edit-format.sh` (PostToolUse, no-op-safe auto-format), `stop-verify.sh` (opt-in Stop hook).
+- `.gitattributes` enforcing LF on shell scripts (cross-platform safety).
+
+### Changed
+- `settings.json` now wires the secret-write guard and formatter hooks by default (Stop hook opt-in).
+- Install scripts copy ALL `hooks/*` (so future hooks need no install-script edits).
+
 ## [0.3.0] — 2026-06-29 (Wave 1 — Back-Half Foundation)
 ### Added
 - `INVARIANTS.md` ledger template + `invariants` auto-load rule (cross-session contract tracking).

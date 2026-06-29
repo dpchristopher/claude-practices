@@ -27,8 +27,10 @@ templates/
       session-workflow.md          ← Full session start/end protocol (auto-loads)
       tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research (auto-loads)
       invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
+      verification.md              ← Evidence over assertion, verification taxonomy (auto-loads)
+      evals.md                     ← Binary pass/fail eval discipline (auto-loads)
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
-  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author)
+  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge)
   .claude/settings.json            ← Deny secrets, allow safe commands
 
 skills/
@@ -44,6 +46,9 @@ skills/
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
   session-context.ps1              ← Windows-native equivalent of the SessionStart hook
+  guard-secrets.sh                 ← PreToolUse: blocks writes to secret files
+  post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
+  stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
