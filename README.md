@@ -25,7 +25,8 @@ templates/
       ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (auto-loads)
       automation.md                ← Idempotence, error handling, pipeline testing (auto-loads)
       session-workflow.md          ← Full session start/end protocol (auto-loads)
-      tool-discipline.md           ← Tool priority, subagents, context budget (auto-loads)
+      tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research (auto-loads)
+      invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
   .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author)
   .claude/settings.json            ← Deny secrets, allow safe commands
@@ -42,6 +43,7 @@ skills/
 
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
+  session-context.ps1              ← Windows-native equivalent of the SessionStart hook
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
@@ -97,7 +99,7 @@ From the repo root:
 .\install.ps1
 ```
 
-Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and install `session-context.sh` into `~/.claude/hooks/`.
+Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and install both `session-context.sh` and `session-context.ps1` into `~/.claude/hooks/`.
 
 Then add the SessionStart hook to your project's `.claude/settings.json`:
 
