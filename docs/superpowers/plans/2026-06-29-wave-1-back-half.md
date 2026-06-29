@@ -27,6 +27,7 @@
 - `templates/.claude/settings.json` — deny secrets / allow safe commands
 
 **Modified:**
+- `templates/CLAUDE.md` — add MANDATORY/ON-DEMAND Reading Order index at top
 - `hooks/session-context.sh` — load `INVARIANTS.md` in full
 - `install.sh`, `install.ps1` — also install the `.ps1` hook sibling
 - `templates/.claude/rules/tool-discipline.md` — add the light/heavy research rubric (§6.5)
@@ -35,11 +36,12 @@
 
 ---
 
-## Task 1: `INVARIANTS.md` template + auto-load rule
+## Task 1: `INVARIANTS.md` template + auto-load rule + CLAUDE.md Reading Order index
 
 **Files:**
 - Create: `templates/INVARIANTS.md`
 - Create: `templates/.claude/rules/invariants.md`
+- Modify: `templates/CLAUDE.md` (add Reading Order index at top)
 
 - [ ] **Step 1: Create `templates/INVARIANTS.md`**
 
@@ -92,16 +94,35 @@ A session that touched an invariant's area and did NOT re-verify it is not done.
 Never mark work complete on top of an unverified invariant you may have disturbed.
 ```
 
-- [ ] **Step 3: Verify**
+- [ ] **Step 3: Add a Reading Order index to the top of `templates/CLAUDE.md`**
 
-Run: `cd "C:/Users/dpchr/OneDrive/Desktop/claude-practices" && test -f templates/INVARIANTS.md && test -f templates/.claude/rules/invariants.md && grep -c "INV-01" templates/INVARIANTS.md && grep -c "RE-VERIFY" templates/.claude/rules/invariants.md`
-Expected: both files exist; one match each.
+Read `templates/CLAUDE.md`. It currently opens with a blockquote like `> **Session start:** Read META_ARCHITECTURE.md → check `.claude/plans/` → read `.claude/HANDOFF.md`.` REPLACE that opening blockquote with this Reading Order index (note it adds INVARIANTS.md and distinguishes guaranteed-loaded vs read-on-demand):
 
-- [ ] **Step 4: Commit**
+```markdown
+## Reading Order — Session Start
+
+> **MANDATORY (the SessionStart hook puts these in context — confirm they're current):**
+> 1. `CLAUDE.md` (this file) — rules, stack, hard rules
+> 2. `META_ARCHITECTURE.md` (summary) — what exists, data flow, known gaps
+> 3. Active plan in `.claude/plans/` — current work
+> 4. `INVARIANTS.md` (in full) — durable contracts that must NOT break
+> 5. `.claude/HANDOFF.md` (in full) — last session blockers + next action
+>
+> **ON-DEMAND (named here; read when the work touches them):**
+> - `.claude/rules/*.md` — auto-load with this file; detailed doctrine
+> - `experiments/`, `docs/` — ML artifacts, deeper references
+```
+
+- [ ] **Step 4: Verify**
+
+Run: `cd "C:/Users/dpchr/OneDrive/Desktop/claude-practices" && test -f templates/INVARIANTS.md && test -f templates/.claude/rules/invariants.md && grep -c "INV-01" templates/INVARIANTS.md && grep -c "RE-VERIFY" templates/.claude/rules/invariants.md && grep -c "Reading Order — Session Start" templates/CLAUDE.md && grep -c "INVARIANTS.md (in full)" templates/CLAUDE.md`
+Expected: both files exist; INV-01 and RE-VERIFY one match each; Reading Order index present (1) and references INVARIANTS (1).
+
+- [ ] **Step 5: Commit**
 
 ```bash
-git add templates/INVARIANTS.md templates/.claude/rules/invariants.md
-git commit -m "Wave 1: add INVARIANTS.md ledger template + auto-load rule"
+git add templates/INVARIANTS.md templates/.claude/rules/invariants.md templates/CLAUDE.md
+git commit -m "Wave 1: add INVARIANTS.md ledger + rule + CLAUDE.md Reading Order index"
 ```
 
 ---
