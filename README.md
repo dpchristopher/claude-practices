@@ -26,6 +26,9 @@ templates/
       automation.md                ← Idempotence, error handling, pipeline testing (auto-loads)
       session-workflow.md          ← Full session start/end protocol (auto-loads)
       tool-discipline.md           ← Tool priority, subagents, context budget (auto-loads)
+  INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
+  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author)
+  .claude/settings.json            ← Deny secrets, allow safe commands
 
 skills/
   thinking-partner/SKILL.md        ← Ideation and exploration
@@ -35,6 +38,7 @@ skills/
   session-workflow/SKILL.md        ← Full methodology reference
   init/SKILL.md                    ← Scaffold a new project from this template
   labarr-ml/                       ← ML methodology (12-step workflow, algorithm families)
+  feynman-explainer/SKILL.md       ← Comprehension gate (completes the thinking trio)
 
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)

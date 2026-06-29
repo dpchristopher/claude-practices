@@ -3,6 +3,20 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [0.3.0] — 2026-06-29 (Wave 1 — Back-Half Foundation)
+### Added
+- `INVARIANTS.md` ledger template + `invariants` auto-load rule (cross-session contract tracking).
+- `feynman-explainer` skill — comprehension gate completing the thinking trio.
+- Minion agents in `templates/.claude/agents/`: Bob (verifier), Kevin (security-reviewer), Stuart (explorer/Haiku), Dave (researcher/Opus), Phil (test-author).
+- `settings.json` template — deny secrets, allow safe git commands.
+- Windows-native `session-context.ps1` hook sibling.
+- MANDATORY/ON-DEMAND Reading Order index at the top of the `CLAUDE.md` template.
+- Light vs heavy research rubric in `tool-discipline.md`.
+
+### Changed
+- SessionStart hook now loads `INVARIANTS.md` in full; install scripts carry both hooks.
+- Session-end discipline now re-verifies affected invariants and runs the Feynman gate.
+
 ## [0.2.0] — 2026-06-29 (Treaty of Versailles)
 ### Changed
 - Normalized all skills to `skills/<name>/SKILL.md` directory form.
