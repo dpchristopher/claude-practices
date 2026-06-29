@@ -18,13 +18,13 @@ for dir in "$REPO_DIR"/skills/*/; do
   echo "  skill: $name"
 done
 
-# 2. Hook
+# 2. Hooks — copy every hook script
 mkdir -p "$DEST/hooks"
-cp "$REPO_DIR/hooks/session-context.sh" "$DEST/hooks/session-context.sh"
-chmod +x "$DEST/hooks/session-context.sh" || true
-echo "  hook: session-context.sh"
-cp "$REPO_DIR/hooks/session-context.ps1" "$DEST/hooks/session-context.ps1"
-echo "  hook: session-context.ps1"
+for h in "$REPO_DIR"/hooks/*; do
+  cp "$h" "$DEST/hooks/$(basename "$h")"
+  echo "  hook: $(basename "$h")"
+done
+chmod +x "$DEST"/hooks/*.sh 2>/dev/null || true
 
 echo "Done. Add the SessionStart hook to your project's .claude/settings.json:"
 echo '  { "hooks": { "SessionStart": [{ "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }] } }'

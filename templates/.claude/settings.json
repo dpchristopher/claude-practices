@@ -19,6 +19,12 @@
   "hooks": {
     "SessionStart": [
       { "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }
+    ],
+    "PreToolUse": [
+      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/guard-secrets.sh" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/post-edit-format.sh" }] }
     ]
   }
 }
