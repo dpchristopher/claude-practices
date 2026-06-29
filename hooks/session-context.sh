@@ -46,6 +46,13 @@ if [ -n "$PLAN_FILE" ]; then
   head -50 "$PLAN_FILE"
 fi
 
+# System invariants — load in full (durable contracts, never truncate)
+if [ -f "INVARIANTS.md" ]; then
+  echo ""
+  echo "## SYSTEM INVARIANTS (INVARIANTS.md — full; these must NOT break)"
+  cat "INVARIANTS.md"
+fi
+
 # Last session handoff
 if [ -f ".claude/HANDOFF.md" ]; then
   echo ""

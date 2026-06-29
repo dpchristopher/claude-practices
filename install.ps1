@@ -22,6 +22,8 @@ $hooksDest = Join-Path $Dest "hooks"
 New-Item -ItemType Directory -Force $hooksDest | Out-Null
 Copy-Item -Force (Join-Path $RepoDir "hooks/session-context.sh") (Join-Path $hooksDest "session-context.sh")
 Write-Host "  hook: session-context.sh"
+Copy-Item -Force (Join-Path $RepoDir "hooks/session-context.ps1") (Join-Path $hooksDest "session-context.ps1")
+Write-Host "  hook: session-context.ps1"
 
 Write-Host 'Done. Add the SessionStart hook to your project .claude/settings.json:'
 Write-Host '  { "hooks": { "SessionStart": [{ "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }] } }'
