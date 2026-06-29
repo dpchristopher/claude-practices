@@ -85,3 +85,20 @@ Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 ---
 
 *Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 80 lines.*
+
+---
+
+## Imports & Keeping This File Lean
+
+CLAUDE.md loads every session — only put things here that apply broadly. Move volatile or
+occasionally-relevant material (long roadmaps, big reference tables, detailed specs) OUT of
+this file and pull it in on demand with an `@`-import:
+
+```
+See the roadmap in @docs/roadmap.md and API notes in @docs/api-notes.md
+```
+
+`@path` references are read when relevant rather than loaded every turn. The prune test for
+anything in this file: *would removing it cause Claude to make a mistake?* If not, cut it or
+move it behind an `@`-import. A lean CLAUDE.md is one whose rules actually get followed —
+bloat causes rules to be ignored.
