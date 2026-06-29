@@ -2,6 +2,8 @@
 
 > Auto-loaded at session start. Governs which tools to reach for and when.
 
+> **Stack note:** Examples below use the Python default (`pytest`, `pyright`, `pip`). Substitute your stack's equivalents — e.g. `vitest`/`tsc`/`npm` for TypeScript, `go test`/`go vet` for Go. The *discipline* (tests before+after, type-check before runtime, pin deps) is language-agnostic; the commands are illustrative.
+
 ---
 
 ## Tool Priority Order
@@ -88,6 +90,8 @@ Never commit:
 - Run tests after each change (catch regressions immediately)
 - Never commit with failing tests
 - If tests don't exist for the area you're changing: write them first
+
+_Python example — swap in your test runner:_
 
 ```bash
 pytest tests/ -v                    # run all tests
