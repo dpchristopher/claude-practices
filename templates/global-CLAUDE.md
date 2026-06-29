@@ -12,6 +12,8 @@
 
 > If there's even a 1% chance a skill applies, invoke it before doing anything else.
 
+> Canonical per-project applicability lives in each project's `META_ARCHITECTURE.md` Toolkit table; full methodology in the `session-workflow` skill. This table is the always-on cross-project quick-reference only.
+
 | When... | Invoke |
 |---|---|
 | Starting ANY session or new project | `/session-workflow` then `/superpowers:brainstorming` |

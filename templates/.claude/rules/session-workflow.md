@@ -24,36 +24,11 @@ Skills are not optional extras — they are named steps in the plan. If a skill 
 
 ---
 
-## Skills First — The Non-Negotiable Rule
+## Skills First & the Thinking Trio
 
-Before building anything, ask: "Is there a skill for this?"
+> Canonical methodology lives in the `session-workflow` skill (`skills/session-workflow/SKILL.md`). Invoke `/session-workflow` for the full protocol. Project-specific skill applicability lives in the Toolkit table of `META_ARCHITECTURE.md`.
 
-| If the task involves... | Invoke this skill |
-|---|---|
-| Ideation or exploring options | `thinking-partner` |
-| Committing to a plan | `socratic-examiner` |
-| Something that feels off | `assumption-archaeologist` |
-| Any ML, forecasting, or modeling | `labarr-ml` |
-| Complex SQL | `sql-pro` |
-| DataFrame/data pipeline work | `pandas-pro` |
-| A stuck bug | `debugging-wizard` |
-| A major design decision | `the-fool` |
-| Choosing a pattern or approach | `patterns-guide` |
-
-**Trio handoff:** thinking-partner → socratic-examiner → assumption-archaeologist  
-Each hands off explicitly to the next. Claude manages the handoffs.
-
----
-
-## Thinking-Partner Trio Workflow
-
-Use in sequence for any non-trivial decision:
-
-1. **`/thinking-partner`** — open up the problem space, explore options, don't commit yet
-2. **`/socratic-examiner`** — stress-test what emerged, challenge assumptions, find weak points
-3. **`/assumption-archaeologist`** — excavate hidden premises that both missed
-
-Don't skip steps. The trio exists because each one catches what the others miss.
+The non-negotiable: before building anything, check if a skill applies and invoke it (even 1% relevance). For non-trivial decisions, run the trio in order — `thinking-partner` → `socratic-examiner` → `assumption-archaeologist`.
 
 ---
 
