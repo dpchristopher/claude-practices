@@ -17,13 +17,13 @@ foreach ($dir in Get-ChildItem -Directory (Join-Path $RepoDir "skills")) {
     Write-Host "  skill: $($dir.Name)"
 }
 
-# 2. Hook
+# 2. Hooks — copy every hook script
 $hooksDest = Join-Path $Dest "hooks"
 New-Item -ItemType Directory -Force $hooksDest | Out-Null
-Copy-Item -Force (Join-Path $RepoDir "hooks/session-context.sh") (Join-Path $hooksDest "session-context.sh")
-Write-Host "  hook: session-context.sh"
-Copy-Item -Force (Join-Path $RepoDir "hooks/session-context.ps1") (Join-Path $hooksDest "session-context.ps1")
-Write-Host "  hook: session-context.ps1"
+foreach ($h in Get-ChildItem -File (Join-Path $RepoDir "hooks")) {
+    Copy-Item -Force $h.FullName (Join-Path $hooksDest $h.Name)
+    Write-Host "  hook: $($h.Name)"
+}
 
 Write-Host 'Done. Add the SessionStart hook to your project .claude/settings.json:'
 Write-Host '  { "hooks": { "SessionStart": [{ "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }] } }'

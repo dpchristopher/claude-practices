@@ -1,0 +1,5 @@
+# Shell scripts and hooks must use LF endings so they run on macOS/Linux.
+# (CRLF in a shebang line breaks the interpreter.)
+*.sh text eol=lf
+hooks/* text eol=lf
+install.sh text eol=lf
