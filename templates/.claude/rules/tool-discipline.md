@@ -98,3 +98,21 @@ pytest tests/ -v                    # run all tests
 pytest tests/test_specific.py -v   # run one file
 pytest -k "test_name" -v           # run one test
 ```
+
+---
+
+## Light vs Heavy Research — Route to the Right Model
+
+**The tell:** if a wrong answer would be immediately obvious, it's light (cheap model /
+Stuart-explorer on Haiku). If a wrong answer would quietly mislead a decision, it's heavy
+(Opus / Dave-researcher, or Sonnet for moderate).
+
+| | Light (Stuart / Haiku) | Heavy (Dave / Opus, or Sonnet mid) |
+|---|---|---|
+| Question shape | "Where is X?" "Which file does Y?" | "Best approach across these sources?" "Verify + recommend." |
+| Sources | One known place | Many, needs synthesis |
+| Output | A fact / path / yes-no | A judgment / ranked recommendation / accuracy verdict |
+| Failure cost | Low (obvious if wrong) | High (quietly misleads) |
+
+Route light lookups to `stuart-explorer` to conserve heavier models on a large codebase.
+Reserve Opus / `dave-researcher` for synthesis, verification, and recommendations.
