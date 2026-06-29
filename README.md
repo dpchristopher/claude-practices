@@ -79,64 +79,29 @@ Copy-Item templates\.claude $proj -Recurse
 
 Replace every `[bracketed]` section with your project's specifics. Keep it under 200 lines.
 
-### 3. Register skills globally (one-time per machine)
+### 3. Register skills + hook (one command)
+
+From the repo root:
 
 ```bash
-# macOS/Linux
-dest=~/.claude/skills
-mkdir -p $dest/{thinking-partner,socratic-examiner,assumption-archaeologist,patterns-guide,session-workflow,init,labarr-ml}
-cp skills/thinking-partner-SKILL.md $dest/thinking-partner/SKILL.md
-cp skills/socratic-examiner-SKILL.md $dest/socratic-examiner/SKILL.md
-cp skills/assumption-archaeologist-SKILL.md $dest/assumption-archaeologist/SKILL.md
-cp skills/patterns-guide-SKILL.md $dest/patterns-guide/SKILL.md
-cp skills/session-workflow/SKILL.md $dest/session-workflow/SKILL.md
-cp skills/init/SKILL.md $dest/init/SKILL.md
-cp -r skills/labarr-ml $dest/
+# macOS/Linux/Git Bash
+./install.sh
 ```
 
 ```powershell
 # Windows (PowerShell)
-$dest = "$env:USERPROFILE\.claude\skills"
-$skills = @("thinking-partner","socratic-examiner","assumption-archaeologist","patterns-guide","session-workflow","init")
-foreach ($s in $skills) {
-    New-Item -ItemType Directory -Force "$dest\$s" | Out-Null
-}
-Copy-Item skills\thinking-partner-SKILL.md "$dest\thinking-partner\SKILL.md"
-Copy-Item skills\socratic-examiner-SKILL.md "$dest\socratic-examiner\SKILL.md"
-Copy-Item skills\assumption-archaeologist-SKILL.md "$dest\assumption-archaeologist\SKILL.md"
-Copy-Item skills\patterns-guide-SKILL.md "$dest\patterns-guide\SKILL.md"
-Copy-Item skills\session-workflow\SKILL.md "$dest\session-workflow\SKILL.md"
-Copy-Item skills\init\SKILL.md "$dest\init\SKILL.md"
-Copy-Item skills\labarr-ml "$dest\labarr-ml" -Recurse
+.\install.ps1
 ```
 
-### 4. Install the SessionStart hook (this IS continuation)
+Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and install `session-context.sh` into `~/.claude/hooks/`.
 
-The `hooks/session-context.sh` hook is the continuation mechanism. Every session start it automatically loads CLAUDE.md, META_ARCHITECTURE.md, your active plan, and HANDOFF.md — then tells Claude to invoke `/session-workflow` and `/superpowers:brainstorming`. You don't build continuation; you install this hook.
-
-```bash
-# macOS/Linux
-mkdir -p ~/.claude/hooks
-cp hooks/session-context.sh ~/.claude/hooks/session-context.sh
-chmod +x ~/.claude/hooks/session-context.sh
-```
-
-```powershell
-# Windows (PowerShell)
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
-Copy-Item hooks\session-context.sh "$env:USERPROFILE\.claude\hooks\session-context.sh"
-```
-
-Then add to your project's `.claude/settings.json`:
+Then add the SessionStart hook to your project's `.claude/settings.json`:
 
 ```json
 {
   "hooks": {
     "SessionStart": [
-      {
-        "type": "command",
-        "command": "bash ~/.claude/hooks/session-context.sh"
-      }
+      { "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }
     ]
   }
 }
