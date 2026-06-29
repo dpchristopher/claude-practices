@@ -4,9 +4,10 @@
 # then wire into settings.json hooks.Stop. No-op (exit 0) until configured.
 CHECK_CMD="${PROJECT_CHECK_CMD:-}"
 [ -z "$CHECK_CMD" ] && exit 0
-if ! eval "$CHECK_CMD" >/tmp/stop-verify.log 2>&1; then
+LOG="${TMPDIR:-/tmp}/stop-verify.log"
+if ! eval "$CHECK_CMD" >"$LOG" 2>&1; then
   echo "Stop blocked: project check failed — fix before finishing:" >&2
-  tail -20 /tmp/stop-verify.log >&2
+  tail -20 "$LOG" >&2
   exit 2
 fi
 exit 0

@@ -104,7 +104,7 @@ From the repo root:
 .\install.ps1
 ```
 
-Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and install both `session-context.sh` and `session-context.ps1` into `~/.claude/hooks/`.
+Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and every script in `hooks/` into `~/.claude/hooks/`.
 
 Then add the SessionStart hook to your project's `.claude/settings.json`:
 

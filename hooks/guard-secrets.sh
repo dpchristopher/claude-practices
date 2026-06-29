@@ -5,7 +5,7 @@ input="$(cat)"
 path="$(printf '%s' "$input" | grep -oE '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed -E 's/.*"([^"]*)"$/\1/')"
 # Carve-out: allow safe scaffolding templates (no real secrets in these)
 if printf '%s' "$path" | grep -qiE '\.(example|template|sample)$'; then exit 0; fi
-if printf '%s' "$path" | grep -qiE '(^|/)\.env($|\.)|\.key$|\.pem$|/secrets/|credentials'; then
+if printf '%s' "$path" | grep -qiE '(^|/)\.env($|\.)|\.key$|\.pem$|/secrets/|(^|/)credentials(\.|$)'; then
   echo "Blocked: refusing to write to a secrets file ($path). Edit it manually if truly intended." >&2
   exit 2
 fi
