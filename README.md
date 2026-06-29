@@ -107,7 +107,7 @@ Then add the SessionStart hook to your project's `.claude/settings.json`:
 }
 ```
 
-### 5. Start a new project with /init
+### 4. Start a new project with /init
 
 For brand-new projects, use the `/init` skill instead of copying templates manually. It asks three questions, scaffolds the full directory structure, fills in CLAUDE.md, inits git, and hands off to brainstorming.
 
@@ -115,7 +115,7 @@ For brand-new projects, use the `/init` skill instead of copying templates manua
 /init
 ```
 
-### 6. Start working
+### 5. Start working
 
 Open a Claude Code session in your project. The hook fires automatically — context loads before you type the first message. Claude already knows the project state.
 
