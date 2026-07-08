@@ -29,6 +29,7 @@ templates/
       invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
       verification.md              ← Evidence over assertion, verification taxonomy (auto-loads)
       evals.md                     ← Binary pass/fail eval discipline (auto-loads)
+      loop.md                      ← Self-correction loop discipline (auto-loads)
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
   .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge)
   .claude/settings.json            ← Deny secrets, allow safe commands
@@ -52,6 +53,7 @@ hooks/
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
+  optional-integrations.md         ← Opt-in Graphiti + Playwright patterns
 ```
 
 ---
