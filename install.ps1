@@ -25,5 +25,13 @@ foreach ($h in Get-ChildItem -File (Join-Path $RepoDir "hooks")) {
     Write-Host "  hook: $($h.Name)"
 }
 
+# 3. Agents — copy every committed agent into ~/.claude/agents/
+$agentsDest = Join-Path $Dest "agents"
+New-Item -ItemType Directory -Force $agentsDest | Out-Null
+foreach ($a in Get-ChildItem -File (Join-Path $RepoDir "templates/.claude/agents")) {
+    Copy-Item -Force $a.FullName (Join-Path $agentsDest $a.Name)
+    Write-Host "  agent: $($a.Name)"
+}
+
 Write-Host 'Done. Add the SessionStart hook to your project .claude/settings.json:'
 Write-Host '  { "hooks": { "SessionStart": [{ "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }] } }'
