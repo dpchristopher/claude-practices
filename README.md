@@ -108,7 +108,7 @@ From the repo root:
 .\install.ps1
 ```
 
-Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and every script in `hooks/` into `~/.claude/hooks/`.
+Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/`, every script in `hooks/` into `~/.claude/hooks/`, and every agent in `templates/.claude/agents/` into `~/.claude/agents/` (so the Minions go global).
 
 Then add the SessionStart hook to your project's `.claude/settings.json`:
 
