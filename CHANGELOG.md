@@ -3,6 +3,17 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.1.0] — 2026-06-29 (Wave 4 — Gru & Planning Autopilot)
+### Added
+- Gru (planner) agent — planning orchestrator: triage → read project + kit → applicability pass → draft with everything explicit → self-audit → hand to Bob. Writes a draft plan for approval.
+- Mel (design-reviewer) and Jerry (doc-writer) agents.
+- `planning` rule — canonical plan rubric (Gru reads it; Bob grades against it).
+- `plan-router.sh` UserPromptSubmit hook — conservative auto-route of planning intent to Gru.
+
+### Changed
+- `settings.json` wires the UserPromptSubmit hook.
+- Install scripts now copy committed agents into `~/.claude/agents/` (agents go global, reproducibly).
+
 ## [1.0.0] — 2026-06-29 (Wave 3 — Loop Discipline & Finale)
 ### Added
 - `loop` rule — self-correction loop discipline built on native `/goal` + `/rewind`: exit-condition-first, maker≠checker, state-on-disk, L1→L2→L3 autonomy ladder, stuck-loop detection, loops open PRs (never auto-merge).
