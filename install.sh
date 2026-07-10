@@ -26,5 +26,12 @@ for h in "$REPO_DIR"/hooks/*; do
 done
 chmod +x "$DEST"/hooks/*.sh 2>/dev/null || true
 
+# 3. Agents — copy every committed agent into ~/.claude/agents/
+mkdir -p "$DEST/agents"
+for a in "$REPO_DIR"/templates/.claude/agents/*.md; do
+  cp "$a" "$DEST/agents/$(basename "$a")"
+  echo "  agent: $(basename "$a")"
+done
+
 echo "Done. Add the SessionStart hook to your project's .claude/settings.json:"
 echo '  { "hooks": { "SessionStart": [{ "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }] } }'

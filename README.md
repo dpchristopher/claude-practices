@@ -30,8 +30,9 @@ templates/
       verification.md              ← Evidence over assertion, verification taxonomy (auto-loads)
       evals.md                     ← Binary pass/fail eval discipline (auto-loads)
       loop.md                      ← Self-correction loop discipline (auto-loads)
+      planning.md                  ← Canonical plan rubric; Gru applies it (auto-loads)
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
-  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge)
+  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge), Gru (planner), Mel (design), Jerry (docs)
   .claude/settings.json            ← Deny secrets, allow safe commands
 
 skills/
@@ -50,6 +51,7 @@ hooks/
   guard-secrets.sh                 ← PreToolUse: blocks writes to secret files
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
+  plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
@@ -106,7 +108,7 @@ From the repo root:
 .\install.ps1
 ```
 
-Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/` and every script in `hooks/` into `~/.claude/hooks/`.
+Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/`, every script in `hooks/` into `~/.claude/hooks/`, and every agent in `templates/.claude/agents/` into `~/.claude/agents/` (so the Minions go global).
 
 Then add the SessionStart hook to your project's `.claude/settings.json`:
 
