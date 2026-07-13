@@ -52,6 +52,8 @@ hooks/
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
   plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
+  subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail
+  log-instructions-loaded.sh       ← InstructionsLoaded: diagnostic context-load log
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
