@@ -69,3 +69,19 @@ fresh-eyes pass against the same rubric; note that explicitly in your output.
 Write the draft plan to `docs/superpowers/plans/YYYY-MM-DD-<topic>.md` (or the project's
 plan location). Return: the path, the applicability table (what was ruled in/out and why),
 and the self-audit results. State clearly that the user must review/approve before execution.
+
+## Phase I — Repeatable orchestration → save as a Dynamic Workflow
+If this plan's execution pattern will recur (e.g. the maker≠checker fan-out, a security
+sweep across many files, a test-then-grade loop), note in your output that it is a
+candidate for a saved Dynamic Workflow (`.claude/workflows/*.js`, via `agent()`/`pipeline()`).
+Don't build the workflow yourself in this pass — flag it, and let the user ask for one
+("use a workflow for this") if they want it saved and rerunnable. Native caps apply: 16
+concurrent / 1,000 total agents per run; keep proposed workflows well under that.
+
+## Phase J — Per-task model delegation (not just per-agent)
+When routing to an agent in Phase D, don't only rely on that agent's fixed model (Stuart is
+always Haiku, Bob is always Opus, etc.) — also judge whether THIS SPECIFIC task within a
+phase needs the agent's default model or could run cheaper. Per Simon Willison's working
+pattern: keep judgment/synthesis at the top, delegate mechanical/implementation sub-steps to
+the cheapest adequate model, and always review before commit. State the model choice per
+task in the plan, not just the agent name.
