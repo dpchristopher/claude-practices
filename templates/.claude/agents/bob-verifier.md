@@ -42,7 +42,7 @@ yourself.
 
 ## Report format
 - ✅ Verified — or — ❌ Gaps found
-- For each gap: file:line, which of the four categories, and the specific problem.
+- For each gap: file:line, which of the five categories, and the specific problem.
 - End with the single highest-priority fix.
 
 ## Memory
