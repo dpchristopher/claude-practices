@@ -36,6 +36,20 @@ MCPs at once.
 
 ---
 
+## Opik (LLM observability) — reaffirmed skip
+**What it would solve:** "which of my 9 agents caused a bad outcome" in a multi-agent run.
+
+**Why it's still skip (re-checked, not just carried over):** Claude Code's native
+`/workflows` progress view now gives per-agent, per-phase tracing for free — token totals,
+elapsed time, drill into any agent's prompt/tool calls/result — for the exact "which agent
+failed" problem Opik would otherwise solve. Opik's real edge (multi-framework support,
+40M-traces/day scale, persistent cross-session trace storage) is an enterprise/high-volume
+axis, not a solo-operator one. Revisit only if you leave Claude Code's runtime, or need
+durable trace history beyond a single session (native workflow runs are only resumable
+within the same session).
+
+---
+
 ## Rule of thumb
 Core kit = zero required infra (markdown + shell + git). Reach for an optional integration
 only when a real, recurring need outgrows the simple mechanism — and remove it when it
