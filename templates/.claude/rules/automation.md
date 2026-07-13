@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/pipeline*.py"
+  - "**/*cron*"
+  - "**/scheduled*"
+  - "scripts/**/*"
+---
+
 # Automation Rules
 
 > Auto-loaded at session start. Apply to any scripted pipeline, scheduled task, or batch process.
