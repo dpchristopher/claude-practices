@@ -34,6 +34,16 @@ Each subagent starts fresh. Only the summary returns to main context. This keeps
 
 ---
 
+## Every named agent must earn its place
+Don't accumulate specialist subagents by role-flavor alone ("we should have an X agent").
+A named agent earns its place only via a real context isolation or a distinct model/
+permission boundary — e.g. a fresh-context checker (maker≠checker needs separate context to
+be honest), a cheaper model for mechanical work, or a narrower tool/permission scope than
+the main session. If a "new agent" would just be a prompt variation running in the same
+context with the same tools, it should be a skill instead, not an agent.
+
+---
+
 ## Context Budget Awareness
 
 Watch for context climbing. When it does:
