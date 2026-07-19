@@ -17,6 +17,8 @@
 - NEVER commit `.env` files or credentials
 - NEVER push directly to main — always use a feature branch
 - NEVER process 50+ items sequentially — use scripts or subagents
+- NEVER claim done/fixed/passing without pasted evidence (command + output) — dispatch `bob-verifier` on non-trivial work
+- NEVER let unattended loops touch prod data, secrets, or `git push` to main (see `rules/safe-autonomy.md`)
 - ALWAYS add `.env`, `venv/`, `__pycache__/`, raw data dirs to `.gitignore`
 - [Add project-specific rules here]
 
@@ -47,6 +49,8 @@
 | Stuck on a bug | `/debugging-wizard` |
 | Major design decision | `/the-fool` |
 | Significant code written | `/code-review` |
+| Before marking work done | `bob-verifier` (fresh-eyes checker) |
+| Grading a batch of outputs (pass/fail) | `carl-evals` |
 | [Project-specific task] | `/[skill]` |
 
 ---
@@ -62,6 +66,8 @@ Write `.claude/HANDOFF.md` (replace, not append):
 ## Test state
 ```
 
+Append one row to `.claude/session-metrics.md` (goal met? · rollback? · interventions · friction · practices). Review monthly.
+
 Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
 ---
@@ -73,4 +79,4 @@ Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
 ---
 
-*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 80 lines.*
+*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under ~90 lines.*
