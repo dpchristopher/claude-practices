@@ -48,12 +48,18 @@ skills/
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
   session-context.ps1              ← Windows-native equivalent of the SessionStart hook
-  guard-secrets.sh                 ← PreToolUse: blocks writes to secret files
+  guard-secrets.sh                 ← PreToolUse: blocks secret-file writes AND keys pasted into any file (content scan)
+  guard-readonly-bash.sh           ← PreToolUse(Bash): blocks mutating commands on read-only reviewer agents
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
   plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
   subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail
   log-instructions-loaded.sh       ← InstructionsLoaded: diagnostic context-load log
+
+install.sh / install.ps1           ← Global installer (--dry-run / -DryRun to preview; writes an install manifest)
+backup-state.sh                    ← Snapshot un-tracked agent memory / local state
+.pre-commit-config.yaml            ← gitleaks commit-time secret backstop
+SECURITY.md / BACKUP.md / ROLLBACK.md  ← Secret-defense, backup, and rollback procedures
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
@@ -108,6 +114,15 @@ From the repo root:
 ```powershell
 # Windows (PowerShell)
 .\install.ps1
+```
+
+Preview what the installer would write first, without changing anything:
+
+```bash
+./install.sh --dry-run      # macOS/Linux/Git Bash
+```
+```powershell
+.\install.ps1 -DryRun       # Windows
 ```
 
 Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/`, every script in `hooks/` into `~/.claude/hooks/`, and every agent in `templates/.claude/agents/` into `~/.claude/agents/` (so the Minions go global).
