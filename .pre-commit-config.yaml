@@ -1,0 +1,10 @@
+# Pre-commit secret-scanning backstop. Install once per clone:
+#   pip install pre-commit   (or: pipx install pre-commit)
+#   pre-commit install
+# Then gitleaks runs on every `git commit`. Bypass a specific commit with:
+#   SKIP=gitleaks git commit -m "..."
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks

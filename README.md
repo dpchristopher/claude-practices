@@ -22,8 +22,8 @@ templates/
   META_ARCHITECTURE.md             ← Tool map + experiment tracking template
   .claude/
     rules/
-      ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (auto-loads)
-      automation.md                ← Idempotence, error handling, pipeline testing (auto-loads)
+      ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (path-scoped)
+      automation.md                ← Idempotence, error handling, pipeline testing (path-scoped)
       session-workflow.md          ← Full session start/end protocol (auto-loads)
       tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research (auto-loads)
       invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
@@ -48,12 +48,18 @@ skills/
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
   session-context.ps1              ← Windows-native equivalent of the SessionStart hook
-  guard-secrets.sh                 ← PreToolUse: blocks writes to secret files
+  guard-secrets.sh                 ← PreToolUse: blocks secret-file writes AND keys pasted into any file (content scan)
+  guard-readonly-bash.sh           ← PreToolUse(Bash): blocks mutating commands on read-only reviewer agents
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
   plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
   subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail
   log-instructions-loaded.sh       ← InstructionsLoaded: diagnostic context-load log
+
+install.sh / install.ps1           ← Global installer (--dry-run / -DryRun to preview; writes an install manifest)
+backup-state.sh                    ← Snapshot un-tracked agent memory / local state
+.pre-commit-config.yaml            ← gitleaks commit-time secret backstop
+SECURITY.md / BACKUP.md / ROLLBACK.md  ← Secret-defense, backup, and rollback procedures
 
 docs/
   Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
@@ -110,6 +116,15 @@ From the repo root:
 .\install.ps1
 ```
 
+Preview what the installer would write first, without changing anything:
+
+```bash
+./install.sh --dry-run      # macOS/Linux/Git Bash
+```
+```powershell
+.\install.ps1 -DryRun       # Windows
+```
+
 Both scripts are idempotent — safe to re-run after you pull updates. They copy every `skills/<name>/SKILL.md` into `~/.claude/skills/`, every script in `hooks/` into `~/.claude/hooks/`, and every agent in `templates/.claude/agents/` into `~/.claude/agents/` (so the Minions go global).
 
 Then add the SessionStart hook to your project's `.claude/settings.json`:
@@ -142,17 +157,14 @@ At session end: write `.claude/HANDOFF.md`. Next session picks up exactly where 
 
 ## How Context Carries Forward Between Sessions
 
-Only two things auto-load at Claude Code session start:
-- `CLAUDE.md`
-- `.claude/rules/*.md`
+Claude Code auto-loads `CLAUDE.md` and unconditional `.claude/rules/*.md` at session start. Some rules are **path-scoped** (they carry a `paths:` frontmatter and load only when Claude touches matching files — e.g. `ml-discipline.md`, `automation.md`). Everything else — `META_ARCHITECTURE.md`, the active plan, `INVARIANTS.md`, and `HANDOFF.md` — is loaded by the **SessionStart hook**, which pre-outputs them into context before your first message. `INVARIANTS.md` is loaded in full (never truncated); the others are summarized.
 
-Everything else (META_ARCHITECTURE, plans, HANDOFF) must be explicitly referenced. This kit handles that three ways:
+This kit's continuity rests on three things:
+1. **CLAUDE.md** — a Reading Order index at the top naming what's mandatory vs. on-demand
+2. **`.claude/rules/*.md`** — auto-load (path-scoped ones load conditionally) and reinforce the protocol
+3. **SessionStart hook** — the primary continuation mechanism; loads INVARIANTS.md in full plus summaries of META_ARCHITECTURE, the active plan, and HANDOFF
 
-1. **CLAUDE.md** includes an instruction to read META_ARCHITECTURE.md, `.claude/plans/`, and `.claude/HANDOFF.md` at session start
-2. **`.claude/rules/session-workflow.md`** auto-loads and reinforces the full protocol
-3. **SessionStart hook** pre-outputs summaries of all three into Claude's context before the first message — this is the primary continuation mechanism
-
-Result: open a session, describe the work, and Claude already knows the project state.
+Result: open a session, describe the work, and Claude already knows the project state — including the durable contracts in INVARIANTS.md.
 
 ---
 

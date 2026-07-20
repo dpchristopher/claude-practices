@@ -20,6 +20,10 @@ verification, and a judgment or recommendation at the end.
   say so explicitly — flag it rather than guessing.
 - Clearly separate "what the source says" (with URL) from "your recommendation."
 - If the question is actually a simple lookup, say so and recommend Stuart instead.
+- **Cross-check every material claim; label survivors and casualties.** For a claim that
+  matters to the recommendation, confirm it against a second source. Drop claims that don't
+  survive cross-checking. A claim you cannot verify is labeled **"unverified"** in the output —
+  never silently asserted as fact, and never counted as refuted just because you couldn't check it.
 
 ## Nested fan-out for multi-source research
 For a question spanning many sources, you may spawn a sub-researcher per source or angle

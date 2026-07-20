@@ -3,6 +3,24 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.3.0] — 2026-06-29 (Wave 6 — Ops, Safety & Runnable Mechanisms)
+### Added
+- Content-based secret scanning in `guard-secrets.sh` — blocks hardcoded keys pasted into ordinary files, not just secret-named files.
+- `.pre-commit-config.yaml` (gitleaks) + `SECURITY.md` — commit-time secret backstop and layered-defense doc with a git-history sweep command.
+- `--dry-run` / `-DryRun` on both installers + an install manifest written to `~/.claude` (preview before writing; enables surgical rollback).
+- Example Dynamic Workflows: `fan-out-audit.js`, `fix-until-green.js` (the runnable form of the loop rule) + a workflows README.
+- Agent-scoped read-only Bash guard on Kevin/Mel/Carl (`guard-readonly-bash.sh`) — closes the Bash side-door on read-only reviewers.
+- `maxTurns: 8` on Stuart (bounds cost on the cheap light-research agent).
+- `BACKUP.md` + `backup-state.sh` — backs up un-git-tracked agent memory / local state.
+- `ROLLBACK.md` — /rewind + git tags + install-manifest rollback procedure.
+- Loop cost budgets (concrete agent/token ceilings) in `loop.md`; Bob reframed review→refute; Dave gains a vote-on-claims protocol.
+
+### Fixed
+- README consistency: path-scoped rules no longer mislabeled "auto-loads"; the continuity section now correctly describes INVARIANTS.md-via-hook and conditional rule loading.
+
+### Notes
+- Addresses reviewer (boss) feedback across all eight areas: dry-run, agent hooks, secret protections, backups, rollbacks, loops, workflows, adversarial reviewing. Load-bearing hook mechanism re-verified live against official docs before building.
+
 ## [1.2.0] — 2026-06-29 (Wave 5 — Native Platform Features & Elite Doctrine)
 ### Added
 - `memory: project` on Bob, Kevin, Gru — persistent per-agent knowledge across sessions (native subagent memory).
