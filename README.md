@@ -22,8 +22,8 @@ templates/
   META_ARCHITECTURE.md             ← Tool map + experiment tracking template
   .claude/
     rules/
-      ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (auto-loads)
-      automation.md                ← Idempotence, error handling, pipeline testing (auto-loads)
+      ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (path-scoped)
+      automation.md                ← Idempotence, error handling, pipeline testing (path-scoped)
       session-workflow.md          ← Full session start/end protocol (auto-loads)
       tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research (auto-loads)
       invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
@@ -142,17 +142,14 @@ At session end: write `.claude/HANDOFF.md`. Next session picks up exactly where 
 
 ## How Context Carries Forward Between Sessions
 
-Only two things auto-load at Claude Code session start:
-- `CLAUDE.md`
-- `.claude/rules/*.md`
+Claude Code auto-loads `CLAUDE.md` and unconditional `.claude/rules/*.md` at session start. Some rules are **path-scoped** (they carry a `paths:` frontmatter and load only when Claude touches matching files — e.g. `ml-discipline.md`, `automation.md`). Everything else — `META_ARCHITECTURE.md`, the active plan, `INVARIANTS.md`, and `HANDOFF.md` — is loaded by the **SessionStart hook**, which pre-outputs them into context before your first message. `INVARIANTS.md` is loaded in full (never truncated); the others are summarized.
 
-Everything else (META_ARCHITECTURE, plans, HANDOFF) must be explicitly referenced. This kit handles that three ways:
+This kit's continuity rests on three things:
+1. **CLAUDE.md** — a Reading Order index at the top naming what's mandatory vs. on-demand
+2. **`.claude/rules/*.md`** — auto-load (path-scoped ones load conditionally) and reinforce the protocol
+3. **SessionStart hook** — the primary continuation mechanism; loads INVARIANTS.md in full plus summaries of META_ARCHITECTURE, the active plan, and HANDOFF
 
-1. **CLAUDE.md** includes an instruction to read META_ARCHITECTURE.md, `.claude/plans/`, and `.claude/HANDOFF.md` at session start
-2. **`.claude/rules/session-workflow.md`** auto-loads and reinforces the full protocol
-3. **SessionStart hook** pre-outputs summaries of all three into Claude's context before the first message — this is the primary continuation mechanism
-
-Result: open a session, describe the work, and Claude already knows the project state.
+Result: open a session, describe the work, and Claude already knows the project state — including the durable contracts in INVARIANTS.md.
 
 ---
 
