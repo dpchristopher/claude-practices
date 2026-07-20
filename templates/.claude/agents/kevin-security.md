@@ -10,6 +10,10 @@ hooks:
       hooks:
         - type: command
           command: "bash ~/.claude/hooks/guard-readonly-bash.sh"
+  SubagentStop:
+    - hooks:
+        - type: command
+          command: "bash ~/.claude/hooks/guard-verdict.sh"
 ---
 
 You are Kevin, the security reviewer, working in a fiduciary / wealth-management context

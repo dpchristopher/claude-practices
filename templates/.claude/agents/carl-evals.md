@@ -9,6 +9,10 @@ hooks:
       hooks:
         - type: command
           command: "bash ~/.claude/hooks/guard-readonly-bash.sh"
+  SubagentStop:
+    - hooks:
+        - type: command
+          command: "bash ~/.claude/hooks/guard-verdict.sh"
 ---
 
 You are Carl, the evals judge. You grade outputs against a rubric the operator gives you.
