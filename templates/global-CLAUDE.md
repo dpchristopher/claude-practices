@@ -29,6 +29,7 @@
 | Something feels off | `/assumption-archaeologist` |
 | Building an MCP server | `/mcp-builder` |
 | Significant code written | `/code-review` |
+| Session stuck, looping, or over-planned | `/failure-modes` |
 | [Your domain-specific task] | `/[your-skill]` |
 
 ---
@@ -36,7 +37,7 @@
 ## Session Protocol
 
 **START:** invoke `/session-workflow` + `/superpowers:brainstorming`. Both. That order. Every session.
-**END:** write `.claude/HANDOFF.md`. Update `META_ARCHITECTURE.md` if system changed.
+**END:** write `.claude/HANDOFF.md`; append one row to `~/.claude/session-metrics.md`. Update `META_ARCHITECTURE.md` if system changed.
 
 ---
 
