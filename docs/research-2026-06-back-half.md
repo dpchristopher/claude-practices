@@ -34,7 +34,17 @@
 > A prior build had already added an agent crew (bob, carl, kevin, phil, jerry, gru, dave, stuart, mel)
 > covering much of this research. Check `~/.claude/agents/` before proposing anything new here.
 
-Everything else below (Tier 2–3) remains a **backlog menu**, not built.
+**Shipped in a second pass (2026-07-19)** — three Tier-2 items chosen to counter bloat/cost, not add ceremony:
+
+- ✅ **Kit-maintenance** → `templates/.claude/rules/kit-maintenance.md` + `~/.claude/rules/`. Line
+  budgets, quarterly GC pass, skill-overlap audit, dated deprecation markers. The antidote rule.
+- ✅ **Loop-cost-discipline** → `templates/.claude/rules/loop-cost-discipline.md` + `~/.claude/rules/`.
+  Estimate-before-loop, default cap 3 iterations, parallelize only when work > cold-start tax.
+- ✅ **Failure-modes skill** → `skills/failure-modes-SKILL.md` + `~/.claude/skills/failure-modes/`.
+  Anti-pattern → detection → escape table, including the "kit over-process" meta anti-pattern.
+
+Remaining Tier-3 backlog (still a menu, not built): operator-skills doc, team-scale section,
+beyond-code doc, domain-knowledge template, plan-archiving, constitution/EARS framing.
 
 ---
 

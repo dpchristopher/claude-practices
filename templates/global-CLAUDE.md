@@ -29,6 +29,7 @@
 | Significant code written | `/code-review` |
 | Before marking any non-trivial change done | `bob-verifier` (fresh-eyes checker) |
 | Grading a batch of model/agent/ML outputs | `carl-evals` (binary pass/fail) |
+| Session stuck, looping, or over-planned | `/failure-modes` |
 | [Your domain-specific task] | `/[your-skill]` |
 
 ---
@@ -48,5 +49,6 @@
 - NEVER claim done/fixed/passing without pasted evidence (command + output) — dispatch `bob-verifier` on non-trivial work
 - NEVER run unattended loops with permission prompts disabled, or let them touch prod data, secrets, or `git push` to main
 - Log one row per session to `~/.claude/session-metrics.md`; review monthly, keep/cut/revise one practice
+- Cap refinement loops at ~3 iterations unless feedback is concrete (test/metric); quarterly, prune the kit — see `~/.claude/rules/`
 - Skills first. Always. No exceptions.
 - [Add your own rules here]

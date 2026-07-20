@@ -51,6 +51,7 @@
 | Significant code written | `/code-review` |
 | Before marking work done | `bob-verifier` (fresh-eyes checker) |
 | Grading a batch of outputs (pass/fail) | `carl-evals` |
+| Session stuck, looping, or over-planned | `/failure-modes` |
 | [Project-specific task] | `/[skill]` |
 
 ---
