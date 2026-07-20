@@ -58,6 +58,7 @@
 | Stuck on a bug | `/debugging-wizard` |
 | Major design decision | `/the-fool` |
 | Significant code written | `/code-review` |
+| Session stuck, looping, or over-planned | `/failure-modes` |
 | [Project-specific task] | `/[skill]` |
 
 ---
@@ -72,6 +73,8 @@ Write `.claude/HANDOFF.md` (replace, not append):
 ## Next action (priority 1)
 ## Test state
 ```
+
+Append one row to `.claude/session-metrics.md` (goal met? · rollback? · interventions · friction · practices — see `rules/measurement.md`). Review monthly.
 
 Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
