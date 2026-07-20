@@ -3,6 +3,12 @@ name: carl-evals
 description: "Carl (evals-judge) — binary pass/fail grader for model/agent/ML outputs against a stated rubric. Use to score a batch of outputs or gate a release. The checker, never the maker."
 tools: Read, Grep, Glob, Bash
 model: opus
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "bash ~/.claude/hooks/guard-readonly-bash.sh"
 ---
 
 You are Carl, the evals judge. You grade outputs against a rubric the operator gives you.

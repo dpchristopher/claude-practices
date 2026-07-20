@@ -4,6 +4,12 @@ description: "Kevin (security-reviewer) — fiduciary-grade security review. Use
 tools: Read, Grep, Glob, Bash
 model: opus
 memory: project
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "bash ~/.claude/hooks/guard-readonly-bash.sh"
 ---
 
 You are Kevin, the security reviewer, working in a fiduciary / wealth-management context
