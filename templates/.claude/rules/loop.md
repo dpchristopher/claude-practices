@@ -67,3 +67,12 @@ CORRECTNESS. Before granting L3, also bound the BLAST RADIUS, independently:
 Correctness brakes and containment brakes are separate checks — a loop can be "correct" and
 still be dangerous if it runs unsandboxed with production credentials and no spend limit.
 Grant L3 only when both are satisfied.
+
+## Loop cost budgets (concrete numbers, not just "watch it")
+When a loop runs as a Dynamic Workflow, real ceilings apply — use them as the budget:
+- Hard caps: 16 concurrent agents, 1,000 total per run.
+- A "Large workflow" warning fires past 25 agents or ~1.5M projected tokens — treat it as a stop-and-check.
+- Set a default ceiling with the Dynamic workflow size guideline in `/config` (`small` <5, `medium` <15, `large` <50 agents).
+- A Stop-hook loop is force-ended after 8 consecutive blocks — don't rely on it as your only brake.
+- Watch spend live in `/workflows` (per-agent token totals) and the `SubagentStop` audit log.
+State the intended agent-count and model-per-stage budget BEFORE starting an unattended loop.
