@@ -1,0 +1,4 @@
+# Local runtime state written into the repo root by Claude Code — never committed.
+# Agent memory (memory: project stores), isolation worktrees, and any per-session
+# scratch land here. The tracked template lives under templates/.claude/, not here.
+.claude/
