@@ -1,4 +1,36 @@
-# Local runtime state written into the repo root by Claude Code — never committed.
-# Agent memory (memory: project stores), isolation worktrees, and any per-session
-# scratch land here. The tracked template lives under templates/.claude/, not here.
+# --- Local runtime state (Claude Code) ---
+# Agent memory (memory: project stores), isolation worktrees, per-session scratch.
+# The tracked template lives under templates/.claude/, not here.
 .claude/
+
+# --- Secrets — never commit ---
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials
+secrets/
+
+# --- Python ---
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+
+# --- Data / model artifacts (keep raw data out of git) ---
+data/raw/
+*.pkl
+*.parquet
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
