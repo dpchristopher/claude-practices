@@ -3,6 +3,13 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.3.1] — 2026-07-22 (Wave 6 gap closure)
+### Added
+- `effort: high` on the heavy reasoning agents (`dave-researcher`, `gru-planner`) — field/values verified against the sub-agents docs.
+- `hooks/guard-verdict.sh` — enforced verdict gate: a `SubagentStop` hook wired into Bob/Carl/Kevin that blocks (exit 2) a checker from finishing without emitting its required verdict marker. Makes maker≠checker *enforced*, not just instructed. Feasibility (SubagentStop payload carries `last_assistant_message`; exit 2 blocks) verified live against the hooks docs before building.
+### Fixed
+- `guard-verdict.sh` matches the agent's final message only (not the whole payload), with encoding-independent ASCII anchors — closes an emoji-encoding false-block and a metadata-path false-pass surfaced by a fresh-context Bob review.
+
 ## [1.3.0] — 2026-06-29 (Wave 6 — Ops, Safety & Runnable Mechanisms)
 ### Added
 - Content-based secret scanning in `guard-secrets.sh` — blocks hardcoded keys pasted into ordinary files, not just secret-named files.

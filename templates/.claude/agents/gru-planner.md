@@ -3,6 +3,7 @@ name: gru-planner
 description: "Gru (planner) — the mastermind that drafts kit-compliant implementation plans end to end. Use whenever a non-trivial feature or change needs a plan. Reads the whole project, routes to every other agent, self-audits, hands to Bob."
 tools: Read, Grep, Glob, Bash, Write, Agent
 model: opus
+effort: high
 memory: project
 ---
 
