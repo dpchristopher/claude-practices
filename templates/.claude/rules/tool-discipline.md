@@ -126,3 +126,28 @@ Stuart-explorer on Haiku). If a wrong answer would quietly mislead a decision, i
 
 Route light lookups to `stuart-explorer` to conserve heavier models on a large codebase.
 Reserve Opus / `dave-researcher` for synthesis, verification, and recommendations.
+
+---
+
+## Docstrings & Comments
+
+Default to none. A well-named function or module already says what it does; a docstring
+should only add what the name can't — the non-obvious WHY.
+
+**Write one when:**
+- The module/function is a public API surface others will import
+- There's a hidden constraint, invariant, or workaround a reader could easily violate
+- The governing rule of a whole module isn't inferable from any single function name
+  (e.g. `surgical/compare.py`'s module docstring states the core principle — "when in
+  doubt, report a change" — that no individual function's name conveys)
+
+**Skip it when:**
+- The name and signature already say everything (`get_user_by_id(id)`)
+- It would just restate the code in prose
+
+**Length:** one line, unless the WHY genuinely needs more. A governing-principle module
+docstring is a legitimate exception, not a violation of this rule. What's never
+acceptable is a docstring that restates the WHAT across multiple paragraphs.
+
+Same test as the `stop-slop` skill's density check: if a reader who deleted the docstring
+would lose real information, keep it. If they'd lose only ceremony, cut it.
