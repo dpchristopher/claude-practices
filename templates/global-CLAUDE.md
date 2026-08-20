@@ -29,6 +29,8 @@
 | Something feels off | `/assumption-archaeologist` |
 | Building an MCP server | `/mcp-builder` |
 | Significant code written | `/code-review` |
+| Before marking any non-trivial change done | dispatch `bob-verifier` (fresh-eyes checker) |
+| Grading a batch of model/agent/ML outputs | dispatch `carl-evals` (binary pass/fail) |
 | Session stuck, looping, or over-planned | `/failure-modes` |
 | [Your domain-specific task] | `/[your-skill]` |
 
@@ -46,5 +48,9 @@
 - NEVER commit `.env` files or API keys to any repo
 - NEVER push directly to main — always use a feature branch
 - NEVER process 50+ items sequentially in the main session — use subagents or scripts
+- NEVER claim done/fixed/passing without pasted evidence (command + output) — dispatch `bob-verifier` on non-trivial work
+- NEVER run unattended loops with permission prompts disabled, or let them touch prod data, secrets, or `git push` to main
+- Log one row per session to `~/.claude/session-metrics.md`; review monthly, keep/cut/revise one practice
+- Cap refinement loops at ~3 iterations unless feedback is concrete (test/metric); quarterly, prune the kit — see `~/.claude/rules/`
 - Skills first. Always. No exceptions.
 - [Add your own rules here]
