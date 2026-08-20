@@ -9,10 +9,16 @@
 
 - Global `~/.claude/CLAUDE.md`: keep under ~60 lines. It burns tokens every turn, every project.
 - Project `CLAUDE.md`: keep under ~90 lines. Detail belongs in `.claude/rules/*.md`, not inline.
+- Per-wave growth across always-loaded files (`global-rules/` + unconditional `.claude/rules/`):
+  aim for **≤ +30 lines**. Wave 7 landed at +51 after cutting 19 through dedup — accepted
+  deliberately, because the remainder was doctrine the wave had just decided it needed. If you
+  exceed the aim, say the number and justify it; do not quietly relax the target or delete
+  something load-bearing to hit it.
 - If a file exceeds budget, move detail into a rule/doc and link it — don't inline it.
 
 Every line in an always-loaded file must earn its place. The test: "would removing this cause
-Claude to make a mistake?" If no, cut it.
+Claude to make a mistake?" If no, cut it. A budget you silently violate is worse than one you
+openly revise.
 
 ---
 
