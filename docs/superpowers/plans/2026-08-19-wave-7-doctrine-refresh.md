@@ -897,12 +897,12 @@ you want it.
 _(Executor: append findings after each phase. If the session ended right now, could someone start Phase N+1
 from this file alone? That is the test.)_
 
-- **Phase 1:** _pending_
-- **Phase 2:** _pending_
-- **Phase 3:** _pending_
-- **Phase 4:** _pending_
-- **Phase 5:** _pending_
-- **Phase 6:** _pending_
-- **Phase 7:** _pending_
-- **Phase 8:** _pending_
-- **Phase 9:** _pending_
+- **Phase 1:** Baseline: VERSION 1.3.1, 10 hooks (plan said 11), 9 agents, 9 skills, rules 738 lines. Gru's repo findings all confirmed: ROLLBACK/BACKUP never mentioned worktrees; global rules untracked and not installed; Dave's prompt was the proximate cause. `verify-sources.sh` immediately found a file the plan missed — `gru-planner.md:80` also quotes the Workflow caps. **MAST gate corrected two circulating numbers** and gained category FC3 entirely.
+- **Phase 2:** Brake landed in three places. `5 levels deep` now returns zero kit-wide. Global rule addition trimmed 19→15 lines after overshooting the ≤14 budget.
+- **Phase 3:** INV-04 went green here. Deliberately designed for 3 nesting layers rather than restoring 5.
+- **Phase 4:** Both items were replacements, paying part of the prune tax. Worktree caveat preserved verbatim.
+- **Phase 5:** MAST placed in the `failure-modes` skill (on-demand), not a rule — a research citation should not cost tokens every turn.
+- **Phase 6:** SessionStart check tested across 4 states × 2 shells. **PowerShell hooks use `Write-Host`, which bypasses the pipeline — they cannot be asserted on programmatically.** Verified from visible output instead. `guard-fanout.sh` built after live feasibility check confirmed `PreToolUse` matches `Agent`.
+- **Phase 7:** README reframed to a dated snapshot. Also fixed a broken link and three conflicting line budgets.
+- **Phase 8:** Found and merged a duplication I had created in Phase 3 (16/1,000 in two loop.md sections). Net +70 → +51. Ceiling breach escalated to the user, who accepted it and chose to raise the ceiling.
+- **Phase 9:** **Bob returned 6 gaps with zero children — the Task 2.2 fix works, tested live.** Most serious: my FC1 "correction" (43.8%) contradicted its own itemization (sums to 44.2). Re-verification gave a *third* value (43.9). **The category number is now withheld and the correction retracted** — mode-level figures are stable and kept. Also fixed: `guard-fanout` counter raced and silently undercounted parallel dispatch (the exact incident scenario); the self-reported budget figure omitted the lines the budget rule itself added (+51 → +57); three uncited Workflow numbers; missing measurement path; missing README hook entries.

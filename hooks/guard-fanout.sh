@@ -34,10 +34,13 @@ STATE_DIR="${TMPDIR:-/tmp}/claude-fanout"
 mkdir -p "$STATE_DIR" 2>/dev/null || exit 0     # never let bookkeeping break a dispatch
 COUNTER="$STATE_DIR/$SESSION"
 
-COUNT=0
-[ -f "$COUNTER" ] && COUNT=$(cat "$COUNTER" 2>/dev/null || echo 0)
-COUNT=$((COUNT + 1))
-echo "$COUNT" > "$COUNTER" 2>/dev/null || true
+# Append-then-count, NOT read-modify-write. O_APPEND is atomic, so a parallel
+# fan-out - the exact 2026-08-19 scenario - is counted correctly. A read-modify-write
+# counter silently undercounts concurrent dispatches and never fires, which would
+# have made this hook useless against the incident it exists for.
+echo x >> "$COUNTER" 2>/dev/null || true
+COUNT=$(wc -l < "$COUNTER" 2>/dev/null | tr -d ' ')
+[ -z "$COUNT" ] && exit 0
 
 if [ "$COUNT" -le "$THRESHOLD" ]; then
   exit 0                                        # normal fan-out: say nothing

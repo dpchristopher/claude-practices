@@ -62,6 +62,8 @@ hooks/
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
   plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
+  guard-fanout.sh                  ← PreToolUse(Agent), OPT-IN: asks past 4 dispatches/session
+  guard-verdict.sh                 ← SubagentStop: blocks a checker finishing without its verdict
   subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail
   log-instructions-loaded.sh       ← InstructionsLoaded: diagnostic context-load log
 

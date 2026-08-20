@@ -38,6 +38,9 @@ Verified 2026-08-19 against the `Workflow` tool's own specification.
 | Concurrent agents per workflow | 16 |
 | Total agents per workflow run | 1,000 |
 | Max items per `parallel()` / `pipeline()` call | 4,096 |
+| "Large workflow" warning threshold | past 25 agents or ~1.5M projected tokens |
+| Stop-hook loop force-end | after 8 consecutive blocks |
+| Dynamic workflow size guideline (`/config`) | `small` <5, `medium` <15, `large` <50 agents |
 
 These govern **the Workflow tool only** — not ad hoc `Agent` dispatch, which is bound by the
 subagent limits above. Conflating the two was a real defect in the kit before Wave 7.
@@ -80,7 +83,7 @@ annotators, Cohen's κ = 0.88.
 
 | Category | Mode | % |
 |---|---|---|
-| **FC1. System design issues — 43.8%** | FM-1.1 Disobey task specification | 11.8% |
+| **FC1. System design issues — see note** | FM-1.1 Disobey task specification | 11.8% |
 | | FM-1.2 Disobey role specification | 1.5% |
 | | FM-1.3 Step repetition | 15.7% |
 | | FM-1.4 Loss of conversation history | 2.80% |
@@ -99,9 +102,23 @@ annotators, Cohen's κ = 0.88.
 
 | Circulating claim | Actual |
 |---|---|
-| System design 44.2% | **43.8%** |
-| Inter-agent misalignment ~37% | **32.35%** |
+| Inter-agent misalignment ~37% | **32.35%** — confirmed, and consistent with its own modes |
 | "identified failures require more sophisticated solutions" | not the operative sentence — see verbatim below |
+
+### FC1's category total: withheld, and why
+
+**Do not quote a category percentage for FC1.** Three retrieval attempts produced three
+different values: 43.8%, 43.9%, and an arithmetic sum of its own five modes of 44.2%. The
+mode-level numbers are stable across independent fetches and are safe to cite; the category
+header is not, and the discrepancy is likely a rounding or per-trace-vs-per-failure counting
+detail this ledger cannot resolve without reading the figure directly.
+
+Per the sourcing rule: a number that cannot be reliably located does not ship. FC2 (32.35%) and
+FC3 (23.5%) *do* reconcile against their own itemizations and are safe.
+
+An earlier draft of this wave claimed "44.2% was wrong, it is 43.8%." **That claim is retracted.**
+It was itself under-verified — caught by a fresh-context review, which is exactly the case for
+maker≠checker.
 
 ### Verbatim conclusion
 

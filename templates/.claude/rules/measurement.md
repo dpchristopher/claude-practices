@@ -18,6 +18,11 @@ At session end (alongside HANDOFF), append a row to `.claude/session-metrics.md`
 Plus tags: which practices/skills were in play (e.g. `verification`, `bob-verifier`,
 `labarr-ml`), and one line on the top failure if there was one.
 
+**On probation — decide keep/cut at the next monthly review:**
+- `guard-fanout` (added 2026-08-19). Tag any session where it fired. Cut it if it never fires,
+  or if it fires on dispatches that were correct. A hook with no evaluation path is the
+  accretion `kit-maintenance.md` exists to prevent.
+
 Keep it binary where possible. No 1–5 quality scores — the difference between a 3 and a 4 is
 noise (Hamel's rule).
 
