@@ -13,10 +13,10 @@ cheaply checkable and each is something a doctrine wave could plausibly break.
 
 | ID | Invariant (plain language) | Area it constrains | How to verify | Status |
 |----|----------------------------|--------------------|---------------|--------|
-| INV-01 | Both installers are idempotent, and a dry run writes nothing. | `install.sh` / `install.ps1` | `./install.sh --dry-run && git status --porcelain \| wc -l` → `0` | ⚠ unverified |
-| INV-02 | Every file in `hooks/` is installed, and every hook referenced by settings or agent frontmatter exists in `hooks/`. | hooks ↔ settings wiring | `bash scripts/verify-hooks.sh` → `HOOK PARITY OK`, exit 0 | ⚠ unverified |
-| INV-03 | No secret-shaped string is committed. | whole repo | `pre-commit run --all-files` (gitleaks) → pass | ⚠ unverified |
-| INV-04 | Every platform limit number quoted in shipped doctrine has a dated entry in `SOURCES.md`. | `templates/.claude/rules/*`, `templates/.claude/agents/*`, `global-rules/*` | `bash scripts/verify-sources.sh` → `CITATIONS OK`, exit 0 | ⚠ unverified |
+| INV-01 | Both installers are idempotent, and a dry run writes nothing. | `install.sh` / `install.ps1` | `./install.sh --dry-run && git status --porcelain \| wc -l` → `0` | ✅ holds (2026-08-19) |
+| INV-02 | Every file in `hooks/` is installed, and every hook referenced by settings or agent frontmatter exists in `hooks/`. | hooks ↔ settings wiring | `bash scripts/verify-hooks.sh` → `HOOK PARITY OK`, exit 0 | ✅ holds (2026-08-19) |
+| INV-03 | No secret-shaped string is committed. | whole repo | `pre-commit run --all-files` (gitleaks) → pass | ⚠ unverified — `pre-commit` is not installed on this machine. A manual secret-shape grep over the Wave 7 diff returned 0 hits, which is a weaker check. Install `pre-commit` before trusting this row. |
+| INV-04 | Every platform limit number quoted in shipped doctrine has a dated entry in `SOURCES.md`. | `templates/.claude/rules/*`, `templates/.claude/agents/*`, `global-rules/*` | `bash scripts/verify-sources.sh` → `CITATIONS OK`, exit 0 | ✅ holds (2026-08-19) — note the check is file-level, not per-number; it catches an uncited file, not an uncited line |
 
 ## Notes
 - Add an invariant the moment a cross-cutting contract is established (auth, data integrity, perf budget, external API shape).
