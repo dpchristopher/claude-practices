@@ -39,10 +39,27 @@ mkdir -p src docs notebooks experiments
 Copy these files into the project root:
 - `CLAUDE.md` (from `claude-practices/templates/CLAUDE.md`)
 - `META_ARCHITECTURE.md` (from `claude-practices/templates/META_ARCHITECTURE.md`)
+- `INVARIANTS.md` (from `claude-practices/templates/INVARIANTS.md`)
 - `HANDOFF.md` → `claude-practices/templates/HANDOFF.md` (if exists, else skip)
 - `.claude/rules/*.md` (from `claude-practices/templates/.claude/rules/`)
+- **`.claude/settings.json` (from `claude-practices/templates/.claude/settings.json`)** — this is
+  what wires the SessionStart hook. **Without it the hook never fires**, so `INVARIANTS.md`,
+  `HANDOFF.md`, and the active plan never auto-load and the whole continuity mechanism is dead.
+  Do not skip this file.
 
-If claude-practices is not cloned locally, use the template content embedded at the bottom of this skill file.
+Verify the wiring landed before moving on:
+
+```bash
+grep -q SessionStart .claude/settings.json && echo "hook wired OK" || echo "MISSING — copy templates/.claude/settings.json"
+```
+
+**If `claude-practices` is not cloned locally, stop and clone it first:**
+
+```bash
+git clone https://github.com/dpchristopher/claude-practices.git
+```
+
+Scaffolding from memory produces a project that looks right and silently lacks the rules.
 
 ---
 
