@@ -91,11 +91,5 @@ Before closing:
 
 ## Context Management
 
-There is no hard limit. When context is climbing, flag it and ask — don't act unilaterally.
-
-Options when context is high:
-- `/compact` with a summary hint — for general bloat
-- Offload to subagent — for batch work or research
-- Fresh session with plan file as context — for major phase transitions
-
-Never process 50+ files sequentially in the main session — use standalone scripts or subagents.
+See `tool-discipline.md` → *Context Budget Awareness* and *Choosing an isolation mechanism*.
+Kept in one place so the two cannot drift apart.

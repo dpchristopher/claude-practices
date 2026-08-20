@@ -40,11 +40,9 @@ the maker's blind spots. This is the most important consequence of fork being on
 (source: `SOURCES.md#subagent-limits`) — it can quietly turn a real verification step into
 self-review.
 
-**On thin payloads.** A cross-session message carries text only, never conversation history or
-files. That thinness is a feature: MAST measures inter-agent misalignment — context collapse and
-format mismatch when passing messages between agents — at 32.35% of multi-agent failures, the
-category it calls hardest to debug (source: `SOURCES.md#mast`). An explicit, thin payload is
-safer than a rich implicit one.
+**Thin payloads are a feature.** A cross-session message carries text only — never history or
+files. MAST measures inter-agent misalignment (context collapse, format mismatch when passing
+messages) at 32.35% of failures and calls it hardest to debug (source: `SOURCES.md#mast`).
 
 ---
 

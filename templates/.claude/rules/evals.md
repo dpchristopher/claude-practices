@@ -26,17 +26,13 @@ the same break can't silently return. This is the manual capture-trace → add-t
 assert-in-CI workflow (not a one-click feature).
 
 ### Pinned cases
-This applies to the kit's own operational failures, not only model outputs.
+Applies to the kit's own operational failures, not only model outputs.
 
-**2026-08-19 — uncosted fan-out burn.** A researcher agent was given a 4-part question. It
-spawned 5 child agents with no cost estimate, consumed the entire session usage limit, and
-returned nothing.
-*Root cause:* breadth without a pre-dispatch estimate. Not depth — the platform's depth limit
-was never reached.
-*The assertion that catches it:* **a dispatch with no stated child count is a fail, regardless
-of what comes back.**
-*Where the fix lives:* `~/.claude/rules/loop-cost-discipline.md` (global), plus the fan-out
-sections of `dave-researcher.md` and `bob-verifier.md` — the prompt that produced the burn.
+**2026-08-19 — uncosted fan-out burn.** A researcher agent got a 4-part question, spawned 5
+children with no estimate, consumed the whole session limit, returned nothing. Root cause was
+breadth, not depth — the depth limit was never reached. **Assertion: a dispatch with no stated
+child count is a fail regardless of output.** Fix lives in `loop-cost-discipline.md` (global)
+and the fan-out sections of `dave-researcher.md` / `bob-verifier.md`.
 
 ## The data flywheel
 Operational failures feed back into the eval set over time (annotate → feed back → review
