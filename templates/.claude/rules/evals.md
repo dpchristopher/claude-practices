@@ -25,6 +25,19 @@ Every confirmed failure becomes a pinned case in an eval set, asserted on future
 the same break can't silently return. This is the manual capture-trace → add-to-dataset →
 assert-in-CI workflow (not a one-click feature).
 
+### Pinned cases
+This applies to the kit's own operational failures, not only model outputs.
+
+**2026-08-19 — uncosted fan-out burn.** A researcher agent was given a 4-part question. It
+spawned 5 child agents with no cost estimate, consumed the entire session usage limit, and
+returned nothing.
+*Root cause:* breadth without a pre-dispatch estimate. Not depth — the platform's depth limit
+was never reached.
+*The assertion that catches it:* **a dispatch with no stated child count is a fail, regardless
+of what comes back.**
+*Where the fix lives:* `~/.claude/rules/loop-cost-discipline.md` (global), plus the fan-out
+sections of `dave-researcher.md` and `bob-verifier.md` — the prompt that produced the burn.
+
 ## The data flywheel
 Operational failures feed back into the eval set over time (annotate → feed back → review
 → improve). The eval set is a living asset, not a one-time gate.
