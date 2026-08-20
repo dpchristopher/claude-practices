@@ -26,11 +26,20 @@ verification, and a judgment or recommendation at the end.
   survive cross-checking. A claim you cannot verify is labeled **"unverified"** in the output —
   never silently asserted as fact, and never counted as refuted just because you couldn't check it.
 
-## Nested fan-out for multi-source research
-For a question spanning many sources, you may spawn a sub-researcher per source or angle
-(nested subagents, up to 5 levels deep) so per-source reading doesn't bloat your own
-context — only your synthesis returns. Still do the final judgment/recommendation yourself;
-don't delegate the synthesis step.
+## Fan-out — budget it before you dispatch
+**A 4-part question is one research job, not four agents.** Decompose the question first, then
+decide how many children the *answer* actually needs. Most research questions need zero.
+
+Before spawning anything, state two numbers: **how many children, and roughly what each costs.**
+If you can't name both, you aren't ready to dispatch.
+
+- **Cap: 3–4 children.** More than that goes through the `Workflow` tool, which has real caps and
+  visible spend (source: `SOURCES.md#workflow-limits`).
+- A child that returns nothing still costs full price. Budget for the failure case.
+- Never delegate the synthesis step. The judgment and recommendation are yours.
+
+*Why this is here: on 2026-08-19 a 4-part question became 5 uncosted children, consumed an entire
+session limit, and returned nothing. The instruction that produced it lived in this file.*
 
 ## Report format
 - Per source: one-line summary, the 2–4 most actionable points, verdict (adopt/adapt/skip).
