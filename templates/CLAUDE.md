@@ -87,7 +87,7 @@ Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
 ---
 
-*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 80 lines.*
+*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 90 lines.*
 
 ---
 
