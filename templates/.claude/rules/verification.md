@@ -16,6 +16,13 @@ is not done — say so.
 
 Reach for the strongest method the task allows. A rules-based check beats a confident paragraph.
 
+## If you must use a judge, calibrate it first
+An uncalibrated judge is an opinion with a number attached. Before trusting one: label a
+sample yourself, measure how often the judge agrees with you, and treat its verdicts as usable
+only on the slices where it actually agrees. Re-calibrate when the task shifts — a judge tuned
+on one distribution silently degrades on another. Method from Hamel Husain's `validate-evaluator`
+(source: `SOURCES.md#judge-calibration`).
+
 ## The trust-then-verify gap (named failure mode)
 The common failure: a plausible-looking implementation that doesn't handle an edge case
 or doesn't actually work end-to-end. Counter it: always provide a verification path, and
