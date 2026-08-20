@@ -49,14 +49,10 @@ each costs.** If you can't name both, you're not ready to dispatch.
 - A multi-part question is **not** a licence to spawn one child per part. Decompose the question
   first, then decide how many children the *answer* needs.
 - **Ad hoc `Agent` fan-out is capped at 3–4 children.** Anything larger goes through the `Workflow`
-  tool — visible progress in `/workflows`, real caps, token-budget awareness
-  (source: `SOURCES.md#workflow-limits`).
+  tool — real caps and visible spend (source: `SOURCES.md#workflow-limits`).
 - A child that returns nothing still costs full price. **Budget for the failure case.**
-- Depth was never the constraint that mattered here; breadth was
-  (source: `SOURCES.md#subagent-limits`).
-
-**Pinned regression — 2026-08-19:** one researcher agent, a 4-part question, 5 uncosted children,
-entire session limit consumed, zero output returned. No estimate was stated before dispatch.
+- Breadth is the constraint, not depth (source: `SOURCES.md#subagent-limits`). Regression case:
+  `templates/.claude/rules/evals.md`, 2026-08-19.
 
 ---
 
