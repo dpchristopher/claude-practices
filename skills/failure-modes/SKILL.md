@@ -37,3 +37,29 @@ escape move. Recovery beats thrashing.
 
 An error inside a loop is the next instruction, not a dead end — but only if it *changes* the next
 action. The same action repeated is not recovery; it's the failure. Detect, switch, or escalate.
+
+## Independent corroboration (MAST)
+
+UC Berkeley's MAST study annotated 1,642 multi-agent execution traces across 7 frameworks
+(κ=0.88) and found 14 failure modes. Several map directly onto rows this catalog already had,
+arrived at independently (source: `SOURCES.md#mast`):
+
+| MAST mode | % | This kit's answer |
+|---|---|---|
+| Step repetition | 15.7% | Loop drift / stuck-loop detection |
+| Unaware of termination conditions | 12.4% | "Write the exit condition BEFORE the loop starts" |
+| Disobey task specification | 11.8% | Evidence over assertion; premature done |
+| Loss of conversation history | 2.80% | INVARIANTS.md + HANDOFF.md |
+| No or incomplete verification | 8.20% | Maker ≠ checker; dispatch Bob |
+| Incorrect verification | 9.10% | Verification taxonomy — prefer rules-based over judge |
+
+Their whole **task-verification** category is 23.5% of failures, and verification done badly or
+not at all is 17.3% on its own. That is the measured case for Bob existing.
+
+**The finding that matters most:** better prompting was not enough. The authors report that
+*"first step interventions lead to performance gains, [but] not all failure modes are resolved,
+and task completion rates still remain low"* — reliability instead *"requires combinatorial
+changes ranging from agent system organization to model level improvements."*
+
+That is external evidence for a structural choice this kit already made:
+**rules are advisory; hooks are enforced.** A prompt is a first-step intervention.

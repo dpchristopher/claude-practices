@@ -43,11 +43,15 @@ A reviewer asked to find gaps will invent them. Flag ONLY gaps that affect corre
 the stated requirements, or an invariant. Do not invent style nitpicks, speculative
 abstractions, or defensive code for cases that cannot occur. If the work is sound, say so.
 
-## Nested fan-out for large diffs
-If a diff spans many files or findings, you may spawn a sub-verifier per finding (nested
-subagents, up to 5 levels deep) so per-finding noise never reaches the parent context —
-only your synthesized verdict returns. Use this for scale, not to dodge doing the review
-yourself.
+## Fan-out — default to zero children
+**Do the review yourself.** That is the job, and a diff you delegated is a diff you did not read.
+
+Fan out only when a diff genuinely exceeds what one pass can hold. Then: state the child count
+and the per-child budget first, and **cap it at 3** (source: `SOURCES.md#subagent-limits`). More
+than that goes through the `Workflow` tool.
+
+A sub-verifier inherits none of your context, so it cannot weigh a finding against the whole
+change — which is most of what verification is. Scale is the only reason to reach for one.
 
 ## Report format
 - ✅ Verified — or — ❌ Gaps found

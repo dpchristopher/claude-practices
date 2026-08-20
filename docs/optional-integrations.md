@@ -50,6 +50,27 @@ within the same session).
 
 ---
 
+## Husain evals-skills — SKIPPED (2026-08-19)
+
+The eight-skill package ([hamel.dev/blog/posts/evals-skills/](https://hamel.dev/blog/posts/evals-skills/),
+Husain & Shankar, March 2026) targets **LLM product pipelines** — RAG retrieval quality,
+generative output with no ground truth. Half its skills exist because you need a calibrated
+judge when there is nothing objective to compare against.
+
+This kit's ML work is classical supervised learning with real ground truth. A calibrated judge
+is a niche fallback here, not the main event, so the package would install seven skills to
+deliver one.
+
+**Adopted:** the `validate-evaluator` *method* only — now a paragraph in `verification.md`.
+**Not adopted:** the package. Revisit if the work ever produces generative output someone reads.
+
+Recording the skip so a later wave does not re-litigate it. Note that `evals.md` already distils
+Husain's philosophy (binary pass/fail, traces to saturation, benevolent dictator, data flywheel)
+and `measurement.md` already cites "Hamel's rule" — this was filling one hole in an existing
+lineage, not importing a framework.
+
+---
+
 ## Rule of thumb
 Core kit = zero required infra (markdown + shell + git). Reach for an optional integration
 only when a real, recurring need outgrows the simple mechanism — and remove it when it

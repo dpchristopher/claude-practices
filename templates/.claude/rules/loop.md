@@ -25,7 +25,12 @@ This rule supplies only the discipline the platform does not.
 5. **Checkpoint per iteration.** Each pass is a git commit — the diff is your audit trail.
    (Rollback itself is `/rewind`; the commits are for the record.)
 6. **Detect a stuck loop.** If the same error repeats, or no new commit lands in N
-   iterations, STOP and surface to a human. Repetition is not progress.
+   iterations, STOP and surface to a human. Repetition is not progress. Use the `Monitor`
+   tool for event-driven watching (logs, processes, WebSocket) rather than hand-rolled
+   polling — and **match the failure patterns, not just the success one. Silence is not
+   success:** a filter that only greps for the happy path stays quiet through a crashloop,
+   and quiet looks identical to still-running. A quiet monitor is an assertion, not
+   evidence (see `verification.md`).
 7. **Loops open PRs; they never auto-merge.** The human merge is the final gate.
 8. **Route model choice per stage, not just per loop.** A single loop can mix cheap
    mechanical stages (cheap model) with judgment/synthesis stages (strongest model) — state
@@ -68,11 +73,20 @@ Correctness brakes and containment brakes are separate checks — a loop can be 
 still be dangerous if it runs unsandboxed with production credentials and no spend limit.
 Grant L3 only when both are satisfied.
 
-## Loop cost budgets (concrete numbers, not just "watch it")
-When a loop runs as a Dynamic Workflow, real ceilings apply — use them as the budget:
-- Hard caps: 16 concurrent agents, 1,000 total per run.
-- A "Large workflow" warning fires past 25 agents or ~1.5M projected tokens — treat it as a stop-and-check.
-- Set a default ceiling with the Dynamic workflow size guideline in `/config` (`small` <5, `medium` <15, `large` <50 agents).
-- A Stop-hook loop is force-ended after 8 consecutive blocks — don't rely on it as your only brake.
-- Watch spend live in `/workflows` (per-agent token totals) and the `SubagentStop` audit log.
-State the intended agent-count and model-per-stage budget BEFORE starting an unattended loop.
+## Cost budgets — three limit systems, do not conflate them
+| System | Limit | Control |
+|---|---|---|
+| `Workflow` tool | 16 concurrent, 1,000 total per run | `/config` size guideline |
+| Subagent concurrency | 20 | `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` |
+| Subagent nesting depth | 3 (was up to 5 before v2.1.219) | `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` |
+
+No total-lifetime subagent cap exists. The repeated claim that "the 200-subagent cap was removed"
+is false — there was never a 200 cap (source: `SOURCES.md#subagent-limits`, `#workflow-limits`).
+
+Workflow-tool specifics: a "Large workflow" warning fires past 25 agents or ~1.5M projected
+tokens; a Stop-hook loop is force-ended after 8 consecutive blocks, so don't lean on it as your
+only brake; watch live spend in `/workflows` and the `SubagentStop` log. **State the agent-count
+and model-per-stage budget BEFORE starting an unattended loop.**
+
+**Design for 3 layers; do not restore 5.** The topology is main → orchestrator → worker. If the
+platform default moves again, that is not a reason to widen — breadth, not depth, burns sessions.

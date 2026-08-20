@@ -16,21 +16,33 @@ Reach for tools in this order — don't skip ahead:
 4. **pandas-pro / sql-pro** — data work gets the right skill
 5. **debugging-wizard** — stuck on a bug? invoke before thrashing
 6. **playwright** — browser-based debugging for web UIs
-7. **Subagents** — batch processing, parallel research, context offload
+7. **Subagents** — batch processing, parallel research, context offload; state the child count and per-child budget before dispatching (see *Choosing an isolation mechanism*)
 8. **MCP tools** — when a dedicated MCP exists for the target system, use it; don't call external APIs directly
 
 ---
 
-## When to Use Subagents vs. Main Session
+## Choosing an isolation mechanism
 
-| Use subagents when... | Stay in main session when... |
-|---|---|
-| Processing 50+ files, records, or URLs | Work is interactive and needs back-and-forth |
-| Research that produces lots of output | Change set is small and targeted |
-| Parallel independent tasks | You need live feedback on results |
-| Risk of context bloat | Context is still lean |
+One question: *I need work done elsewhere — which mechanism, and what does it cost?*
 
-Each subagent starts fresh. Only the summary returns to main context. This keeps main session lean.
+| Mechanism | Context it gets | Reach for it when | Cost |
+|---|---|---|---|
+| Main session | everything | interactive, small, needs live feedback | free |
+| **Fork** (`/subtask`; on by default in interactive sessions) | full conversation, system prompt, tools, model; **shares the prompt cache** | a side quest that must keep everything already established | cheapest branch |
+| **Fresh subagent** (`Agent`) | fresh and isolated | you need genuine independence, or context kept *out* | full cold-start per child — **state the child count first** |
+| **Cross-session message** | none — a thin text payload | the other work has its own long-lived session, repo, or machine state | thin payload is the point |
+| **Workflow tool** | per-agent, orchestrated | more than ~4 children, or the fan-out should be rerunnable and visible | real caps + budget visibility |
+
+**Fork when you need the context; fresh subagent when you need the independence.**
+
+**A fork is not a valid maker≠checker checker.** It inherits the maker's context and therefore
+the maker's blind spots. This is the most important consequence of fork being on by default
+(source: `SOURCES.md#subagent-limits`) — it can quietly turn a real verification step into
+self-review.
+
+**Thin payloads are a feature.** A cross-session message carries text only — never history or
+files. MAST measures inter-agent misalignment (context collapse, format mismatch when passing
+messages) at 32.35% of failures and calls it hardest to debug (source: `SOURCES.md#mast`).
 
 ---
 

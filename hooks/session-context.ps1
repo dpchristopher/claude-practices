@@ -14,7 +14,16 @@ Show-Head "CLAUDE.md" "PROJECT RULES (CLAUDE.md - first 80 lines)" 80
 Show-Head "META_ARCHITECTURE.md" "ARCHITECTURE SNAPSHOT (META_ARCHITECTURE.md - first 120 lines)" 120
 
 $plan = Get-ChildItem ".claude/plans/*.md" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-if ($plan) { Write-Host ""; Write-Host "## ACTIVE PLAN ($($plan.Name))"; Get-Content $plan.FullName -TotalCount 50 }
+if ($plan) {
+  Write-Host ""; Write-Host "## ACTIVE PLAN ($($plan.Name))"
+  Get-Content $plan.FullName -TotalCount 50
+  # Exit-condition check - greps the WHOLE plan, not just the head shown above.
+  # Mirrors session-context.sh; these two must not drift apart.
+  if (-not (Select-String -Path $plan.FullName -Pattern 'done when|exit condition' -Quiet)) {
+    Write-Host ""
+    Write-Host '! ACTIVE PLAN HAS NO "Done when" / EXIT CONDITION - write one before executing.'
+  }
+}
 
 if (Test-Path "INVARIANTS.md") {
   Write-Host ""; Write-Host "## SYSTEM INVARIANTS (INVARIANTS.md - full; these must NOT break)"

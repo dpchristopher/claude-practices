@@ -2,15 +2,15 @@
 
 Portable best-practices starter kit for Claude Code — software engineering, full-stack apps, machine learning, and task automation.
 
-Built from a real production Claude Code project (June 2026). Focused on session reproducibility, plans that carry forward, and diligent ML/automation workflows.
+How I actually use Claude Code, as of August 2026. Built from a real production project and revised whenever the platform moves under it.
 
 ---
 
-## The Core Problem This Solves
+## What This Is
 
-Claude Code sessions forget context between sessions. Plans die. Next session starts blank.
+Context does not carry itself. Claude Code has real continuity primitives now — sessions can even message each other — but none of them decide what is worth carrying, or prove that last session's work actually held.
 
-**This kit fixes that** by structuring CLAUDE.md, META_ARCHITECTURE.md, and `.claude/rules/` so Claude auto-loads context at session start and knows exactly how to work on your project.
+This kit is the discipline layer: what gets written down, what gets re-verified, and what gets pruned. It structures CLAUDE.md, META_ARCHITECTURE.md, INVARIANTS.md and `.claude/rules/` so the decisions worth keeping are the ones that load automatically.
 
 ---
 
@@ -18,7 +18,7 @@ Claude Code sessions forget context between sessions. Plans die. Next session st
 
 ```
 templates/
-  CLAUDE.md                        ← Project rules template (fill in blanks, keep under 200 lines)
+  CLAUDE.md                        ← Project rules template (fill in blanks, keep under 90 lines)
   META_ARCHITECTURE.md             ← Tool map + experiment tracking template
   .claude/
     rules/
@@ -44,6 +44,15 @@ skills/
   init/SKILL.md                    ← Scaffold a new project from this template
   labarr-ml/                       ← ML methodology (12-step workflow, algorithm families)
   feynman-explainer/SKILL.md       ← Comprehension gate (completes the thinking trio)
+  failure-modes/SKILL.md           ← Known failure modes + escapes; MAST corroboration
+
+global-rules/                      ← Always-loaded layer → ~/.claude/rules/ (every project, every turn)
+  kit-maintenance.md               ← Line budgets, quarterly prune, skill-overlap audit
+  loop-cost-discipline.md          ← Iteration caps + estimate-breadth-before-dispatch
+
+scripts/
+  verify-hooks.sh                  ← INV-02: hook↔settings parity, sh/ps1 drift
+  verify-sources.sh                ← INV-04: every limit number carries a SOURCES.md pointer
 
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
@@ -53,6 +62,8 @@ hooks/
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
   plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
+  guard-fanout.sh                  ← PreToolUse(Agent), OPT-IN: asks past 4 dispatches/session
+  guard-verdict.sh                 ← SubagentStop: blocks a checker finishing without its verdict
   subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail
   log-instructions-loaded.sh       ← InstructionsLoaded: diagnostic context-load log
 
@@ -60,9 +71,11 @@ install.sh / install.ps1           ← Global installer (--dry-run / -DryRun to 
 backup-state.sh                    ← Snapshot un-tracked agent memory / local state
 .pre-commit-config.yaml            ← gitleaks commit-time secret backstop
 SECURITY.md / BACKUP.md / ROLLBACK.md  ← Secret-defense, backup, and rollback procedures
+SOURCES.md                         ← Primary-source ledger; every limit number traces here
+INVARIANTS.md                      ← The kit's own durable contracts (it eats its own dog food)
 
 docs/
-  Coolest Thing Since Crystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
+  Coolest Thing Since Chrystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns
   optional-integrations.md         ← Opt-in Graphiti + Playwright patterns
 ```
 
@@ -100,7 +113,7 @@ Copy-Item templates\.claude $proj -Recurse
 
 ### 2. Fill in the blanks in CLAUDE.md
 
-Replace every `[bracketed]` section with your project's specifics. Keep it under 200 lines.
+Replace every `[bracketed]` section with your project's specifics. Keep it under 90 lines.
 
 ### 3. Register skills + hook (one command)
 
@@ -158,6 +171,8 @@ At session end: write `.claude/HANDOFF.md`. Next session picks up exactly where 
 ## How Context Carries Forward Between Sessions
 
 Claude Code auto-loads `CLAUDE.md` and unconditional `.claude/rules/*.md` at session start. Some rules are **path-scoped** (they carry a `paths:` frontmatter and load only when Claude touches matching files — e.g. `ml-discipline.md`, `automation.md`). Everything else — `META_ARCHITECTURE.md`, the active plan, `INVARIANTS.md`, and `HANDOFF.md` — is loaded by the **SessionStart hook**, which pre-outputs them into context before your first message. `INVARIANTS.md` is loaded in full (never truncated); the others are summarized.
+
+Cross-session messaging is a *sibling* mechanism, not a replacement for any of this: it hands a live message to another running session, while everything above is durable state on disk. One survives the session ending; the other does not. Keep them separate.
 
 This kit's continuity rests on three things:
 1. **CLAUDE.md** — a Reading Order index at the top naming what's mandatory vs. on-demand

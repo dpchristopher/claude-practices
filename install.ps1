@@ -49,6 +49,14 @@ foreach ($a in Get-ChildItem -File (Join-Path $RepoDir "templates/.claude/agents
   Install-Item $a.FullName (Join-Path $agentsDest $a.Name) "agent: $($a.Name)"
 }
 
+# 4. Global rules - always-loaded, every project, every turn. Keep this layer tiny.
+$rulesDest = Join-Path $Dest "rules"
+if (-not $DryRun) { New-Item -ItemType Directory -Force $rulesDest | Out-Null }
+foreach ($r in Get-ChildItem -File (Join-Path $RepoDir "global-rules") -Filter *.md) {
+  if ($r.Name -eq "README.md") { continue }   # docs for the repo, not a rule to install
+  Install-Item $r.FullName (Join-Path $rulesDest $r.Name) "global-rule: $($r.Name)"
+}
+
 if ($DryRun) {
   Write-Host "Dry run complete. Re-run without -DryRun to install."
 } else {

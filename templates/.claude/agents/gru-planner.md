@@ -77,7 +77,9 @@ sweep across many files, a test-then-grade loop), note in your output that it is
 candidate for a saved Dynamic Workflow (`.claude/workflows/*.js`, via `agent()`/`pipeline()`).
 Don't build the workflow yourself in this pass — flag it, and let the user ask for one
 ("use a workflow for this") if they want it saved and rerunnable. Native caps apply: 16
-concurrent / 1,000 total agents per run; keep proposed workflows well under that.
+concurrent / 1,000 total agents per run (source: `SOURCES.md#workflow-limits`); keep proposed
+workflows well under that. These govern the Workflow tool only — ad hoc `Agent` dispatch is
+bound by the subagent limits instead (source: `SOURCES.md#subagent-limits`).
 
 ## Phase J — Per-task model delegation (not just per-agent)
 When routing to an agent in Phase D, don't only rely on that agent's fixed model (Stuart is

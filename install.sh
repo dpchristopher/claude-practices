@@ -58,6 +58,14 @@ for a in "$REPO_DIR"/templates/.claude/agents/*.md; do
   do_cp "$a" "$DEST/agents/$(basename "$a")" "agent: $(basename "$a")"
 done
 
+# 4. Global rules — always-loaded, every project, every turn. Keep this layer tiny.
+[ "$DRY_RUN" -eq 0 ] && mkdir -p "$DEST/rules"
+for r in "$REPO_DIR"/global-rules/*.md; do
+  name="$(basename "$r")"
+  [ "$name" = "README.md" ] && continue   # docs for the repo, not a rule to install
+  do_cp "$r" "$DEST/rules/$name" "global-rule: $name"
+done
+
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "Dry run complete. Re-run without --dry-run to install."
 else

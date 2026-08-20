@@ -44,6 +44,14 @@ if [ -n "$PLAN_FILE" ]; then
   echo ""
   echo "## ACTIVE PLAN ($PLAN_FILE)"
   head -50 "$PLAN_FILE"
+
+  # Exit-condition check. Greps the WHOLE plan, not just the head shown above.
+  # MAST measures "unaware of termination conditions" at 12.4% of multi-agent
+  # failures; loop.md already requires an exit condition, but nothing checked it.
+  if ! grep -qiE "done when|exit condition" "$PLAN_FILE"; then
+    echo ""
+    echo "⚠ ACTIVE PLAN HAS NO \"Done when\" / EXIT CONDITION — write one before executing."
+  fi
 fi
 
 # System invariants — load in full (durable contracts, never truncate)

@@ -3,6 +3,43 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.4.0] — 2026-08-19 (Wave 7 — Doctrine Refresh: Limits, Isolation & the Fan-Out Brake)
+### Added
+- `global-rules/` — the always-loaded layer is now **in version control and installed**. Both installers gained a step 4 writing `global-rules/*.md` → `~/.claude/rules/`. Before this, `kit-maintenance.md` and `loop-cost-discipline.md` existed only on one machine: untracked, un-backed-up, and unrecoverable by reinstall.
+- **The fan-out brake**, in three places: an *Estimate breadth before dispatch* section in `loop-cost-discipline.md` (global, always loaded); rewritten fan-out sections in `dave-researcher.md` and `bob-verifier.md`; and a pinned regression case in `evals.md`.
+- `SOURCES.md` — dated primary-source ledger. Rules cite it by anchor (`SOURCES.md#mast`) rather than carrying URLs inline.
+- `INVARIANTS.md` for the kit itself (INV-01…04). The kit shipped `templates/INVARIANTS.md` for other projects while keeping none of its own.
+- `scripts/verify-hooks.sh` (INV-02: hook↔settings parity, sh/ps1 drift) and `scripts/verify-sources.sh` (INV-04: every limit number carries a citation).
+- SessionStart hook warns when the active plan has no `Done when` / exit condition — targets MAST's measured 12.4% termination-condition failure mode, and enforces a `loop.md` rule nothing previously checked. Bash and PowerShell both.
+- `hooks/guard-fanout.sh` — **opt-in** `PreToolUse(Agent)` guard. Silent for dispatches 1–4, then `permissionDecision: "ask"`. L2 on the autonomy ladder, never a hard deny.
+- Judge-calibration doctrine in `verification.md` (Husain's `validate-evaluator` method).
+- MAST corroboration mapped onto the `failure-modes` skill catalog.
+
+### Changed
+- **README reframed** from "Claude Code sessions forget context between sessions" to a dated snapshot: *"How I actually use Claude Code, as of August 2026."* The premise was obsolete — cross-session messaging means sessions can talk. The platform closed the mechanical gap; the judgment gap is what the kit was always actually about.
+- `tool-discipline.md`: *When to Use Subagents vs. Main Session* **superseded** by *Choosing an isolation mechanism* — one table covering main session / fork / fresh subagent / cross-session message / Workflow tool.
+- `loop.md`: cost budgets rescoped to the Workflow tool and merged with a three-limit-systems table.
+- `loop.md` rule 6 now uses `Monitor` for event-driven watching, carrying its discipline: **silence is not success.**
+- Built-in `EnterWorktree`/`ExitWorktree` replace manual `git worktree add` in `patterns-guide/SKILL.md` and the Chrystal Ball doc.
+- `session-workflow.md`'s *Context Management* replaced with a pointer — it restated `tool-discipline.md` near-verbatim.
+- `templates/global-CLAUDE.md` synced to the live global file (bob-verifier/carl-evals rows, evidence rule, unattended-loop rule, metrics logging, refinement cap).
+- `kit-maintenance.md` gained a per-wave growth aim and records this wave's overage against it.
+
+### Fixed
+- **Nesting depth: the kit claimed "5 levels deep."** The platform default has been **3** since v2.1.219. Bob's and Dave's prompts carried the stale number; both rewritten. Doctrine now designs for 3 deliberately rather than chasing the default.
+- Three CLAUDE.md line budgets were in circulation (200 / 80 / ~90) — reconciled to 90.
+- Broken README link: `Coolest Thing Since Crystal Ball.md` → `Chrystal`.
+- `failure-modes` was missing from the README skills list.
+
+### Notes
+- **Sourcing.** Every limit number in shipped doctrine traces to a dated entry in `SOURCES.md`, enforced by `verify-sources.sh` (INV-04). Held to Wave 5's standard: primary docs or the paper itself, never aggregators.
+- **MAST verification changed the numbers — including one of its own corrections.** Gating on the primary source caught that inter-agent misalignment is **32.35%**, not the circulating ~37%, and that the paraphrased conclusion was not the paper's operative sentence. It also gained category FC3 *Task Verification* (23.5%) entirely — of which incomplete or incorrect verification is 17.3% of all failures, a measured case for maker≠checker. **FC1's category total is deliberately not quoted:** three retrieval attempts gave 43.8%, 43.9%, and a mode-sum of 44.2%. A mid-wave claim that "44.2 was wrong, it is 43.8" is **retracted** — it was itself under-verified, and a fresh-context review caught it. Mode-level percentages are stable and safe; see `SOURCES.md#mast`.
+- **The 200-subagent cap never existed.** A widely repeated claim that "the 200-subagent cap was removed" is false. Real concurrent default is 20; there is no total-lifetime cap. Recorded here so it does not resurface.
+- **Line budget: +51 against a +30 aim.** 19 lines were cut through genuine dedup. The remaining growth is doctrine this wave deliberately added. Accepted by the user rather than deleting something load-bearing to hit an estimate made before the content existed.
+- **`maxTurns` on Dave: not added.** The field's validity on a non-Haiku agent was not verified, and the plan forbade guessing. The prompt-level cap stands.
+- **Deferred to Wave 8:** the four-surface automation taxonomy (CronCreate / Routines / Workflow / Desktop Scheduled Tasks) and its downstream fourth autonomy rung — the hard part is placement, since `automation.md` is `paths:`-scoped and will not load when the surface is being *chosen*.
+- **Blocked pending `/the-fool`:** discover-on-demand (`SearchSkills`/`SearchPlugins`) vs. the curated-roster rule. A genuine philosophical fork. Worth knowing when it is decided: `~/.claude/skills/` already holds 90+ skills, mostly `gsd-*`, so the curation premise is already not holding at the global layer.
+
 ## [1.3.1] — 2026-07-22 (Wave 6 gap closure)
 ### Added
 - `effort: high` on the heavy reasoning agents (`dave-researcher`, `gru-planner`) — field/values verified against the sub-agents docs.
