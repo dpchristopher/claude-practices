@@ -68,11 +68,27 @@ Correctness brakes and containment brakes are separate checks — a loop can be 
 still be dangerous if it runs unsandboxed with production credentials and no spend limit.
 Grant L3 only when both are satisfied.
 
-## Loop cost budgets (concrete numbers, not just "watch it")
-When a loop runs as a Dynamic Workflow, real ceilings apply — use them as the budget:
+## Loop cost budgets — Workflow tool only
+These ceilings govern **the `Workflow` tool**. They do not bound ad hoc `Agent` dispatch, which
+has its own separate limits — conflating the two was a real defect in this kit before Wave 7.
 - Hard caps: 16 concurrent agents, 1,000 total per run.
 - A "Large workflow" warning fires past 25 agents or ~1.5M projected tokens — treat it as a stop-and-check.
 - Set a default ceiling with the Dynamic workflow size guideline in `/config` (`small` <5, `medium` <15, `large` <50 agents).
 - A Stop-hook loop is force-ended after 8 consecutive blocks — don't rely on it as your only brake.
 - Watch spend live in `/workflows` (per-agent token totals) and the `SubagentStop` audit log.
 State the intended agent-count and model-per-stage budget BEFORE starting an unattended loop.
+
+## Three limit systems — do not conflate them
+| System | Limit | Control |
+|---|---|---|
+| `Workflow` tool | 16 concurrent, 1,000 total per run | `/config` size guideline |
+| Subagent concurrency | 20 | `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` |
+| Subagent nesting depth | 3 (was up to 5 before v2.1.219) | `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` |
+
+There is **no total-lifetime cap** on subagents in a session. The widely repeated claim that
+"the 200-subagent cap was removed" is false — there was never a 200 cap
+(source: `SOURCES.md#subagent-limits`, `SOURCES.md#workflow-limits`).
+
+**Design for 3 layers; do not restore 5.** The kit's real topology is main → orchestrator
+(Gru/Dave/Bob) → worker. Three is enough. If the platform default moves again, that is not a
+reason to widen this — breadth, not depth, is what actually burns a session.
