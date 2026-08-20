@@ -41,6 +41,25 @@ cost more than they save. (Heuristic, not a measured constant.)
 
 ---
 
+## Estimate Breadth Before Dispatch — Ad Hoc Fan-Out
+
+Before dispatching **any** agent, say two numbers out loud: **how many children, and roughly what
+each costs.** If you can't name both, you're not ready to dispatch.
+
+- A multi-part question is **not** a licence to spawn one child per part. Decompose the question
+  first, then decide how many children the *answer* needs.
+- **Ad hoc `Agent` fan-out is capped at 3–4 children.** Anything larger goes through the `Workflow`
+  tool — visible progress in `/workflows`, real caps, token-budget awareness
+  (source: `SOURCES.md#workflow-limits`).
+- A child that returns nothing still costs full price. **Budget for the failure case.**
+- Depth was never the constraint that mattered here; breadth was
+  (source: `SOURCES.md#subagent-limits`).
+
+**Pinned regression — 2026-08-19:** one researcher agent, a 4-part question, 5 uncosted children,
+entire session limit consumed, zero output returned. No estimate was stated before dispatch.
+
+---
+
 ## Fresh Session vs. /compact
 
 - `/compact` — for general mid-phase bloat; cheap, lossy.
