@@ -25,7 +25,12 @@ This rule supplies only the discipline the platform does not.
 5. **Checkpoint per iteration.** Each pass is a git commit — the diff is your audit trail.
    (Rollback itself is `/rewind`; the commits are for the record.)
 6. **Detect a stuck loop.** If the same error repeats, or no new commit lands in N
-   iterations, STOP and surface to a human. Repetition is not progress.
+   iterations, STOP and surface to a human. Repetition is not progress. Use the `Monitor`
+   tool for event-driven watching (logs, processes, WebSocket) rather than hand-rolled
+   polling — and **match the failure patterns, not just the success one. Silence is not
+   success:** a filter that only greps for the happy path stays quiet through a crashloop,
+   and quiet looks identical to still-running. A quiet monitor is an assertion, not
+   evidence (see `verification.md`).
 7. **Loops open PRs; they never auto-merge.** The human merge is the final gate.
 8. **Route model choice per stage, not just per loop.** A single loop can mix cheap
    mechanical stages (cheap model) with judgment/synthesis stages (strongest model) — state
