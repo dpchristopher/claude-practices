@@ -25,14 +25,14 @@ templates/
       ml-discipline.md             ← Experiment tracking, reproducibility, ML pitfalls (path-scoped)
       automation.md                ← Idempotence, error handling, pipeline testing (path-scoped)
       session-workflow.md          ← Full session start/end protocol (auto-loads)
-      tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research (auto-loads)
+      tool-discipline.md           ← Tool priority, subagents, context budget, light/heavy research, delegation packets (auto-loads)
       invariants.md                ← Governs the INVARIANTS.md contract ledger (auto-loads)
       verification.md              ← Evidence over assertion, verification taxonomy (auto-loads)
-      evals.md                     ← Binary pass/fail eval discipline (auto-loads)
+      evals.md                     ← Binary pass/fail eval discipline, held-out gate for self-optimization (auto-loads)
       loop.md                      ← Self-correction loop discipline (auto-loads)
       planning.md                  ← Canonical plan rubric; Gru applies it (auto-loads)
   INVARIANTS.md                    ← Durable cross-session system contracts (loaded in full)
-  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge), Gru (planner), Mel (design), Jerry (docs)
+  .claude/agents/                  ← Bob (verifier), Kevin (security), Stuart (explorer), Dave (researcher), Phil (test-author), Carl (evals-judge), Gru (planner), Mel (design), Jerry (docs), Otto (rule-reviewer)
   .claude/settings.json            ← Deny secrets, allow safe commands
 
 skills/
@@ -47,7 +47,7 @@ skills/
   failure-modes/SKILL.md           ← Known failure modes + escapes; MAST corroboration
 
 global-rules/                      ← Always-loaded layer → ~/.claude/rules/ (every project, every turn)
-  kit-maintenance.md               ← Line budgets, quarterly prune, skill-overlap audit
+  kit-maintenance.md               ← Line budgets, quarterly prune, skill-overlap audit, agent-creation gate
   loop-cost-discipline.md          ← Iteration caps + estimate-breadth-before-dispatch
 
 scripts/

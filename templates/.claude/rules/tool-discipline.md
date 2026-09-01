@@ -46,6 +46,27 @@ messages) at 32.35% of failures and calls it hardest to debug (source: `SOURCES.
 
 ---
 
+## Delegation packet — external or irreversible dispatches only
+
+When a dispatch (fork, subagent, cross-session message, or Workflow) will touch an external
+system, spend budget, or take an action from the Prohibited/Explicit-permission-required
+categories, name these five before dispatching. Gru's plan already owns
+objective/evidence/done-criteria for the phase as a whole — this only covers what it doesn't
+(source: `SOURCES.md#agent-reliability`):
+
+| Field | Answers |
+|---|---|
+| Owner | which agent executes, and who is accountable for the outcome |
+| Allowed effects | the explicit boundary — what it may touch, what it may NOT (write vs. read-only, spend cap, no push/deploy) |
+| Budget | token/turn/cost ceiling — reuses `loop-cost-discipline.md`'s existing estimate-before-dispatch rule, not a second budgeting system |
+| Escalation trigger | the specific condition that halts and asks the user — never a vague "if unsure" |
+| Receipt | one line into the plan's Running Notes on completion — what happened, not just that it happened |
+
+Skip this for ordinary in-scope work. Regular-category actions inside the main session or a
+normal fork don't need a packet — this exists for the boundary, not for every delegation.
+
+---
+
 ## Every named agent must earn its place
 Don't accumulate specialist subagents by role-flavor alone ("we should have an X agent").
 A named agent earns its place only via a real context isolation or a distinct model/

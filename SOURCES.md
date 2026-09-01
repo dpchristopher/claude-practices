@@ -146,3 +146,71 @@ intervention; the paper measures it as insufficient on its own.
 The kit adopts the **method**, not the package. The eight-skill bundle targets LLM product
 pipelines (RAG, generative output); the decision to skip it is recorded in
 `docs/optional-integrations.md` so a later wave does not re-litigate it.
+
+---
+
+## agent-handoffs
+
+Verified 2026-08-31 by direct fetch of `code.claude.com/docs/en/sub-agents`.
+
+> "the subagent does that work in its own context and returns only the summary... the verbose
+> output stays in the subagent's context while only the relevant summary returns to your main
+> conversation."
+
+Primary-source basis for the kit's `## Handoffs` sections (Gru/Dave/Bob — Otto has no
+Handoffs section of its own; it's the common *target*, documented in its `## Where you fit`
+section instead): a handoff names
+a target, a trigger, and a return shape — producer emits output + scope + constraints, receiver
+acts on them. The same shape is independently converged on by OpenAI Agents SDK's `handoff()`
+primitive and LangGraph's node-edge model — **not independently re-verified this session**,
+cited from search-summarized secondary sources only:
+[Evaluating LLM Agent Handoffs 2026](https://futureagi.com/blog/evaluating-llm-agent-handoffs-2026/).
+
+## agent-sprawl
+
+Vendor-terminology grounding, not a measured research claim — cited for the *name* of the
+pattern, not a number. "AI agent sprawl" = uncontrolled agent proliferation without a
+registry, owner, or defined scope per agent.
+[IBM](https://www.ibm.com/think/topics/ai-agent-sprawl),
+[Kore.ai](https://www.kore.ai/blog/what-is-ai-agent-sprawl). Neither independently re-verified
+this session — IBM's page returned HTTP 403 on direct fetch 2026-08-31; both are vendor blogs,
+not primary docs or a paper. Held to a deliberately lower bar than `mast` / `subagent-limits`
+above. Governs `kit-maintenance.md`'s Agent-Creation Gate.
+
+## deterministic-vs-judgment-review
+
+Industry-consensus pattern, not a single paper: rule-based static checks and LLM semantic
+review are described as complementary layers, not substitutes.
+[Sourcegraph, 13 Best Automated Code Review Tools 2026](https://sourcegraph.com/blog/automated-code-review-tools) —
+"one AI reviewer... plus one rule-based platform... plus open-source linters," each catching
+what the other structurally cannot.
+
+**A specific "69.8% of harmful runs caught by deterministic checks" figure, attributed to
+SABER (arXiv:2606.01317), was checked against the paper directly during Wave 8 and could not
+be confirmed** — direct PDF and abstract fetches found a different, unrelated headline figure
+(a 54% harmful safety-violation rate) and no trace of 69.8%/30.2%. Per this file's own
+standard, the number does not ship; only the qualitative pattern above does, cited to
+Sourcegraph instead. Same discipline as the `mast` FC1 withholding — repeatable, not a
+one-off. Governs Otto's role as a cheap pre-filter ahead of Bob/Kevin's judgment-tier review.
+
+## optimization-candidates
+
+DSPy and APE's held-out-validation methodology is well established in the prompt-optimization
+literature (DSPy's optimizers score candidates on a validation split disjoint from training;
+APE frames instruction generation as black-box optimization selected by held-out accuracy) —
+**not independently re-confirmed against primary docs this session.** Two direct fetch
+attempts (`dspy.ai`, the arXiv abstract for APE) did not return the specific passage. Cited at
+the same lower bar as `agent-sprawl` above: a real, well-known practice, flagged as unverified-
+this-session rather than silently presented as fully checked. Governs `evals.md`'s held-out
+gate for self-generated skill/prompt optimizations.
+
+## agent-reliability
+
+Practice-pattern grounding for the delegation-packet fields in `tool-discipline.md` (Owner,
+Allowed effects, Budget, Escalation trigger, Receipt): a reliable agentic task needs "a clear
+job, measurable operating limits, bounded authority, current context, safe failure behavior,
+and enough evidence to find and fix recurring problems," with one named owner defining
+acceptable outcomes, risk limits, and escalation rules.
+[Alignbase, AI Agent Reliability](https://alignbase.ai/blogs/ai-agent-reliability/) — a vendor
+blog, not independently re-verified this session; held to the same lower bar as the entries
+immediately above.

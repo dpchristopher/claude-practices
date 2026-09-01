@@ -37,7 +37,7 @@ MCPs at once.
 ---
 
 ## Opik (LLM observability) — reaffirmed skip
-**What it would solve:** "which of my 9 agents caused a bad outcome" in a multi-agent run.
+**What it would solve:** "which of my 10 agents caused a bad outcome" in a multi-agent run.
 
 **Why it's still skip (re-checked, not just carried over):** Claude Code's native
 `/workflows` progress view now gives per-agent, per-phase tracing for free — token totals,

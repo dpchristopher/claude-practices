@@ -43,8 +43,17 @@ firing). During the GC pass:
 
 - List skills/agents whose trigger conditions overlap.
 - Resolve each pair: merge them, or sharpen descriptions so each owns a distinct trigger.
-- **Before adding any new skill, check `~/.claude/skills/` and `~/.claude/agents/` for one that
-  already does the job.** Wire to the existing one instead of duplicating.
+
+---
+
+## Agent-Creation Gate
+
+Before writing any new skill or `.claude/agents/*.md` — not just during the quarterly GC pass —
+check `~/.claude/skills/` and `~/.claude/agents/` for one that already does the job. Wire to the
+existing one instead of duplicating. This is the standing fix for "agent sprawl" —
+uncontrolled agent proliferation without a registry or owner (source: `SOURCES.md#agent-sprawl`)
+— caught at creation time, not cleaned up after the fact. Applies equally to skills; named
+"agent" only because that's the sharper-edged failure mode.
 
 ---
 

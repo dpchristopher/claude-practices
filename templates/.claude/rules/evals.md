@@ -38,6 +38,14 @@ and the fan-out sections of `dave-researcher.md` / `bob-verifier.md`.
 Operational failures feed back into the eval set over time (annotate → feed back → review
 → improve). The eval set is a living asset, not a one-time gate.
 
+## Self-generated optimizations need a held-out gate
+A self-generated prompt/skill edit (e.g. `skill-creator`'s benchmarking or description
+optimization) is a candidate, not an upgrade, until it clears a held-out case set it did not
+see while being generated — the same held-out-vs-training split the DSPy/APE line of
+prompt-optimization work uses before promoting a candidate (source:
+`SOURCES.md#optimization-candidates`). Never auto-promote a generated optimization on its own
+self-report; score it against pinned cases the way a model output would be scored.
+
 ## Tooling (optional)
 Opik (`@opik.track` tracing, LLM-as-judge metrics, PyTest integration) is a reasonable
 local stack if you want instrumentation — but the discipline above matters more than the tool.
