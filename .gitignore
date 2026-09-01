@@ -1,7 +1,9 @@
 # --- Local runtime state (Claude Code) ---
 # Agent memory (memory: project stores), isolation worktrees, per-session scratch.
 # The tracked template lives under templates/.claude/, not here.
-.claude/
+# Anchored to root only (leading slash) — a bare ".claude/" also matches
+# templates/.claude/, which would silently untrack every new template file.
+/.claude/
 
 # --- Secrets — never commit ---
 .env

@@ -3,6 +3,43 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.5.0] — 2026-08-31 (Wave 8 — Delegation Discipline: Handoffs, Sprawl Gate, Rule Reviewer)
+### Added
+- `otto-rules` agent — literal, zero-judgment checklist reviewer (`model: haiku`, `Read/Grep/Glob` only, same cost tier as Stuart, no Bash so no readonly-bash guard needed). Runs a project-local checklist of literal patterns and reports matches only; flags anything needing interpretation back to Bob/Kevin instead of attempting it.
+- `## Handoffs` sections on Gru, Bob, and Dave — formalizes delegation targets and expected return shapes that were previously implicit (e.g. Gru Phase G "hand to Bob"). Otto is the common new target across all three: a cheap pre-filter before judgment-tier review or research.
+- `## Delegation packet` in `tool-discipline.md` — five fields (Owner, Allowed effects, Budget, Escalation trigger, Receipt) required before any dispatch that touches an external system, spends budget, or falls in the Prohibited/Explicit-permission-required action categories. Deliberately does not duplicate Gru's plan fields (objective/evidence/done-criteria stay Gru's); reuses `loop-cost-discipline.md`'s existing budget-estimate rule and the plan's Running Notes log instead of inventing new mechanisms.
+- Agent-Creation Gate in `kit-maintenance.md` — promotes the existing "check before adding" bullet from a quarterly-GC habit to a standing pre-creation check, named against the industry term "agent sprawl" (source: `SOURCES.md#agent-sprawl`).
+- Held-out gate for self-generated optimizations in `evals.md` — a `skill-creator`-produced prompt/skill edit is a candidate, not an upgrade, until it clears a held-out case set, mirroring the DSPy/APE held-out-vs-training split.
+- Five new `SOURCES.md` anchors: `agent-handoffs`, `agent-sprawl`, `deterministic-vs-judgment-review`, `optimization-candidates`, `agent-reliability`.
+- `otto-rules` added to the README agent list and Gru's Phase B/D roster references.
+- **`.gitattributes`** gained `* text=auto eol=lf` — normalizes Windows checkouts to LF.
+
+### Fixed
+- **`.gitignore`'s `.claude/` pattern was unanchored** and silently matched `templates/.claude/`
+  too, meaning `otto-rules.md` would never have been tracked despite every doc referencing it —
+  caught by Bob before commit, not after. Anchored to `/.claude/` (repo root only).
+- CRLF had crept into this wave's edited files on a Windows checkout with no normalizing
+  `.gitattributes` rule, turning small doc edits into full-file rewrites in the diff. Fixed via
+  the `text=auto eol=lf` rule above plus a scoped `git add --renormalize` on only the touched
+  files (not a repo-wide rewrite).
+- Gru's own Minions roster line (persona intro) and `docs/optional-integrations.md`'s "9 agents"
+  reference were missed on the first pass and didn't count Otto — both updated to 10.
+- `kit-maintenance.md`'s Agent-Creation Gate had silently narrowed from "skill or agent" to
+  "agent" only during the promotion from the old inline bullet — restored to cover both.
+- `SOURCES.md#agent-handoffs` overclaimed that Otto has a `## Handoffs` section (it doesn't —
+  Otto is the common *target*, documented in its own `## Where you fit` section) — corrected.
+- Bob's fan-out section (cap-at-3 sub-verifiers) read as ambiguous against the new Otto handoff
+  row (different trigger, no size gate) — added an explicit carve-out: Otto is a pre-filter,
+  not a sub-verifier, and doesn't count against the cap.
+- All six caught by dispatching `bob-verifier` on the diff before commit — maker≠checker, same
+  discipline the kit ships, applied to the kit's own change.
+
+### Notes
+- **A borrowed statistic was caught and dropped before shipping.** Draft doctrine for Otto cited "69.8% of harmful runs caught by deterministic checks," attributed to the SABER paper (arXiv:2606.01317), from a search-engine-summarized result. Direct fetch of the paper itself during this wave found a different, unrelated headline figure (54% harmful safety-violation rate) and no trace of 69.8%/30.2%. The number does not ship — only the qualitative pattern (rule-based and LLM review are complementary layers) does, re-cited to a source that was actually confirmed. Same discipline as Wave 7's MAST FC1 withholding; see `SOURCES.md#deterministic-vs-judgment-review`.
+- **Three other new claims rest on vendor blogs, not primary docs or a paper:** `agent-sprawl`, `optimization-candidates`, `agent-reliability`. Flagged explicitly at a lower confidence tier in `SOURCES.md` rather than silently presented as MAST-grade verification — this wave's practices are design patterns, not measured platform limits, and are held to an appropriately lighter (but stated, not hidden) bar.
+- **Line budget:** `kit-maintenance.md` and `evals.md` are the only two files touching the always-loaded per-wave budget (57→65 lines and 43→51 lines respectively — **+16 total**, well under the ≤+30 aim). Otto, the three `## Handoffs` sections, and the delegation-packet section are all on-demand agent/rule files, not always-loaded, so they don't count against it.
+- **What "installed globally" actually covers:** `install.ps1`/`install.sh` push `otto-rules.md` and the updated `kit-maintenance.md` to `~/.claude/agents/` and `~/.claude/rules/` — available immediately in every project. The `tool-discipline.md` and `evals.md` changes are per-project **template** files; they only reach an existing project (Civ, Wealth Management Dash, etc.) if that project's `.claude/rules/` is refreshed from the template by hand — they do not retroactively apply on their own.
+
 ## [1.4.0] — 2026-08-19 (Wave 7 — Doctrine Refresh: Limits, Isolation & the Fan-Out Brake)
 ### Added
 - `global-rules/` — the always-loaded layer is now **in version control and installed**. Both installers gained a step 4 writing `global-rules/*.md` → `~/.claude/rules/`. Before this, `kit-maintenance.md` and `loop-cost-discipline.md` existed only on one machine: untracked, un-backed-up, and unrecoverable by reinstall.

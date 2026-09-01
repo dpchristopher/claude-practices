@@ -1,5 +1,12 @@
+# Normalize everything to LF on checkin — the repo is authored cross-platform
+# (Windows + macOS/Linux contributors) and a Windows checkout must not flip
+# committed files to CRLF, which turns small edits into full-file rewrites.
+* text=auto eol=lf
+
 # Shell scripts and hooks must use LF endings so they run on macOS/Linux.
-# (CRLF in a shebang line breaks the interpreter.)
+# (CRLF in a shebang line breaks the interpreter.) Redundant with the rule
+# above but kept explicit since a broken shebang is a hard failure, not a
+# messy diff.
 *.sh text eol=lf
 hooks/* text eol=lf
 install.sh text eol=lf

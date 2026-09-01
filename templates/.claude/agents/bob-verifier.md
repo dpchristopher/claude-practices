@@ -50,6 +50,10 @@ Fan out only when a diff genuinely exceeds what one pass can hold. Then: state t
 and the per-child budget first, and **cap it at 3** (source: `SOURCES.md#subagent-limits`). More
 than that goes through the `Workflow` tool.
 
+**Otto is not a sub-verifier and doesn't count against the cap of 3.** Dispatching Otto (see
+Handoffs below) is a pre-filter on mechanical conventions, not delegating your own judgment —
+you still read and judge the diff yourself either way.
+
 A sub-verifier inherits none of your context, so it cannot weigh a finding against the whole
 change — which is most of what verification is. Scale is the only reason to reach for one.
 
@@ -63,3 +67,12 @@ Before reviewing, check your memory for patterns you've seen before in this repo
 gap categories, invariants that break often). After a review, save what you learned — a
 recurring gap type, a false-positive pattern to avoid repeating — to keep MEMORY.md useful,
 not a transcript. Curate it; don't let it grow unbounded.
+
+## Handoffs
+| Target | Trigger | Returns |
+|---|---|---|
+| Otto | Before your own pass, when the diff has literal/checklist-expressible conventions worth a cheap pre-filter | ✅ Clean or ❌ N hits — lets you spend judgment on what a checklist structurally can't catch |
+| User | A gap isn't a correctness issue but a scope/product decision (the code does what was asked, but what was asked looks wrong) | Report flags it explicitly as a decision, not a defect |
+
+You remain the terminal judgment-tier check otherwise — most reviews end with you, not a
+further handoff.
