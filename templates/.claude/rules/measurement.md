@@ -20,6 +20,17 @@ automation is the likeliest blind spot for a habit built around interactive work
 Plus tags: which practices/skills were in play (e.g. `verification`, `bob-verifier`,
 `labarr-ml`), and one line on the top failure if there was one.
 
+**Probation resolved 2026-09-08 — `guard-fanout` KEPT, then found buggy and fixed the same day.**
+It fired for real for the first time that evening and revealed its own design flaw: it counted
+dispatches for the life of the session, not concurrency. A session doing hours of legitimate
+sequential research hit 12 and had every subsequent dispatch gated with no way to clear it
+(another session's counter read 20). "Fan-out" means concurrency; it now counts a rolling
+5-minute window, with `CLAUDE_FANOUT_THRESHOLD` and `CLAUDE_FANOUT_WINDOW` overridable per
+project. **A hook nobody has watched fire is not a verified hook** — this one passed a probation
+review while carrying a bug that only appeared under real use.
+
+Original probation note follows.
+
 **Probation resolved 2026-09-08 — `guard-fanout` KEPT.** It had fired 5 times (state dirs under
 `$TMPDIR/claude-fanout`) and was tagged in the log zero times. The contract said "tag any session
 where it fired," and nothing ever did — so the probation was unresolvable by its own terms, and
