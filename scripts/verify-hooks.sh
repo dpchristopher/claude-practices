@@ -34,6 +34,29 @@ for ref in $REFS; do
   fi
 done
 
+# --- direction 3: template -> DEPLOYED parity ------------------------------
+# The template settings.json is the source of truth for which hooks are meant to
+# be wired. This checks the machine's LIVE ~/.claude/settings.json against it.
+#
+# Why this direction exists: directions 1 and 2 compare files inside this repo to
+# each other, so they pass even when the deployed kit wires none of them. That is
+# exactly what happened — 8 hooks sat installed-but-unwired while INV-02 reported
+# green. A check that cannot observe the deployed state cannot catch deployment
+# drift. Skipped (not failed) when no deployed config exists, so CI stays green.
+DEPLOYED="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.json"
+if [ -f "$DEPLOYED" ]; then
+  TPL_HOOKS=$(grep -ohE '[a-zA-Z0-9_-]+\.(sh|ps1|js)' templates/.claude/settings.json 2>/dev/null | sort -u)
+  for h in $TPL_HOOKS; do
+    [ -f "$HOOKS_DIR/$h" ] || continue   # only kit-owned hooks
+    if ! grep -q "$h" "$DEPLOYED"; then
+      echo "FAIL: $h is wired in the template but NOT in the deployed config ($DEPLOYED)"
+      FAIL=1
+    fi
+  done
+else
+  echo "SKIP: no deployed settings.json at $DEPLOYED — deployment parity not checked"
+fi
+
 # --- direction 2: .sh/.ps1 parity ------------------------------------------
 # Only enforced for hooks that already have a .ps1 sibling — we are not demanding
 # every bash hook be ported, only that existing pairs do not drift apart.
