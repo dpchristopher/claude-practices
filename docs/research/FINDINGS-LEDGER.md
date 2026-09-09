@@ -210,6 +210,37 @@ most candid sources.
 
 ---
 
+## Open question added by Daniel, 2026-09-08 - NOT YET RESEARCHED
+
+**"If RAM does not matter for local models, what can I do AI-wise with this laptop? What is the
+point of all that RAM?"**
+
+Phase 2 established that iGPU compute and bandwidth, not memory, cap single-model speed. That
+answers what RAM does *not* buy. It does not answer what it *does*.
+
+Claude's unresearched first pass, to be verified or refuted next sweep - **reasoned from general
+principles, zero measurements, treat as hypotheses:**
+
+1. **Long context is genuinely RAM-bound.** KV cache grows with context length and lives in
+   memory. A mid-size model at 100K+ tokens may be a capability a 12 GB discrete card cannot
+   reach at all, regardless of its speed advantage. **If true, this is the strongest answer** -
+   and it suits document-heavy work (client audits, long transcripts).
+2. **Throughput over latency.** Many models resident at once, or batched parallel inference over
+   50 documents rather than sequential. Slow-per-call stops mattering when calls run concurrently
+   - and batch/bulk is exactly what the `local-models` skill targets.
+3. **The non-LLM answer: his actual day job.** Finance and analytics - pandas on large frames,
+   joins that would swap on a 16 GB machine. Possibly where the 63 GB genuinely earns its keep,
+   with nothing to do with AI at all.
+
+**The uncomfortable possibility, stated rather than avoided:** the RAM may have been bought for a
+bottleneck he does not have. Worth measuring rather than rationalizing.
+
+**What would settle it:** measured tokens/sec at 4K vs 32K vs 128K context on one model; measured
+throughput for 1 vs 8 concurrent requests; and an honest look at whether any real workload has
+ever approached the memory ceiling. All local benchmarks, no web research needed.
+
+---
+
 ## SWEEP COMPLETE - all 5 phases landed 2026-09-08
 
 | Phase | Result |
