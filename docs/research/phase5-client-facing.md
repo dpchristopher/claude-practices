@@ -6,8 +6,8 @@
 > session from the orphans' returns as they land, so the work already paid for is not wasted.
 > Sections appear in the order the orphans return, not the order of the original questions.
 
-**Status: PARTIAL — 2 of 4 orphans returned.** Verdict on the phase's bar (2 patterns genuinely
-applicable to Betsey or The Caregiver Club) is deferred until the rest land.
+**Status: COMPLETE — all 4 orphans salvaged.** Verdict at the foot of this file.
+
 
 ---
 
@@ -230,5 +230,216 @@ becomes a subscription.
 
 ---
 
-*Sections for Q2 (nonprofit automation) and Q4/Q6 (client handoff, liability) pending the
-remaining orphans.*
+## Q4 / Q6 — Handing Claude to a non-technical client, and liability
+
+*Source: orphaned child agent, returned 2026-09-08. The strongest of the four returns.*
+
+### The finding with real consequences
+
+**A consultant doing client work on a personal Pro or Max account is under consumer terms with
+no DPA.** Anthropic's own scoping says so:
+
+- The [DPA](https://support.claude.com/en/articles/7996862-how-do-i-view-and-sign-your-data-processing-addendum-dpa)
+  applies **only** to commercial products — Claude for Work and the API. Not Free, Pro, or Max.
+- The [consumer privacy page](https://privacy.claude.com/en/articles/10458704-how-does-anthropic-protect-the-personal-data-of-claude-users)
+  states it covers Free/Pro/Max/Claude Code and is "not commercial products like Claude for Work
+  or the API, which have separate privacy documentation."
+- And when working inside a client's own subscription: "If you access Claude via a third-party
+  platform or service provider, your use of Claude in those cases is governed by the third-party
+  platform's terms of service." **Whose account does the accessing determines whose terms apply.**
+
+Doc-grounded, not inferred. It bears directly on the Betsey engagement, which runs through
+Daniel's own accounts against her Drive and Asana.
+
+A practitioner reaches the same conclusion independently. **Bradford Tobin**,
+[bradfordtobin.substack.com](https://bradfordtobin.substack.com/p/using-ai-in-client-work),
+multi-industry consultant writing from his own practice:
+
+> "The biggest risk isn't the output; it's the input. Uploading a client's sensitive PII... into
+> a standard (non-Enterprise) AI account can be a breach of your NDA and data privacy laws like
+> GDPR or CCPA."
+
+His practice is "only use Team or Enterprise tiers for client work" — immediately caveated with
+"even when using an enterprise account, nothing is safe!"
+
+His contract disclosure clause, worth copying close to verbatim:
+
+> "Consultant utilizes AI-assisted tools to enhance efficiency and analysis. Consultant maintains
+> human oversight over all outputs, remains responsible for the accuracy of final deliverables."
+
+Three-tier disclosure framework: none needed for mechanical work (grammar, formatting);
+discretionary when AI collaborates; **mandatory when AI creates the substance**, for IP and
+liability reasons. Plus: "Never let AI have the final word. If you didn't verify it, don't send
+it out."
+
+### What actually breaks for non-technical users
+
+1. **Terminal intimidation is the top blocker for Claude Code.** Michael Crist
+   ([michaelcrist.substack.com](https://michaelcrist.substack.com/p/claude-code)) reports an
+   employee who avoided it entirely "specifically because the terminal was too intimidating."
+   People don't push through — they don't start.
+2. **Fear of irreversible action.** Crist: "Every time it asked to do something on my computer,
+   I'd Google the command just to make sure it wasn't going to break something."
+3. **Anthropic's own safety guidance assumes security literacy ordinary users lack.** Simon
+   Willison, [on Cowork](https://simonwillison.net/2026/Jan/12/claude-cowork/): *"I do not think
+   it is fair to tell regular non-programmer users to watch out for 'suspicious actions that may
+   indicate prompt injection'!"* — the sharpest line in the phase, and it lands directly on
+   ledger items B7 and P5.
+4. **UI friction in Cowork** — Willison hit a sidebar/artifact layout bug on first use.
+5. **Bimodal misuse**: users either treat Claude as a plain chatbot and get mediocre results, or
+   assume customization is too technical and never touch skills or instructions. Corroborated
+   across several authors; only Crist fetched in full.
+
+**Implication for both clients: hand them claude.ai with Projects and Skills, never Claude Code.**
+The terminal is the adoption cliff.
+
+### The handoff path (official docs)
+
+- **[Projects](https://support.claude.com/en/articles/9517075-what-are-projects)** — self-contained
+  workspaces with their own knowledge base and instructions. Free tier gets 5; paid expands
+  retrieval "tenfold." Team/Enterprise share org-wide with view/edit roles.
+- **[Skills](https://support.claude.com/en/articles/12512180-use-skills-in-claude)** — on every
+  tier including Free, but **requires code execution enabled** (Settings > Capabilities).
+  Non-technical path: Customize > Skills, toggle on. "Claude will automatically use these tools
+  when relevant. You don't need to explicitly invoke them."
+- **[Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)** —
+  paid only. Local file access, scheduled cloud tasks, browser control, produces real deliverables.
+  No session sharing yet.
+
+### Security guidance worth adopting
+
+From [General Analysis](https://generalanalysis.com/guides/security-guidance-for-claude-cowork-and-risks),
+an AI-security firm — vendor-adjacent but specific and tradeoff-aware:
+
+- "Create dedicated Cowork working folders for approved tasks. Keep credential stores, .env
+  files, SSH keys, cloud config, browser profiles, shell history, finance exports, legal
+  archives, and customer data **out** of those folders."
+- "Use least-privilege OAuth scopes and avoid broad admin grants. Require approval for external
+  sends, public links, permission changes, record deletion, customer-impacting actions."
+
+The first already matches `C:\Clients\CLAUDE.md`'s client-data rule. The second is implemented
+nowhere.
+
+### Not verified
+
+- **The actual DPA text was never fetched.** All specifics (SCCs, UK IDTA, Irish law,
+  zero-retention, HIPAA BAA) come from third-party compliance-vendor summaries. **Read the real
+  DPA before relying on any of it.**
+- Google Workspace connector claims — "mirrors your existing permissions," "not trained on
+  connector data" — from a search snippet, not the live page. Verify before quoting to a client.
+- Contract-template sites (liability caps at 3 months' fees, 30-day deletion) are template-vendor
+  copy, **not** practitioner-validated norms.
+
+---
+
+## Q2 — Nonprofit automation (applies to The Caregiver Club)
+
+*Source: orphaned child agent, returned 2026-09-08. Its verdict: dominated by near-identical
+vendor listicles recycling the same unsourced claims. Genuine accounts from a specific person at
+a specific small org are rare.*
+
+### The immediately actionable finding
+
+**Claude for Nonprofits exists: up to 75% off Team/Enterprise, and Team at $8/user/month with a
+2-seat minimum for orgs under 20 people.**
+[claude.com/solutions/nonprofits](https://claude.com/solutions/nonprofits) ·
+[announcement](https://www.anthropic.com/news/claude-for-nonprofits) · 2025-12-02
+
+Eligibility: 501(c)(3) and international equivalents, verified through Goodstack.
+
+**This changes the Caregiver Club engagement.** The assumption was a zero-budget org on free
+tiers. $16/month for two seats on Team is a different proposition — and per the Q4/Q6 section
+above, **Team is also the tier that carries a DPA.** The cheap path and the defensible-data-
+handling path turn out to be the same path.
+
+Listed use cases match the brief exactly: grant-proposal drafting, donor segmentation and email
+sequences, volunteer role descriptions and onboarding, turning survey data into board decks.
+
+Caveats worth stating: the named case studies (Epilepsy Foundation, IRC, IDinsight, Robin Hood)
+are all mid-to-large orgs with technical staff. The Blackbaud/Benevity/Candid connectors are
+enterprise-CRM integrations, not something a no-technical-staff org sets up alone. And the "16×
+faster" style figures are partner-reported, not independently verified.
+
+### The best small-org workflow found
+
+**SisterLove** (~18 people, reproductive-justice nonprofit), via a
+[Zapier case study](https://zapier.com/blog/how-sisterlove-scaled-content-creation-with-ai-and-automation/) —
+vendor-published, but it names a real org and a real staffer, which is more than most:
+
+A staffer types a keyword into a Google Sheet cell. Zapier sends it to an LLM, which returns an
+800–1,000 word blog post into the matching row — then fans out to generate an email, a
+short-video outline, social captions, and text messages. A Google Form lets other staff submit
+ideas into the same pipeline.
+
+Claimed: 6–8 hours per topic down to minutes; 190+ hours saved in under 9 months. Vendor-reported,
+unverified.
+
+**The transferable shape is the spreadsheet-as-interface.** A non-technical person types in a
+cell; automation does the rest. That sidesteps every adoption blocker in the Q4/Q6 section — no
+terminal, no prompt engineering, no new tool to learn.
+
+### A zero-budget pilot framework
+
+[The CLASS Consulting Group](https://www.theclassconsultinggroup.org/post/how-small-nonprofits-can-pilot-ai-operations-without-new-software-or-budget) —
+consultant advice, not a documented case:
+
+Identify repetitive tasks → pick one free tool → build a shared Google Doc of prompt templates →
+run a 2-week test measuring time saved → compute ROI. Their illustrative math: 20 min/week × 52
+weeks × $30/hr ≈ $510/year reclaimed.
+
+Notably one of the few sources naming **Claude.ai alongside ChatGPT** as a viable free-tier
+option for a small org.
+
+### Honest friction, which the vendor content never shows
+
+Deb Stuligross, a nonprofit-technology consultant, [strefatech.substack.com](https://strefatech.substack.com/p/116-bro-wtf) ·
+2025-02-05 — a real internal pilot at a ~25-person remote nonprofit. A data analyst tried to get
+an LLM to turn CRM exports into a decent bar chart and got repeatedly "drab" output, prompting
+the post's title. Kept here precisely because it is a failure account, and the only one found.
+
+### Sector survey data
+
+TechSoup + Tapp Network AI Benchmark Report, via
+[blog.techsoup.org](https://blog.techsoup.org/posts/what-ai-means-for-nonprofits-in-2025-insights-from-the-ai-benchmark-report) ·
+2025-02-21. TechSoup is a nonprofit-tech intermediary rather than an AI vendor, so this is closer
+to independent sector research:
+
+- ~25% of orgs use AI to streamline grant writing
+- ~30% cite financial limits as the primary adoption barrier
+- **>75% have no formal AI strategy**
+- >60% of orgs under $1M budget are "exploring" AI
+
+The full report may break out donor-management and volunteer-scheduling rates; only the summary
+was read.
+
+### Not verified
+
+- OpenAI's nonprofit case studies (a "$20,000 grant in 12 minutes," 200+ applications vs. 90)
+  read as marketing hyperbole and are vendor-published with no corroboration.
+- Reddit's r/nonprofit was unreachable — same tooling limit as the other phases.
+- The full TechSoup benchmark PDF was not accessed.
+
+---
+
+## Verdict
+
+**The phase cleared its bar.** It required 2 patterns genuinely applicable to Betsey or The
+Caregiver Club; it produced four that change what to actually do:
+
+1. **Claude for Nonprofits at $8/user/month** — and Team is the tier that carries a DPA, so the
+   cheap path and the compliant path coincide.
+2. **The consumer-tier/no-DPA gap** — directly relevant to how the Betsey audit is being run today.
+3. **The 90%-itinerary-error study** — a numerate argument that Betsey's verification *is* the
+   billable expertise, and a caution against any AI-itinerary feature on her site.
+4. **Spreadsheet-as-interface** — the handoff shape that avoids every adoption blocker found.
+
+**Recommendation for the recurring sweep: KEEP, but narrow.** The general "what do AI
+consultancies do" search is almost pure noise and should be dropped. The two threads worth
+re-running monthly are Anthropic's own nonprofit/business program changes, and the
+liability/data-handling picture — both are official-source questions with real answers, and both
+change what Daniel can defensibly offer.
+
+**A structural gap across all four returns:** Reddit and Facebook groups — where practitioners
+in both of these industries actually talk — were unreachable by every agent. That is a tooling
+limit, not an absence of material, and it means this phase systematically under-samples the most
+candid sources.
