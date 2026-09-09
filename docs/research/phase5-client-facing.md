@@ -6,7 +6,7 @@
 > session from the orphans' returns as they land, so the work already paid for is not wasted.
 > Sections appear in the order the orphans return, not the order of the original questions.
 
-**Status: PARTIAL — 1 of 4 orphans returned.** Verdict on the phase's bar (2 patterns genuinely
+**Status: PARTIAL — 2 of 4 orphans returned.** Verdict on the phase's bar (2 patterns genuinely
 applicable to Betsey or The Caregiver Club) is deferred until the rest land.
 
 ---
@@ -134,5 +134,101 @@ differentiator, and it is one this kit is unusually well set up to deliver.
 
 ---
 
-*Sections for Q2 (nonprofit automation), Q3 (travel-agency automation), and Q4/Q6 (client
-handoff, liability) pending the remaining orphans.*
+## Q3 — Travel-agency automation (applies to Betsey Brown Travel)
+
+*Source: orphaned child agent, returned 2026-09-08. Its own summary: "overwhelmingly vendor/SEO
+content-marketing noise." ~15 searches, ~10 full fetches, and it found **zero** verifiable
+accounts of an independent travel agent describing their own automation workflow. Reporting that
+plainly rather than dressing thin material up.*
+
+### The finding that actually matters for Betsey
+
+**90% of unsupervised AI itineraries contain an error.**
+[north9.agency](https://north9.agency/ai-travel-itineraries/) · 2024-04-08 ·
+**Independent study, but published by a travel-marketing agency** — not peer-reviewed, not
+replicated, and it tested vanilla ChatGPT rather than a purpose-built workflow. Directional, not
+definitive.
+
+Method: 10 two-day itineraries for each of 10 major cities, manually checked.
+
+| Failure | Rate |
+|---|---|
+| At least one error | 90% |
+| Venue suggested outside opening hours | 52% |
+| Routing requiring illogical backtracking | 25% |
+| **Permanently closed venue recommended** | **24%** |
+
+One itinerary cited a fabricated Rome cafe ("Antico Caffe Ponit").
+
+**Why this is the most useful thing in the phase:** it is a concrete, numerate argument for
+where Betsey's value actually sits. A luxury travel agent's product is *curation that is
+verified* — the 24% closed-venue rate is precisely the failure a client would blame her for.
+This says: draft with AI, never send unreviewed, and the review step is the billable expertise
+rather than an overhead. It also cautions against any "AI itinerary generator" feature on her
+site.
+
+### The one credible practitioner account (not travel-specific)
+
+[beginnersinai.org](https://beginnersinai.org/automated-small-business-ai/) · 2026-05 ·
+**PRACTITIONER**, one-person consulting business. Site also sells courses, so commercial
+incentive exists — but the account reads as genuine, and the tell is the candor below.
+
+Tracked before/after via Toggl across two months:
+
+| Task | Before | After |
+|---|---|---|
+| Customer support email | 12 hrs/wk | 3 |
+| Content creation | 8 | 3 |
+| Meeting scheduling and prep | 4 | 0.5 |
+| Bookkeeping and quotes | 6 | 4 |
+
+Claimed ~19.5 hrs/week recovered and 35% revenue growth — self-reported, unverified.
+
+**The part worth copying is where he pulled back:** he refused full auto-send on client emails,
+rejected AI for sensitive matters, and *rehired a human bookkeeper at $180/month* rather than
+automate bookkeeping. That "here's what I chose not to automate" detail is what distinguishes a
+real account from vendor copy — and it is the honest shape of a proposal to a client.
+
+### Vendor claims, recorded as claims
+
+Two consultancy write-ups describe travel-client engagements. Both are written by the seller,
+neither has client-side corroboration:
+
+- [aistrategywithmaramsay](https://aistrategywithmaramsay.substack.com/p/how-we-helped-a-travel-agency-owner) ·
+  2025-04-03 · Tally → Zapier → Zoho Zia → ChatGPT → Motion → MailerLite. Claims 80% faster
+  inquiry response and doubled lead-to-booking conversion — measured **7 days** after launch.
+- [connex.digital](https://connex.digital/blog/how-airtable-and-zapier-transformed-a-travel-companys-customer-experience/) ·
+  2024-12-10 · Australian youth-adventure operator, 4,000+ travelers/yr. Rezdy → Airtable →
+  Zapier → Timeline.ai. Claims 600+ automated WhatsApp messages monthly.
+
+The **stack shape** is the transferable part — intake form, then CRM, then automation, then
+messaging — not the numbers.
+
+### A caution worth keeping despite its source
+
+Repeated across several vendor CRM-cleanup pages, and sensible even though no practitioner is
+attached to it:
+
+> AI cannot fix your CRM processes. If new duplicates are created daily because there is no
+> dedup logic at the point of entry, AI cleanup is a recurring expense instead of a one-time fix.
+
+Directly relevant to Betsey's systems-audit workstream: fix the intake path, or the cleanup
+becomes a subscription.
+
+### Gaps the agent flagged honestly
+
+- **Reddit was inaccessible** — WebFetch is blocked on reddit.com, and indexed search surfaced
+  no thread content. `r/travelagents` almost certainly has real practitioner discussion on
+  exactly this. A human with a browser should check it; that is not a research failure so much
+  as a tooling limit.
+- Facebook groups for independent travel advisors are where this shop-talk actually happens and
+  are not crawlable at all.
+- Host Agency Reviews has published agent-survey data and runs a podcast; blog content was
+  vendor-grade, but transcripts were not reached.
+- A travel-agent byline piece ("Stop Trusting AI for Travel Planning," 2025-12-01) turned out to
+  cite third-party incidents rather than his own client cases — anecdotal, not documented.
+
+---
+
+*Sections for Q2 (nonprofit automation) and Q4/Q6 (client handoff, liability) pending the
+remaining orphans.*
