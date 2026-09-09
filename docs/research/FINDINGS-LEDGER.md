@@ -143,6 +143,20 @@ same hope.
 | L8 | **The `local-models` delegation boundary needs a third tier.** Its task-shape rules (one-step, verifiable, <=8K tokens) hold up; what is missing is a middle tier between "fast local 3-4B" and "Claude." | DOCTRINE | OPEN | Agent deliberately did not fix it - the skill's own rehearsal-ladder discipline requires a measured A/B first. |
 | L9 | **There may be no American-lab-compliant dense model in the 27-32B band.** Qwen and Gemma are excluded by the existing American-labs-only rule; gpt-oss-20b is the nearest compliant fit at 20B. | DOCTRINE | OPEN | Resolve before building anything on that tier. The constraint may make the tier unreachable. |
 
+### From Phase 4 - academic literature
+
+*Source: `phase4-academic.md`. Bar was >=1 finding surviving the strict citation rule; delivered 8, all fetched and read at source. The agent dispatched zero children, reasoning that delegating the reading would recreate the exact self-report problem the task was about.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| Q1 | **Four independent 2026 papers, four unrelated methodologies, converge: an agent's self-report of success is not evidence, and is often wrong with no adversarial intent.** arXiv 2607.24300, 2606.05976, 2606.28430, 2604.19049 | DOCTRINE | **VERIFIED** | Independent academic confirmation of tonight's lived experience: three subagents produced confident claims that failed local checking, one reporting an edit it never made. `output-accuracy.md`'s distrust rule now has real backing rather than a single anecdote. |
+| Q2 | **The citation rule demonstrated itself mid-research.** A WebSearch summary invented a statistic ("80+ agents... ~16%") for arXiv 2604.19049 that a direct fetch of the same paper's abstract shows does not exist - the real figure is 10 reviewers, and no 16% appears anywhere. | DOCTRINE | **VERIFIED** | The sharpest evidence in the sweep for why "an unread abstract is not a source" is a hard rule. Third time this kit has caught a fabricated statistic; first time caught live, in-flight. |
+| Q3 | **No paper gives a validated optimal fan-out N, in either direction.** The 3-4 cap is neither contradicted nor numerically supported. | DOCTRINE | **VERIFIED** | Honest null result. The cap remains a judgment call from one incident. |
+| Q4 | **Structure beats headcount.** arXiv 2608.18167 and 2607.25656: a 3-agent setup with an explicit adversarial/critic role beat a 5-agent baseline, and naive multi-agent agreement produces a "false-consensus" failure mode. | DOCTRINE | **VERIFIED** | Reframes the fan-out lever from *how many* to *what roles*. A refinement candidate for `loop-cost-discipline.md`, not a contradiction of it. Note this is the same 2608.18167 that Wave 9 declined to cite from an unread abstract - now actually read. |
+| Q5 | EXCLUDED: "entropy principle" paper (2606.08162) | DISCARD | DONE | Fully read, then excluded on credibility: single non-peer-reviewed author, commercial affiliation, pseudo-physics framing. |
+| Q6 | EXCLUDED: "41-87% production failure rate" (2605.03310) | DISCARD | DONE | Read directly; the abstract gives no citation for the figure and the paper's own experiment does not measure it. Exactly the shape of the numbers Waves 8 and 9 dropped. |
+| Q7 | EXCLUDED: AdaptOrch (2602.16873) | DISCARD | DONE | Surfaced in fan-out searches but does not address breadth at all. |
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -162,7 +176,7 @@ same hope.
 - **2** Local models on this hardware — LANDED
 - **3** Named practitioners — LANDED (9 compositions)
 - **3b** Anduril / edge AI — LANDED (verdict: mostly no; cut from future sweeps)
-- **4** Academic — not started
+- **4** Academic — LANDED (8 findings survived full verification)
 - **5** Client-facing — not started
 
 ---
