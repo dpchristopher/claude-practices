@@ -174,3 +174,54 @@ A one-time sweep decays; a recurring one compounds.
 4. **Distrust agent self-reports.** Re-verify anything load-bearing locally before acting.
 5. **Every finding must answer: does this change what Daniel does on Monday?** If not, it is
    trivia, however interesting.
+
+---
+
+## Part 6 — How the phases are judged, filtered, and landed
+
+### Every phase runs. The bar is per-phase, never global.
+
+A single project-wide quota would let Phase 1 satisfy it and cause Phases 2–5 to be skipped —
+which would be backwards, since the later phases carry the material Phase 1 structurally cannot
+produce. So:
+
+- Each phase has its own bar, and **a phase that clears its bar does not cancel any other phase.**
+- The bar is a **quality check on that phase's approach**, not a stopping condition. If a phase
+  returns little, that is itself a finding: cut it from *next* month's sweep, do not skip it now.
+
+Per-phase bars:
+
+| Phase | Clears its bar if it produces |
+|---|---|
+| 1 — Anthropic ground truth | ≥5 capabilities not currently used, plus every conflict with existing doctrine |
+| 2 — Local models | A concrete model + backend recommendation with measured tokens/sec on this machine |
+| 3 — Practitioners | ≥5 *compositions* (not features) worth stealing |
+| 3b — Anduril / edge AI | An honest yes/no on whether anything transfers |
+| 4 — Academic | ≥1 finding that survives the citation rules above |
+| 5 — Client-facing | ≥2 patterns applicable to Betsey or The Caregiver Club |
+
+### Phase 1 hunts for compositions, not just feature lists
+
+Docs enumerate capabilities. They do not show what people *build* from them, and the gap
+between "SessionEnd hooks exist" and "someone wired one that does X" is the entire thing Daniel
+is chasing. So Phase 1 must also sweep cookbook-style docs, shipped plugins and skills on
+GitHub, and worked examples — not only the reference pages.
+
+### The filter is the doctrine, not novelty
+
+Do **not** filter on "would this impress Claude." Claude is a biased instrument here: things
+that read as mundane to it may be exactly what Daniel has never seen. The correct test is
+**"does this help *this* kit, these projects, or these clients?"** — judged against the doctrine
+in this repo, which is in context. When in doubt, include it.
+
+### Every finding lands somewhere
+
+Findings that sit in a document and die are the exact failure this session was spent repairing.
+Each one is filed as exactly one of:
+
+1. **Doctrine change** — a rule added, corrected, or retired (with what it displaces)
+2. **Config change** — hook, permission, setting, plugin
+3. **Build** — a thing to make, with a one-line reason
+4. **Discarded** — with the reason, so it is not rediscovered next month
+
+A finding with no destination is not a finding.
