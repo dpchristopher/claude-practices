@@ -62,4 +62,6 @@ and task completion rates still remain low"* — reliability instead *"requires 
 changes ranging from agent system organization to model level improvements."*
 
 That is external evidence for a structural choice this kit already made:
-**rules are advisory; hooks are enforced.** A prompt is a first-step intervention.
+**rules are advisory; deterministic mechanisms are structural.** A prompt is a first-step
+intervention. The deterministic layer is itself tiered — the permission system is the actual
+allow/deny gate, hooks are best-effort automation on top of it (`SOURCES.md#hooks-are-advisory`).

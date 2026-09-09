@@ -1,7 +1,7 @@
 # Loop Cost Discipline
 
 > Auto-loaded at session start. Applies to any iterative refinement loop or subagent fan-out.
-> Refinement has diminishing returns; spend accordingly. Pairs with `safe-autonomy.md`.
+> Refinement has diminishing returns; spend accordingly.
 
 ---
 

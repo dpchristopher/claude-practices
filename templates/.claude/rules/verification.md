@@ -34,8 +34,28 @@ The agent that wrote the change should not be the sole judge of it. For non-triv
 have a fresh-context reviewer verify (see Bob the verifier). The writer is too forgiving
 of its own work.
 
-## Hooks back this up
+## Cite or retract (generation time, not review time)
+Every factual claim about code or data carries its evidence inline: a `file:line`, a
+quoted line, or the command whose output you are reporting. If a re-check finds no
+support for a claim you already made, retract it — do not soften it into a hedge and
+leave it standing. This is the upstream half of "evidence over assertion" above: that
+rule governs claiming *done*, this one governs every claim on the way there.
+Scope it to non-obvious claims; citing that a file exists is noise.
+
+## Say "I don't know" out loud
+When context or evidence is insufficient, say "insufficient information to confirm"
+and name what would settle it. An abstention is a usable answer; a confident guess
+sends the reader down a path that costs more to unwind than the question was worth.
+(Source: `SOURCES.md#abstention-and-citation`.)
+
+## Hooks back this up — but hooks are not a guarantee
 - `guard-secrets.sh` (PreToolUse) blocks writes to secret files deterministically.
 - `post-edit-format.sh` (PostToolUse) auto-formats edited files when a formatter exists.
 - `stop-verify.sh` (Stop, opt-in) can block turn-end until a project check passes.
-Rules are advisory; hooks are enforced. Use hooks for things that MUST happen.
+
+Hooks are **best-effort automation, not an enforcement boundary.** They can fail to
+fire — matcher misses, timeouts, a path the pattern didn't anticipate. For anything
+that must *never* happen, use the permission system, which is the actual allow/deny
+gate; use hooks for the things you want to happen automatically without remembering.
+A hook meant to block must `exit 2` — any other non-zero code is treated as
+non-blocking and the action proceeds. (Source: `SOURCES.md#hooks-are-advisory`.)
