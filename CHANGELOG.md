@@ -3,6 +3,34 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.8.0] — 2026-09-08 (Wave 11 — Mechanizing Doctrine)
+### Added
+- **`hooks/guard-agent-ownership.sh`** (PreToolUse:Agent) — mechanizes the agent-ownership rule
+  added hours earlier in this same session. Blocks a direct dispatch of a `gsd-*` agent, but only
+  in a project with no `.planning/` directory, since inside a real GSD project those agents are
+  the right tool. Names the replacement in the block message (`gsd-verifier` → `bob-verifier`,
+  and so on). Verified against all three cases: blocks outside a GSD project, passes for the
+  kit's own agents, passes for `gsd-*` inside a GSD project.
+- **`docs/mechanizing-doctrine.md`** — the tier map (permission > hook > rule > skill) and a
+  per-rule status table, plus the config for turning on `stop-verify` per project.
+
+### Notes
+- **The rule this wave mechanized was written earlier tonight, at tier 3.** That is the pattern
+  worth naming: a rule that can be expressed as a matcher was never a rule, it was an unwritten
+  hook. Four of the nine hard rules are now at tier 2 or better; four were already there; the
+  remaining ones need judgment a matcher cannot make and correctly stay rules.
+- **`stop-verify.sh` is still opt-in and still fires nowhere.** It is the highest-value remaining
+  conversion — it would move "never claim done without evidence" from Claude's goodwill to a
+  blocking gate — but it needs a per-project `PROJECT_CHECK_CMD`, and setting it globally would
+  block every turn in any repo without tests. Documented, not enabled. Listing it as done would
+  repeat exactly the installed-but-unwired failure this session was spent correcting.
+- **"Never push directly to main" was deliberately left at tier 3.** A `Bash(git push origin
+  main:*)` deny would enforce it absolutely, with no approval path — and doc-only HANDOFF pushes
+  to main are established practice here. The trade is real in both directions and is recorded
+  rather than silently resolved.
+- **Line budget: +0.** Nothing was added to the always-loaded layer this wave; the hook and the
+  doc are both on-demand. This wave pays back part of Wave 10's +31.
+
 ## [1.7.0] — 2026-09-08 (Wave 10 — Deploying What Wave 9 Wrote)
 ### Added
 - **`global-rules/output-accuracy.md`** — promotes Wave 9's cite-or-retract and abstention rules
