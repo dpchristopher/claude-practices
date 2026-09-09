@@ -39,8 +39,24 @@
   mechanism wrong (checked `.git/hooks/` instead of `core.hooksPath`). Verify agent claims.
 
 ## Next action (priority 1)
-Turn on `stop-verify` in the remaining projects once each has a real check to run.
-See `docs/mechanizing-doctrine.md`.
+Nothing outstanding from this session. All five active projects now have a working
+`stop-verify` gate (below).
+
+**`stop-verify` is live in all 5 projects** — Claude cannot end a turn while the check fails:
+| Project | Check | Runtime |
+|---|---|---|
+| claude-practices | `verify-hooks.sh && verify-sources.sh` | 5s |
+| Civ_Project | `python tools/validate_mod.py` | 2s |
+| Econ Project | `bash scripts/check.sh` (new) | <1s |
+| Wealth Management Dash | `npm run build --silent` | 7s |
+| STL_Project | `bash check.sh` (new) | 1s |
+
+Built this session: `Econ Project/scripts/check.sh` (compiles all 55 .py files, then verifies
+every module the CODE imports resolves — deliberately not driven by requirements.txt, which
+carries stale entries) and `STL_Project/check.sh` (HTML parses). Econ's check found `bs4`
+genuinely missing from the MSBA_Fal env and a test file needing pytest; both installed.
+Econ runs in MSBA_Fal, not base — the check hardcodes that interpreter, overridable via
+`ECON_PYTHON`.
 
 **Do not raise API key rotation.** Daniel has declined it repeatedly and considers it closed.
 Do not re-add it to a handoff, a plan, or a recommendation.
