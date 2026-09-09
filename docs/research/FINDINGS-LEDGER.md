@@ -182,6 +182,54 @@ Note this cuts against the earlier conclusion that fan-out width should be bound
 verification capacity. Width was not the problem here. **Depth was** - and nothing in the kit
 currently constrains it.
 
+### From Phase 5 - client-facing
+
+*Source: `phase5-client-facing.md`. Assembled by the parent session from four orphaned agents.
+Bar was 2 applicable patterns; cleared with 4.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| C5-1 | **Claude for Nonprofits: up to 75% off, Team at $8/user/month, 2-seat minimum, for orgs under 20 people.** Verified via Goodstack, 501(c)(3). | BUILD | **HIGH** | Reframes The Caregiver Club from zero-budget-free-tier to $16/month. **And Team is the tier that carries a DPA** - so the cheap path and the compliant path are the same path. |
+| C5-2 | **A consultant working on a personal Pro/Max account is under consumer terms with NO DPA.** Anthropic's DPA covers only Claude for Work and the API; the consumer privacy page explicitly excludes commercial products. Whose account does the accessing determines whose terms apply. | DOCTRINE | **HIGH** | Bears directly on how the Betsey audit runs today - through Daniel's own accounts, against her Drive and Asana. Doc-grounded, not inferred. |
+| C5-3 | **90% of unsupervised AI itineraries contain an error; 24% recommend permanently closed venues.** Independent study, travel-marketing agency, tested vanilla ChatGPT. | DOCTRINE | OPEN | A numerate argument that Betsey's verification **is** the billable expertise, and a caution against any AI-itinerary feature on her site. |
+| C5-4 | **Spreadsheet-as-interface** - staffer types a keyword into a Google Sheet cell, automation does the rest (SisterLove, ~18 people) | BUILD | OPEN | Avoids every adoption blocker found: no terminal, no prompt engineering, no new tool. |
+| C5-5 | **Terminal intimidation is the top adoption blocker.** One account describes an employee who avoided Claude Code entirely because the terminal was too intimidating. | DOCTRINE | OPEN | **Both clients get claude.ai with Projects and Skills, never Claude Code.** |
+| C5-6 | Willison: *"I do not think it is fair to tell regular non-programmer users to watch out for 'suspicious actions that may indicate prompt injection'!"* | DOCTRINE | OPEN | Lands directly on B7 and P5. If the guidance is unreasonable for a technical audience, it is unreasonable for Betsey and for nonprofit volunteers. |
+| C5-7 | Bradford Tobin's contract disclosure clause and three-tier disclosure framework | BUILD | OPEN | Copy near-verbatim. Mandatory disclosure when AI creates the substance, for IP and liability. |
+| C5-8 | **The actual Anthropic DPA was never fetched** - all specifics come from third-party compliance-vendor summaries | - | OPEN | Read the real DPA before relying on any of it. |
+| C5-9 | Least-privilege OAuth scoping and approval gates for external sends, public links, permission changes, deletions | CONFIG | OPEN | Implemented nowhere currently. |
+
+**Phase verdict: KEEP but NARROW.** The general "what do AI consultancies do" search is near-pure
+noise. The two threads worth re-running are Anthropic's nonprofit/business program changes and
+the liability picture - official-source questions with real answers.
+
+**Structural gap across all five phases:** Reddit and Facebook groups - where practitioners in
+these industries actually talk - were unreachable by every agent, every time. That is a tooling
+limit, not an absence of material, and it means the whole sweep systematically under-samples the
+most candid sources.
+
+---
+
+## SWEEP COMPLETE - all 5 phases landed 2026-09-08
+
+| Phase | Result |
+|---|---|
+| 1a Anthropic changelog | 12 unused capabilities; caught a stale fact in its own dispatch prompt |
+| 1b Community / GitHub | 6 compositions; 2 risks refuted locally |
+| 1c Rules still-true | 6 real defects incl. 2 mutation-tested; **3 of 7 FALSE findings were themselves wrong** |
+| 1d GC inventory | GSD apparatus never used once; 2 hooks recording pure garbage |
+| 2 Local models | RAM was never the constraint - refuted this session's own framing |
+| 3 Practitioners | 9 compositions; Auto Mode classifier is not a hard gate |
+| 3b Anduril | Mostly no - **CUT from future sweeps** |
+| 4 Academic | 8 findings survived strict citation; caught a fabricated stat live |
+| 5 Client-facing | 4 applicable patterns - **KEEP but narrow** |
+
+**Cross-cutting theme.** Tonight's repair work fixed *wiring*. This sweep found the next layer
+down: things that are wired and still do not work. INV-01 and INV-04 cannot fail. Two hooks log
+only `unknown`. 68 GSD skills have never run. And **four separate agent self-reports failed
+verification**, one of them reporting an edit it never made - which Phase 4 then found four
+independent papers predicting.
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -202,7 +250,7 @@ currently constrains it.
 - **3** Named practitioners — LANDED (9 compositions)
 - **3b** Anduril / edge AI — LANDED (verdict: mostly no; cut from future sweeps)
 - **4** Academic — LANDED (8 findings survived full verification)
-- **5** Client-facing — not started
+- **5** Client-facing — LANDED (4 patterns; keep but narrow)
 
 ---
 
