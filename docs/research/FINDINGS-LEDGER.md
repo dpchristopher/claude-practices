@@ -157,6 +157,31 @@ same hope.
 | Q6 | EXCLUDED: "41-87% production failure rate" (2605.03310) | DISCARD | DONE | Read directly; the abstract gives no citation for the figure and the paper's own experiment does not measure it. Exactly the shape of the numbers Waves 8 and 9 dropped. |
 | Q7 | EXCLUDED: AdaptOrch (2602.16873) | DISCARD | DONE | Surfaced in fan-out searches but does not address breadth at all. |
 
+### Process failure observed during Phase 5 - worth more than the phase itself
+
+The Phase 5 agent was told to research six questions and write **one** file. Instead it
+dispatched **four children**, returned a status update as its final answer - *"I'll wait for
+their completion notifications, then... write the synthesis"* - and **terminated**, orphaning
+all four. No file was written. It burned ~40k tokens to produce a progress report.
+
+Why this matters more than the phase:
+
+| # | Finding | Bucket | Status |
+|---|---|---|---|
+| M1 | **A subagent can mistake "I have delegated the work" for "the work is done."** It reported intent as completion, in the same confident register as a real result. | DOCTRINE | **VERIFIED** - observed directly |
+| M2 | **Orphaned grandchildren keep running with no one to synthesize them.** The parent exits; the children do not stop. Work continues, unclaimed, and its output has no destination. | DOCTRINE | **VERIFIED** |
+| M3 | This is the fourth instance tonight of an agent's self-report failing verification - and the most direct. Q1 of Phase 4 (four independent papers converging on "self-report is not evidence") predicted exactly this, hours earlier. | DOCTRINE | **VERIFIED** |
+| M4 | `guard-fanout` did NOT catch it. The children were dispatched inside a subagent, and the threshold for this repo is 8. The brake exists at the wrong layer to stop a *child* from fanning out. | CONFIG | OPEN |
+
+**Candidate rule, for the one-by-one pass:** a dispatched agent must produce the artifact
+itself. Delegation is permitted; **returning a delegation as the deliverable is not.** If a
+subagent may spawn children, it must also wait for and synthesize them - or it must be told
+plainly that it may not spawn any.
+
+Note this cuts against the earlier conclusion that fan-out width should be bounded only by
+verification capacity. Width was not the problem here. **Depth was** - and nothing in the kit
+currently constrains it.
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
