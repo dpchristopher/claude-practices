@@ -127,6 +127,22 @@ same hope.
 | P6 | ghuntley.com unreachable on both attempts (connection reset) | - | OPEN | A genuine gap, not a low-yield result. Retry next month; the expectation of heavy relevant content there is still unconfirmed either way. |
 | P7 | Four further compositions in the phase file | mixed | OPEN | See `phase3-practitioners.md` for the full nine. |
 
+### From Phase 2 - local models on this hardware
+
+*Source: `phase2-local-models.md`. Bar was a concrete model+backend recommendation with measured tok/s from a real source. Cleared.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| L1 | **Chip-matched benchmark found.** `ggml-org/llama.cpp` discussion #23313 confirms Arc B390 = 12 Xe3 cores, tested June 2026: **7B Q4_0 = 19.2 tok/s; 27B Q4_K_M = 3.55-4.31 tok/s**. | - | **VERIFIED** | Primary source, exact chip. Not an estimate. |
+| L2 | **RAM was never the constraint - iGPU compute and bandwidth are.** A 3B -> 27B jump is not "8-10x more capacity," it is an **~18-20x slowdown per call** (2.1s -> ~35-45s). | DOCTRINE | OPEN - HIGH | **Directly refutes what this session told Daniel twice**: that 63.5 GB of RAM meant he was badly underusing the machine. The headroom is real and irrelevant. Correct the framing before acting on it. |
+| L3 | **Intel IPEX-LLM is archived (2026-01-28)**, with stated "known security issues" and no further patches | CONFIG | **VERIFIED** | Confirmed on the repo. Remove from consideration entirely. |
+| L4 | **Ollama has no official Intel Arc support** (docs.ollama.com/gpu: NVIDIA/AMD/Apple only, plus an unofficial Vulkan fallback) | CONFIG | OPEN | LM Studio, already installed and using Vulkan, remains the right vehicle. |
+| L5 | **Foundry Local caps at ~14-20B by design, ONNX-only, no GGUF** | CONFIG | OPEN | Confirmed on Microsoft Learn. It cannot be the vehicle for a 27-32B tier; LM Studio is. |
+| L6 | **The NPU is not the speed play.** A GitHub issue on Core Ultra 9 288V shows NPU **54% slower than CPU** for small models. A second comparison shows iGPU beating NPU ~2x on an 8B model. | DOCTRINE | OPEN | Second figure flagged directional, not exact - the primary page 403'd. Contradicts the current setup, which runs phi-4-mini on the NPU. |
+| L7 | **Embeddings and reranking are the one clean local win** - CPU-only, no backend fragmentation, vendor-independent | BUILD | OPEN | The clearest actionable item in this phase. |
+| L8 | **The `local-models` delegation boundary needs a third tier.** Its task-shape rules (one-step, verifiable, <=8K tokens) hold up; what is missing is a middle tier between "fast local 3-4B" and "Claude." | DOCTRINE | OPEN | Agent deliberately did not fix it - the skill's own rehearsal-ladder discipline requires a measured A/B first. |
+| L9 | **There may be no American-lab-compliant dense model in the 27-32B band.** Qwen and Gemma are excluded by the existing American-labs-only rule; gpt-oss-20b is the nearest compliant fit at 20B. | DOCTRINE | OPEN | Resolve before building anything on that tier. The constraint may make the tier unreachable. |
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -143,7 +159,7 @@ same hope.
 **PHASE 1 COMPLETE.** 4 of 4 agents landed. 30 findings indexed; 6 already closed by local verification (2 confirmed, 4 refuted).
 - **1c** Rules still-true audit → `phase1c-rules-still-true.md` — LANDED
 - **1d** GC inventory → `phase1d-gc-inventory.md` — LANDED
-- **2** Local models on this hardware — not started
+- **2** Local models on this hardware — LANDED
 - **3** Named practitioners — LANDED (9 compositions)
 - **3b** Anduril / edge AI — LANDED (verdict: mostly no; cut from future sweeps)
 - **4** Academic — not started
