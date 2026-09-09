@@ -12,6 +12,10 @@ CLAUDE="$HOME/.claude"
 INCLUDE=()
 [ -d "$CLAUDE/agent-memory" ] && INCLUDE+=("$CLAUDE/agent-memory")
 [ -f "$CLAUDE/settings.json" ] && INCLUDE+=("$CLAUDE/settings.json")
+# The global CLAUDE.md is deliberately NOT tracked in git (templates/global-CLAUDE.md is a
+# generic scaffold, not this machine's real file). That makes it the single most valuable
+# un-backed-up file here: it carries the hard rules and the toolkit routing table.
+[ -f "$CLAUDE/CLAUDE.md" ] && INCLUDE+=("$CLAUDE/CLAUDE.md")
 [ -f "$CLAUDE/.claude-practices-install-manifest.txt" ] && INCLUDE+=("$CLAUDE/.claude-practices-install-manifest.txt")
 # Per-project orchestration logs under the current dir
 [ -f ".claude/orchestration-log.txt" ] && INCLUDE+=(".claude/orchestration-log.txt")
