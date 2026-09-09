@@ -3,6 +3,70 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.6.0] — 2026-09-08 (Wave 9 — Accuracy at Generation Time; Hooks Demoted to Advisory)
+### Fixed
+- **The kit shipped a wrong claim about its own enforcement model.** `verification.md` read
+  "Rules are advisory; hooks are enforced. Use hooks for things that MUST happen." Claude Code's
+  hooks documentation says the opposite: hooks are best-effort (matchers miss, hooks time out)
+  and the **permission system** is the hard allow/deny gate. Corrected in place, with the
+  positive guidance kept — hooks remain the right tool for automation that should fire without
+  being remembered, they are just not a security boundary. (`SOURCES.md#hooks-are-advisory`.)
+  The same wrong claim was **swept for and corrected in two further live locations** that the
+  first pass missed: `skills/failure-modes/SKILL.md` (wired into the global trigger table, so it
+  would have kept surfacing the corrected-away claim) and `SOURCES.md`'s pre-existing `mast`
+  section, which quoted the old `verification.md` line and left this file asserting both
+  positions at once. Both restated as "rules are advisory; deterministic mechanisms are
+  structural" — the MAST finding is about prompting vs. structure and survives the correction
+  intact. Archived plan docs keep their original wording by standing convention.
+- **Dangling reference:** `loop-cost-discipline.md` claimed to pair with `safe-autonomy.md`,
+  which exists in neither the repo nor `~/.claude/rules/`. Reference dropped rather than a file
+  invented to satisfy it. The autonomy constraints it pointed at live in the user's own global
+  `CLAUDE.md` ("unattended loops … require explicit per-session go-ahead"), not here.
+
+### Added
+- **Cite-or-retract** (`verification.md`) — factual claims about code or data carry a
+  `file:line`, a quoted line, or the command whose output is being reported; a claim that
+  survives no re-check gets retracted, not hedged. Scoped to non-obvious claims. This is the
+  generation-time half of the file's existing "evidence over assertion" rule, which governed
+  only the final claim of *done*.
+- **Licensed abstention** (`verification.md`) — "insufficient information to confirm," plus what
+  would settle it, is a usable answer; a confident guess costs more to unwind than the question
+  was worth. (`SOURCES.md#abstention-and-citation`.)
+- **Hooks section** (`automation.md`) — the two mechanical rules for writing one: a blocking
+  hook must `exit 2` (any other non-zero code is non-blocking and the action proceeds), and hard
+  denies belong in the permission config, not a hook matcher.
+- Two `SOURCES.md` anchors: `hooks-are-advisory` (primary product docs, fetched and confirmed),
+  `abstention-and-citation` (vendor docs, agent-reported, not independently re-fetched).
+
+### Changed
+- `measurement.md` — closed an ambiguity rather than adding a parallel rule: a scheduled,
+  headless, or cron agent run **is** a session and logs its own metrics row. Unattended
+  automation was the blind spot in a habit written around interactive work.
+
+### Notes
+- **Audit result: nothing to fix in the existing hooks.** All four blocking shell hooks
+  (`guard-secrets`, `guard-readonly-bash`, `guard-verdict`, `gsd-validate-commit`) already
+  `exit 2` correctly. The new rule is documentation for future hooks, not a cleanup task. The
+  `gsd-*.js` hooks always `exit 0`, but they are GSD plugin code and may block via JSON output
+  instead — not inspected, not ours to change.
+- **Two unread citations were dropped before shipping**, continuing Wave 8's discipline. A
+  research subagent surfaced arXiv 2604.03904 (calibrated abstention) and 2608.18167
+  (reviewer-critic structured disagreement) from search-engine summaries of abstracts it never
+  opened, and disclosed that limitation unprompted. The qualitative practice ships under the
+  vendor doc; the papers are named in `SOURCES.md` as not-carried rather than cited as support.
+- **A vendor blog was overruled by product docs.** "Trust, but Verify" in The Claude Code Guide
+  for Startups (claude.com, 2026-08) advises deploying hooks as hard gates where determinism is
+  required. The hooks documentation contradicts this. Docs won; the disagreement is recorded in
+  `SOURCES.md#hooks-are-advisory` rather than silently resolved.
+- **Both research agents independently reported "nothing to cut."** Two for two on a kit whose
+  maintenance rule exists to remove things is treated here as the agents not looking, not as
+  evidence the kit is clean. A garbage-collection pass remains owed; `kit-maintenance.md`'s
+  quarterly trigger is the mechanism, and this wave does not substitute for it.
+- **Line budget: +22** against the ≤+30 aim. `verification.md` 41→61 (+20) and `measurement.md`
+  43→45 (+2) are unconditionally auto-loaded and count; `loop-cost-discipline.md` is net 0.
+  `automation.md` (122→142) is `paths:`-gated to pipeline/cron/script files and does not count
+  against the always-loaded budget. Figure includes every line this wave added to a counted file.
+
 ## [1.5.0] — 2026-08-31 (Wave 8 — Delegation Discipline: Handoffs, Sprawl Gate, Rule Reviewer)
 ### Added
 - `otto-rules` agent — literal, zero-judgment checklist reviewer (`model: haiku`, `Read/Grep/Glob` only, same cost tier as Stuart, no Bash so no readonly-bash guard needed). Runs a project-local checklist of literal patterns and reports matches only; flags anything needing interpretation back to Bob/Kevin instead of attempting it.

@@ -92,6 +92,26 @@ For multi-step pipelines:
 
 ---
 
+## Hooks: Automation, Not Enforcement
+
+Hooks are the highest-leverage automation available — they fire whether or not anyone
+remembers to ask. Use them for the mechanical things: formatting, logging a metrics row,
+blocking a commit that carries a secret.
+
+Two rules govern writing one:
+
+1. **A blocking hook must `exit 2`.** Exit 1 and every other non-zero code are treated as
+   non-blocking — Claude reports the failure and proceeds. A hook that means to block and
+   returns 1 is decorative.
+2. **Hard denies belong in the permission system, not in a hook.** Hooks are best-effort
+   matching and can miss. Use the permission config for anything that must *never* happen,
+   and hooks for what should happen automatically.
+
+(Source: `SOURCES.md#hooks-are-advisory`. This corrects a line that previously read
+"hooks are enforced" in `verification.md`.)
+
+---
+
 ## Dependency Pinning
 
 ```bash

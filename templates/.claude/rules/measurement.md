@@ -8,6 +8,8 @@
 ## Log One Row Per Session
 
 At session end (alongside HANDOFF), append a row to `.claude/session-metrics.md`. ~30 seconds.
+**A scheduled, headless, or cron agent run is a session** and logs its own row — unattended
+automation is the likeliest blind spot for a habit built around interactive work.
 **Four metrics, hard cap** — resist adding more:
 
 - **goal met?** — Y / N

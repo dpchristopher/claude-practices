@@ -131,9 +131,13 @@ and reliability
 > "requires combinatorial changes ranging from agent system organization to model level
 > improvements."
 
-This is external evidence for a structural choice the kit already made independently —
-`verification.md`'s *"Rules are advisory; hooks are enforced."* Better prompting is a first-step
-intervention; the paper measures it as insufficient on its own.
+This is external evidence for a structural choice the kit already made independently: rules are
+advisory, and deterministic mechanisms are what actually hold. Better prompting is a first-step
+intervention; the paper measures it as insufficient on its own. (This passage previously cited
+`verification.md`'s *"Rules are advisory; hooks are enforced"* — that wording was wrong about
+which mechanism enforces, and was corrected in Wave 9; see `#hooks-are-advisory` below. The
+paper's finding is unaffected: it is about prompting vs. structure, not about hooks vs.
+permissions.)
 
 ---
 
@@ -214,3 +218,34 @@ acceptable outcomes, risk limits, and escalation rules.
 [Alignbase, AI Agent Reliability](https://alignbase.ai/blogs/ai-agent-reliability/) — a vendor
 blog, not independently re-verified this session; held to the same lower bar as the entries
 immediately above.
+
+## hooks-are-advisory
+
+Claude Code's own hooks documentation states that hooks are best-effort — a hook can fail to
+fire (matcher misses, timeouts) — and directs users to the **permission system** for hard
+allow/deny policy. It also specifies exit-code semantics: a hook that intends to block must
+`exit 2`; other non-zero exit codes are non-blocking and the action proceeds.
+[Claude Code hooks](https://code.claude.com/docs/en/hooks) — **primary product documentation**,
+fetched and confirmed this wave (undated page, current at time of fetch).
+
+This anchor exists because the kit shipped the opposite claim. `verification.md` previously
+read "Rules are advisory; hooks are enforced. Use hooks for things that MUST happen." Several
+2026 vendor blogs frame PreToolUse hooks as the security layer, and "Trust, but Verify" in The
+Claude Code Guide for Startups says to "deploy hooks as hard gates where determinism is
+required." Product docs outrank the vendor blog here. Corrected in Wave 9.
+
+## abstention-and-citation
+
+Anthropic's "reduce hallucinations" guidance recommends requiring evidence/citation for factual
+claims and explicitly permitting the model to say it does not know rather than guessing.
+[Anthropic, Reduce hallucinations](https://platform.claude.com/docs/en/build-with-claude/reduce-hallucinations)
+— **vendor documentation, undated**, reported by a research subagent and not independently
+re-fetched this wave.
+
+Two supporting claims surfaced in the same pass are **deliberately not carried into doctrine**:
+an arXiv paper on calibrated abstention (2604.03904) and one on reviewer-critic structured
+disagreement (2608.18167). Both reached this wave as search-engine summaries of abstracts that
+the researching agent never opened in full, and it said so unprompted. Same discipline as
+Wave 8's dropped 69.8% figure and Wave 7's MAST FC1 withholding: the qualitative practice ships,
+the unread citation does not. Governs the cite-or-retract and abstention rules in
+`verification.md`.
