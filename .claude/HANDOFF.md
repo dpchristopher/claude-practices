@@ -39,9 +39,12 @@
   mechanism wrong (checked `.git/hooks/` instead of `core.hooksPath`). Verify agent claims.
 
 ## Next action (priority 1)
-**Rotate FRED, EIA, and BEA API keys** (Econ Project). Still unrotated, carried across
-multiple sessions, with a Kevin finding that `BEA_API_KEY` bypassed redaction. Oldest real
-risk on the board. `Econ Project/.claude/HANDOFF.md` has the sequencing.
+Turn on `stop-verify` in the remaining projects once each has a real check to run.
+See `docs/mechanizing-doctrine.md`.
+
+**Do not raise API key rotation.** Daniel has declined it repeatedly and considers it closed.
+Do not re-add it to a handoff, a plan, or a recommendation.
+
 
 ## Test state
 INV-01/02/03/04 all pass with 2026-09-08 evidence. Gitleaks passed on every commit tonight.
