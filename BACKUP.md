@@ -7,6 +7,13 @@ and live only on this machine:
    Bob/Kevin/Gru write their own notes here across sessions. Losing it loses institutional memory.
 2. **Local runtime state** — `~/.claude/settings.json` edits, `.claude/orchestration-log.txt`,
    and the install manifest.
+3. **The global `~/.claude/CLAUDE.md`** — `templates/global-CLAUDE.md` is a generic scaffold with
+   placeholders, not this machine's real file, and the template itself says not to commit the real
+   one. So the hard rules and toolkit routing table that fire every turn exist in exactly one place.
+
+**Where to put the archive:** not `~/claude-backups`. That is the same disk you are protecting
+against. Pass a path that syncs or lives elsewhere — e.g. `./backup-state.sh ~/OneDrive/claude-backups`.
+A backup on the failing drive is not a backup.
 
 Committed-and-pushed files (templates, rules, agents, hooks, docs) ARE backed up by the GitHub
 remote — that remote *is* your offsite backup. Push after every wave.
