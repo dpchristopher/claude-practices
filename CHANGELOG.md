@@ -3,6 +3,26 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.8.1] — 2026-09-08 (guard-fanout: rolling window)
+### Fixed
+- **`guard-fanout.sh` counted the wrong thing.** It tallied Agent dispatches for the life of the
+  session rather than concurrency, so a long session doing legitimate sequential work hit the cap
+  and had every subsequent dispatch gated permanently — no reset short of deleting the state file.
+  Observed live: this session reached 12 dispatches across hours of research and every further one
+  was gated; an older session's counter read 20. Because the hook returns `permissionDecision:
+  "ask"`, and an explicit ask is one of the few things **not auto-approved even in
+  `bypassPermissions` mode**, this presented as "bypass mode is broken" rather than as a hook.
+  Now counts a rolling window (default 300s), which is what "fan-out" actually means.
+- Threshold and window are env-overridable (`CLAUDE_FANOUT_THRESHOLD`, `CLAUDE_FANOUT_WINDOW`).
+  The **global default stays 4** deliberately: the 2026-08-19 incident this hook exists for was 5
+  uncosted children, and raising the default to 6 would let that exact failure through. Raised to
+  8 for this repo only, where heavy research fan-out is the work.
+
+### Notes
+- **This hook passed a probation review earlier the same day while carrying the bug.** The review
+  could only ask "has it fired?" — it had, 5 times, unlogged. Nothing asked "and was it right?"
+  `measurement.md` now records the lesson: a hook nobody has watched fire is not a verified hook.
+
 ## [1.8.0] — 2026-09-08 (Wave 11 — Mechanizing Doctrine)
 ### Added
 - **`hooks/guard-agent-ownership.sh`** (PreToolUse:Agent) — mechanizes the agent-ownership rule
