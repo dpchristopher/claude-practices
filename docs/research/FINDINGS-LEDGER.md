@@ -44,6 +44,43 @@ the same alarm being raised next month.
 | B10 | PreToolUse `exit 2` may cause Claude to stop rather than self-correct (#24327) | DOCTRINE | OPEN | Affects `guard-secrets.sh` and `guard-agent-ownership.sh`, which both block with `exit 2`. Agent marked the HN corroboration a user claim, not verified. Needs a primary check. |
 | B11 | "2026 source-code leak" blog claims (voice mode, daemon mode, hidden flags) | **DISCARD** | DONE | Excluded by the agent per the citation rules — uncorroborated by any issue or maintainer statement. Recorded so it is not re-surfaced. |
 
+### From Phase 1c — rules still-true audit (Bob, opus)
+*Source: `phase1c-rules-still-true.md`. Bob returned 7 FALSE / 4 STALE / 5 UNVERIFIABLE / 3 VACUOUS.*
+
+**Verified as REAL — the two mutation-tested findings are the strongest work of the night:**
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| R1 | **INV-04 cannot fail on the files that matter.** `verify-sources.sh:42` is a file-level `grep -q "SOURCES\.md"`. Bob mutation-tested it: injected *"99 concurrent agents and 4 levels deep"* into `loop.md` → `CITATIONS OK`, exit 0. Four of five files quoting limits already carry a pointer, so they are green by construction. | CONFIG | OPEN | **Wave 8's and Wave 9's fabricated stats would not have been caught by this.** The invariant that exists to enforce sourcing discipline cannot detect a fabricated number. |
+| R2 | **INV-01 watches the wrong directory.** `install.sh:13` sets `DEST="$HOME/.claude"`; the check runs `git status --porcelain` *in the repo*, which cannot see `~/.claude`. A dry run that copied every file would still print `0`. `wc -l` also swallows the exit code. | CONFIG | OPEN | This session "verified" INV-01 from a clean tree and stamped it with evidence. **That verification was meaningless** — same defect class as INV-02. |
+| R3 | **INV-02's first clause is checked by nothing.** Mutation: add a hook wired nowhere → `HOOK PARITY OK`. | CONFIG | OPEN | The deployment-parity direction added this session genuinely fails on mutation; the *original* direction still does not. |
+| R4 | `automation.md:11` and `ml-discipline.md:11` claim "Auto-loaded at session start" while their own frontmatter is `paths:`-scoped. | DOCTRINE | OPEN | Consequence: Wave 9's hooks correction at `automation.md:96-112` only loads when someone edits a `pipeline*.py`. |
+| R5 | `bob-verifier.md:50` cites `SOURCES.md#subagent-limits` for a breadth cap, but the only `3` in that anchor is **nesting depth**. | DOCTRINE | OPEN | The exact breadth/depth conflation `SOURCES.md:45-46` names as a pre-Wave-7 defect. Dave and the global rule cite `#workflow-limits` correctly. |
+| R6 | **All 13 `templates/.claude/rules/*.md` load in zero projects.** Four of five projects have no `.claude/rules/`; Civ_Project has three project-local files instead. | DOCTRINE | OPEN | Independently confirmed earlier this session. **The kit's own repo does not load its own rules** — which is why R4, and a reference to a deleted `surgical/compare.py`, survived. |
+
+**REFUTED — Bob was wrong; do not act on these:**
+
+| # | Bob's claim | Verdict | Evidence |
+|---|---|---|---|
+| X1 | F3: `/code-review` does not exist; a session-end step silently failing open | **REFUTED** | It exists and is available this session. Bob searched the kit skills dir and the enabled-plugins list and missed it. |
+| X2 | F4: `/superpowers:brainstorming` is a deprecated no-op | **REFUTED** | `skills/brainstorming/` is real. The deprecated one is `brainstorm`, a different command. CLAUDE.md references the correct one. **Acting on this fix would have pointed the session protocol at the no-op.** |
+| X3 | F7: `guard-readonly-bash.sh` is a live orphan, wired in no settings.json | **REFUTED** | Not an orphan — invoked via `hooks:` in Kevin/Mel/Carl frontmatter. Deliberately not wired globally: it blocks `rm`, `git commit`, `pip install`. |
+| X4 | Bob's self-declared **highest-priority** risk: agent-frontmatter `hooks:` may not be honoured, leaving Kevin/Mel/Carl unguarded | **REFUTED** | [Subagent docs](https://code.claude.com/docs/en/sub-agents) list `hooks` as a supported frontmatter field. These agents live in `~/.claude/agents/` (user-level), so it applies. Only *plugin* agents ignore it. |
+
+**Meta-finding:** Bob got **3 of 7 FALSE findings wrong**, plus his top-priority open question, and two of those errors would have caused actively harmful fixes. Third instance tonight of a confident agent claim failing verification. Direct evidence for `output-accuracy.md`'s distrust-agent-self-reports rule, and an argument that fan-out width should be bounded by **verification capacity**, not token cost.
+
+### From Phase 1d — GC inventory
+*Source: `phase1d-gc-inventory.md`. Built its evidence from the transcript corpus rather than the 11-row metrics log — strongest methodology of the four.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| G1 | **GSD apparatus: 68 skills, 24 agents, 9 hooks — zero usage ever.** No `.planning/` dirs anywhere, zero real `gsd-*` dispatches, zero genuine `/gsd-*` invocations, 8 versions stale. | CONFIG | OPEN | Agent's split recommendation: keep skills/agents (free at rest, preserves optionality) but **the 9 hooks fire on every tool call globally** regardless of GSD use. Real ongoing cost, zero payoff. |
+| G2 | **`subagent-audit.sh` and `log-instructions-loaded.sh` fire correctly but record nothing usable.** | CONFIG | **VERIFIED** | Checked locally: all 89 lines of `Civ_Project/.claude/orchestration-log.txt` read `agent=unknown` or `loaded=(none captured)`. Field-extraction regexes never match the real payload shape. New variant of tonight's pattern — connected, but recording garbage. |
+| G3 | `session-context.ps1` is referenced by no settings.json anywhere | CONFIG | OPEN | Genuine orphan, unlike X3. |
+| G4 | Merge candidates with quoted overlapping triggers: `mcp-builder` / `mcp-developer` / `mcp-server-dev`; `the-fool` / `socratic-examiner`; three session-record mechanisms; a `frontend-design` name collision between kit and plugin | DOCTRINE | OPEN | |
+| G5 | Confirmed **real** usage: `superpowers`, `playwright` (actual browser tool_use calls), `session-workflow`, `daniel-context`. Confirmed broken: `github` plugin. | — | OPEN | First evidence-based usage data the kit has ever had. |
+| G6 | The transcript corpus (`~/.claude/projects/*/**.jsonl`) is a far better usage instrument than the hand-written log | BUILD | OPEN | Answers the brief's "what signal would we need" question. |
+
 ### From the changelog index (pre-read, needs confirmation from Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -56,8 +93,8 @@ the same alarm being raised next month.
 ## Phases outstanding
 
 - **1a** Anthropic changelog sweep → `phase1a-anthropic-changelog.md` *(running)*
-- **1c** Rules still-true audit → `phase1c-rules-still-true.md` *(running)*
-- **1d** GC inventory → `phase1d-gc-inventory.md` *(running)*
+- **1c** Rules still-true audit → `phase1c-rules-still-true.md` — LANDED
+- **1d** GC inventory → `phase1d-gc-inventory.md` — LANDED
 - **2** Local models on this hardware — not started
 - **3** Named practitioners — not started
 - **3b** Anduril / edge AI — not started
