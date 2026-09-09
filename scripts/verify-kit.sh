@@ -22,7 +22,10 @@ S=/c/Users/dpchr/.claude/settings.json
 
 echo "── 1. Repo state ──"
 cd /c/Dev/claude-practices
-[ "$(cat VERSION)" = "1.8.0" ] && ok "VERSION 1.8.0" || no "VERSION" "$(cat VERSION)"
+# Compare VERSION to the CHANGELOG's newest entry rather than a literal — a hardcoded
+# version makes this check fail on every release, which trains you to ignore a red run.
+CLV=$(grep -m1 -oE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md | tr -d '#[] ')
+[ "$(cat VERSION)" = "$CLV" ] && ok "VERSION $CLV matches CHANGELOG" || no "VERSION" "VERSION=$(cat VERSION) but CHANGELOG top=$CLV"
 [ -z "$(git status --porcelain)" ] && ok "working tree clean" || no "tree" "dirty"
 git fetch -q origin 2>/dev/null; [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/master)" ] && ok "master == origin/master" || no "sync" "diverged"
 
