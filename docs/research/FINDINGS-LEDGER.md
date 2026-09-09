@@ -113,6 +113,20 @@ this phase existed to find.
 already implements. Recording the negative result so next month does not re-run it on the
 same hope.
 
+### From Phase 3 - named practitioners
+
+*Source: `phase3-practitioners.md`. Bar was 5 compositions; delivered 9.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| P1 | **Auto Mode's permission classifier is NOT a hard gate.** Johann Rehberger demonstrated a ~80%-success attack against it (via Simon Willison 2026-08-27, cross-checked to The Register / GovInfoSecurity / Cybernews). Anthropic stated outright that Auto Mode is *"a best-effort classifier, not a security guarantee."* | DOCTRINE | OPEN - HIGH | **Contradicts `docs/mechanizing-doctrine.md`, written this session.** Its tier 1 says "Permission deny - Claude literally cannot." That holds for *static* deny rules; it does NOT hold for Auto Mode's *dynamic* classifier. The tier model needs an explicit split between the two. This is the same defect shape as the "hooks are enforced" error - a mechanism assumed deterministic that is best-effort. Action: confirm Claude Code Desktop >= 2.1.257. |
+| P2 | **Anthropic ships `sandbox-runtime` (srt)** for containing agents | BUILD | OPEN | The "don't reinvent the wheel" answer for isolating client-repo work that touches credentials. Evaluate before building anything bespoke. |
+| P3 | **Cross-model adversarial review** - Simon Willison routinely has Claude and GPT review each other's work | DOCTRINE | OPEN | Cheap extension of the kit's distrust-one-agent instinct: across *vendors*, not just across subagents. Tonight produced three cases where a same-vendor agent's confident claim failed verification. |
+| P4 | **Two-line file-by-file vulnerability/bug-sweep loop** (Nicholas Carlini's method, via Thomas Ptacek at sockpuppet.org, cross-checked three ways) | BUILD | OPEN | Near-zero-effort periodic sweep for the client repos and Civ_Project. |
+| P5 | **obra names the credential / untrusted-content / external-comms triad as UNSOLVED** | DOCTRINE | OPEN | Directly relevant: both clients feed in exactly that kind of external content. **Ledger item B7 should be read as a partial mitigation, not a closed question** - the author of the plugin Daniel runs says the general problem is open. |
+| P6 | ghuntley.com unreachable on both attempts (connection reset) | - | OPEN | A genuine gap, not a low-yield result. Retry next month; the expectation of heavy relevant content there is still unconfirmed either way. |
+| P7 | Four further compositions in the phase file | mixed | OPEN | See `phase3-practitioners.md` for the full nine. |
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -130,7 +144,7 @@ same hope.
 - **1c** Rules still-true audit → `phase1c-rules-still-true.md` — LANDED
 - **1d** GC inventory → `phase1d-gc-inventory.md` — LANDED
 - **2** Local models on this hardware — not started
-- **3** Named practitioners — not started
+- **3** Named practitioners — LANDED (9 compositions)
 - **3b** Anduril / edge AI — LANDED (verdict: mostly no; cut from future sweeps)
 - **4** Academic — not started
 - **5** Client-facing — not started
