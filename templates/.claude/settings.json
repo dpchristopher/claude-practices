@@ -20,22 +20,72 @@
   },
   "hooks": {
     "SessionStart": [
-      { "type": "command", "command": "bash ~/.claude/hooks/session-context.sh" }
+      {
+        "type": "command",
+        "command": "bash ~/.claude/hooks/session-context.sh"
+      }
     ],
     "PreToolUse": [
-      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/guard-secrets.sh" }] }
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/guard-secrets.sh"
+          }
+        ]
+      }
     ],
     "PostToolUse": [
-      { "matcher": "Write|Edit", "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/post-edit-format.sh" }] }
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-edit-format.sh"
+          }
+        ]
+      }
     ],
     "UserPromptSubmit": [
-      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/plan-router.sh" }] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/plan-router.sh"
+          }
+        ]
+      }
     ],
     "SubagentStop": [
-      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/subagent-audit.sh" }] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/subagent-audit.sh"
+          }
+        ]
+      }
     ],
     "InstructionsLoaded": [
-      { "hooks": [{ "type": "command", "command": "bash ~/.claude/hooks/log-instructions-loaded.sh" }] }
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/log-instructions-loaded.sh"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-metrics-stub.sh"
+          }
+        ]
+      }
     ]
   }
 }
