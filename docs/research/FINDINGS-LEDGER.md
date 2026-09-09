@@ -81,7 +81,18 @@ the same alarm being raised next month.
 | G5 | Confirmed **real** usage: `superpowers`, `playwright` (actual browser tool_use calls), `session-workflow`, `daniel-context`. Confirmed broken: `github` plugin. | — | OPEN | First evidence-based usage data the kit has ever had. |
 | G6 | The transcript corpus (`~/.claude/projects/*/**.jsonl`) is a far better usage instrument than the hand-written log | BUILD | OPEN | Answers the brief's "what signal would we need" question. |
 
-### From the changelog index (pre-read, needs confirmation from Phase 1a)
+### From Phase 1a — Anthropic changelog sweep
+*Source: `phase1a-anthropic-changelog.md`. 15 weekly digests (w19–w30, w32–w34) plus engineering blog. 12 unused capabilities against a bar of 5.*
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| A1 | **Subagent nesting default dropped from 5 layers to 3** (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`); 5 was the default only May–Aug (v2.1.172–216) | DOCTRINE | **VERIFIED** | The agent caught a stale figure **in this session's own dispatch prompt**, copied from the w24 headline. Exactly the drift this sweep exists to catch, found inside the sweep's own input. |
+| A2 | `TaskCreate`/`TaskUpdate`/`TodoWrite` are removed by default on Opus 4.8, Sonnet 5 and later. Hooks matching them would fire zero times. | CONFIG | **REFUTED for this kit** | Checked locally: no hook in `~/.claude/settings.json`, `~/.claude/hooks/`, or any project settings matches those tools. Risk does not apply. |
+| A3 | **Auto mode became the Pro/Max/Team default on 2026-08-14** | CONFIG | OPEN | Worth confirming what mode Desktop sessions actually start in now. Interacts with tonight's `guard-fanout` diagnosis, where an `ask` decision is not auto-approved in any mode. |
+| A4 | 12 unused capabilities documented in the phase file | mixed | OPEN | Full table in `phase1a-anthropic-changelog.md`; work through it in the one-by-one pass. |
+| A5 | Claude Managed Agents "dreaming/outcomes" claim | DISCARD | DONE | Direct fetch 404'd; sourced only from a search snippet. Flagged **not independently verified** per the standing rules rather than carried. |
+
+### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
 |---|---|---|---|---|
@@ -92,7 +103,9 @@ the same alarm being raised next month.
 
 ## Phases outstanding
 
-- **1a** Anthropic changelog sweep → `phase1a-anthropic-changelog.md` *(running)*
+- **1a** Anthropic changelog sweep → `phase1a-anthropic-changelog.md` — LANDED
+
+**PHASE 1 COMPLETE.** 4 of 4 agents landed. 30 findings indexed; 6 already closed by local verification (2 confirmed, 4 refuted).
 - **1c** Rules still-true audit → `phase1c-rules-still-true.md` — LANDED
 - **1d** GC inventory → `phase1d-gc-inventory.md` — LANDED
 - **2** Local models on this hardware — not started
