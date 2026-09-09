@@ -3,6 +3,40 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.7.0] — 2026-09-08 (Wave 10 — Deploying What Wave 9 Wrote)
+### Added
+- **`global-rules/output-accuracy.md`** — promotes Wave 9's cite-or-retract and abstention rules
+  from `templates/.claude/rules/` (which deploys only via `/init` on a NEW project, and that
+  template has never scaffolded one) into the always-loaded layer, where they actually fire.
+  Wave 9 shipped four rules that reached zero projects; these are the two that affect output
+  quality, so they move and the other two stay path-gated where they belong.
+  Adds a third rule not in Wave 9: **distrust agent self-reports**, with the regression case that
+  produced it — of three audit agents run 2026-09-08, one reported an edit it never made and one
+  checked `.git/hooks/` instead of `core.hooksPath`, concluding 8 repos were unprotected when 6
+  were fine.
+- **`hooks/session-metrics-stub.sh`** (SessionEnd) — appends a metrics row every session with the
+  machine-observable fields filled and the four judgment fields left `?`. Wired in both the
+  template and the deployed config.
+
+### Changed
+- `measurement.md` — **`guard-fanout` probation resolved: KEPT.** It had fired 5 times (state dirs
+  under `$TMPDIR/claude-fanout`) and been tagged in the log zero times. Its probation clause said
+  "tag any session where it fired"; nothing ever did, so it was nearly cut for a logging failure
+  rather than its own behavior. The rule now states the lesson: a probation that depends on a
+  manual step is not an evaluation path.
+
+### Notes
+- **The GC pass found the instrument broken, not the skills.** 14 skills and agents appear zero
+  times in the metrics log — but the log holds 10 data rows total after several months, which is
+  far too sparse to cut anything on. Cutting 14 items on that evidence would have been the
+  reckless inverse of Wave 9's "nothing to cut." The stub hook is the fix; a real GC pass becomes
+  possible once the log has data.
+- **Line budget: +31, over the ≤+30 aim, stated rather than fudged.** `output-accuracy.md` is 31
+  new always-loaded lines; `measurement.md` is net 0 (the probation block was replaced, not
+  extended). The aim is exceeded because this wave's whole purpose was moving rules INTO the
+  always-loaded layer — the budget exists to stop unconsidered accretion, and this was considered.
+  It also does not yet pay for itself: no rule was cut. That debt is real and carried forward.
+
 ## [1.6.0] — 2026-09-08 (Wave 9 — Accuracy at Generation Time; Hooks Demoted to Advisory)
 ### Fixed
 - **The kit shipped a wrong claim about its own enforcement model.** `verification.md` read
