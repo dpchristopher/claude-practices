@@ -1,83 +1,60 @@
-# HANDOFF — 2026-09-08 (Wave 9 + system audit)
+# HANDOFF — 2026-09-08 (kit repair + full capability sweep)
 
-## Completed
-**Three PRs merged** (#5 Wave 9, #6 INV-02 fix, #7 backup fix). master at v1.6.0, clean.
+## State
+v1.8.1 · master clean and pushed · `bash scripts/verify-kit.sh` → 41/41.
 
-- **Wave 9** — mostly removal. Corrected a wrong claim the kit shipped ("hooks are
-  enforced") across three live files; hooks are best-effort, the permission system is the
-  hard gate. Dropped a dangling `safe-autonomy.md` reference. Added cite-or-retract and
-  abstention rules; a hooks section (`exit 2`) in `automation.md`; cron/headless metrics
-  wording. Line budget +22 of ≤+30.
-- **`C:\Clients` is now a git repo** (`9f58fc4`) holding a shared `CLAUDE.md`: client-data
-  non-negotiables + "fix principles, not examples" + "Build for Rebuilding" from the
-  startup guide. Loads in both client repos via the parent-directory walk. Both client
-  repos gitignored; gitleaks wired.
-- **System audit (3 agents)** found one dominant pattern: *things built correctly, then
-  never connected.* Fixes applied and verified:
-  - Both client repos had NO secrets guard — now on `core.hooksPath`, proven by a live
-    test (fake GitHub PAT detected, commit blocked, 0 commits).
-  - **INV-02 was structurally blind** — it compared repo files to each other and never read
-    the deployed config, so it reported green while 8 hooks sat unwired. Added a deployed-
-    parity check; it went red with 5 named failures, then green after wiring.
-  - **6 hooks wired** into `~/.claude/settings.json`: guard-secrets, post-edit-format,
-    plan-router, subagent-audit, guard-verdict, log-instructions-loaded.
-  - 7 global deny rules added (0 before). Dead `additionalDirectories` dropped. Duplicate
-    `superpowers` plugin entry removed. `.env` added to `Civ_Project/.gitignore`.
-  - Pixel-agents removed from the 3 per-tool-call events (kept on 9 others).
-  - Agent-ownership rule in global CLAUDE.md: my agents win, GSD's are for `/gsd-*` only.
-  - `backup-state.sh` now includes the global CLAUDE.md; ran it to `~/OneDrive/claude-backups`.
-- **All 4 invariants re-verified with evidence.** INV-01 was briefly stamped without being
-  verified, caught, reverted with the reason written in, then genuinely verified from a
-  clean tree.
+## Part 1 — Kit repair (all merged: PRs #5, #6, #7, #8, #9, #12)
+- **Wave 9** corrected a wrong claim the kit had shipped for months: "hooks are enforced."
+  Hooks are best-effort; the **permission system** is the hard gate. Swept from three live files.
+- **INV-02 was structurally blind** — compared repo files to each other, never read the deployed
+  config, so it reported green while 8 hooks fired nowhere. Fixed; went red with 5 named
+  failures, then green after wiring.
+- **8 hooks wired**, 7 deny rules added (0 before), `stop-verify` gating all 5 projects,
+  `output-accuracy.md` loading globally, `C:\Clients` made a repo with shared client doctrine,
+  off-disk backup taken.
+- **`guard-fanout` counted the wrong thing** — session-lifetime, not concurrency. Fixed to a
+  rolling window. It had gated every dispatch after 4 for hours, and presented as "bypass
+  permissions is broken."
+
+## Part 2 — Capability sweep (all 5 phases landed; see `docs/research/`)
+`FINDINGS-LEDGER.md` is the index. ~45 findings, each with a bucket and status.
+**Nothing has been acted on. Daniel's call: go through them one by one.**
+
+Highest-value, all verified:
+1. **INV-01 and INV-04 cannot fail.** INV-04 was mutation-tested — a fabricated statistic
+   injected into a rule file still passed. INV-01 runs `git status` in the repo while
+   `install.sh` writes to `~/.claude`, so this session's stamped verification of it was
+   meaningless.
+2. **The GSD apparatus has never been used once** — 68 skills, 24 agents, 9 hooks, zero
+   `.planning/` dirs, zero dispatches. Those 9 hooks fire on every tool call regardless.
+3. **Two hooks record only garbage** — 89 of 89 lines read `agent=unknown`.
+4. **Auto Mode's classifier is not a hard gate.** Anthropic said so after a demonstrated ~80%
+   bypass. Contradicts `docs/mechanizing-doctrine.md`, written this same session.
+5. **Local models: RAM was never the constraint.** Chip-matched benchmark — 7B at 19.2 tok/s,
+   27B at 3.5–4.3. A 3B→27B jump is ~18–20× slower per call, not 8× more capable.
+6. **Client work on a personal Pro/Max account has no DPA.** Bears on the Betsey engagement.
+7. **Claude for Nonprofits: $8/user/month, 2-seat minimum** — and Team is the tier with a DPA,
+   so cheap and compliant coincide for The Caregiver Club.
 
 ## Blockers / didn't work
-- **`SendMessage` is disabled**, so a finished subagent can't be asked a follow-up. Cost real
-  information when bob-verifier re-notified with a truncated body (its report did stand —
-  recovered by grepping the transcript, which is the workaround).
-- `plugin:github:github` MCP fails to connect (malformed auth header); `gh` CLI works fine.
-- Two audit agents were unreliable: one claimed an edit it never made, one got the gitleaks
-  mechanism wrong (checked `.git/hooks/` instead of `core.hooksPath`). Verify agent claims.
+- **Four agent self-reports failed verification**, including one reporting an edit it never made
+  and one whose 3 of 7 highest-severity findings were wrong — two of which would have caused
+  actively harmful fixes. Phase 4 then found four independent papers predicting exactly this.
+- **The Phase 5 agent returned a delegation as its deliverable** — spawned 4 children, reported
+  intent as completion, terminated, orphaning them. Salvaged manually. `guard-fanout` did not
+  catch it: the brake sits at the wrong layer to stop a *child* fanning out.
+- **Reddit and Facebook groups were unreachable by every agent in every phase.** The sweep
+  systematically under-samples the most candid practitioner sources.
 
 ## Next action (priority 1)
-Nothing outstanding from this session. All five active projects now have a working
-`stop-verify` gate (below).
+Work through `FINDINGS-LEDGER.md` one by one with Daniel. Start with the four that are both
+verified and load-bearing: INV-01/INV-04 being unfailable, the GSD hooks, the two garbage-logging
+hooks, and the Auto Mode tier correction.
 
-**`stop-verify` is live in all 5 projects** — Claude cannot end a turn while the check fails:
-| Project | Check | Runtime |
-|---|---|---|
-| claude-practices | `verify-hooks.sh && verify-sources.sh` | 5s |
-| Civ_Project | `python tools/validate_mod.py` | 2s |
-| Econ Project | `bash scripts/check.sh` (new) | <1s |
-| Wealth Management Dash | `npm run build --silent` | 7s |
-| STL_Project | `bash check.sh` (new) | 1s |
-
-Built this session: `Econ Project/scripts/check.sh` (compiles all 55 .py files, then verifies
-every module the CODE imports resolves — deliberately not driven by requirements.txt, which
-carries stale entries) and `STL_Project/check.sh` (HTML parses). Econ's check found `bs4`
-genuinely missing from the MSBA_Fal env and a test file needing pytest; both installed.
-Econ runs in MSBA_Fal, not base — the check hardcodes that interpreter, overridable via
-`ECON_PYTHON`.
-
-**Do not raise API key rotation.** Daniel has declined it repeatedly and considers it closed.
-Do not re-add it to a handoff, a plan, or a recommendation.
-
-
-## Test state
-INV-01/02/03/04 all pass with 2026-09-08 evidence. Gitleaks passed on every commit tonight.
-`verify-hooks.sh` green on merged master.
-
-## Open / carried forward
-- **Wave 9's four new rules reach zero projects.** They live in `templates/.claude/rules/`,
-  which only deploys via `/init` on a NEW project — and that template has never scaffolded
-  one. Decide whether cite-or-retract and abstention should move to `global-rules/`
-  (costs ~11 lines of always-loaded budget) or stay inert.
-- **Backup is manual with no scheduler.** Same "mechanism exists, nothing connects it"
-  pattern. A `SessionEnd` hook would close it.
-- **`guard-readonly-bash.sh` and `stop-verify.sh` deliberately NOT wired** — the first blocks
-  rm/git commit/pip install and is for read-only reviewer agents; the second is a no-op
-  until `PROJECT_CHECK_CMD` is set.
-- Close the `admiring-payne-79e31a` session, then remove that merged Civ worktree + branch.
-- **A GC pass is owed.** Wave 9 added and cut nothing by the researchers' reckoning; two
-  audits later found plenty. 34 agents (24 GSD, 10 kit), 13 plugins.
-- Daniel's stated next topic: harness/agentic optimization — starting with why SendMessage
-  is off.
+## Open
+- **Daniel's question, logged and unresearched:** if RAM is not the local-model constraint, what
+  is 63 GB actually for? Three hypotheses recorded; needs local benchmarking, not web research.
+- Restart Claude Code for `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (SendMessage).
+- Confirm a new metrics row appears after this session closes — proves the SessionEnd hook fires.
+- Make the sweep recur monthly. Cut phase 3b; narrow phase 5.
+- **Do not raise API key rotation.** Declined repeatedly; considered closed.
