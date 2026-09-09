@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/*.ipynb"
+  - "experiments/**/*"
+  - "**/*model*.py"
+  - "**/*train*.py"
+---
+
 # ML Discipline Rules
 
 > Auto-loaded at session start. Apply to any ML, forecasting, analytics, or modeling work.

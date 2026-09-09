@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/pipeline*.py"
+  - "**/*cron*"
+  - "**/scheduled*"
+  - "scripts/**/*"
+---
+
 # Automation Rules
 
 > Auto-loaded at session start. Apply to any scripted pipeline, scheduled task, or batch process.
@@ -81,6 +89,26 @@ For multi-step pipelines:
 2. Test the full pipeline end-to-end with a small sample
 3. Assert on output shape, type, and value ranges — not just "no crash"
 4. Keep fixtures in `tests/fixtures/` — small, representative, checked into git
+
+---
+
+## Hooks: Automation, Not Enforcement
+
+Hooks are the highest-leverage automation available — they fire whether or not anyone
+remembers to ask. Use them for the mechanical things: formatting, logging a metrics row,
+blocking a commit that carries a secret.
+
+Two rules govern writing one:
+
+1. **A blocking hook must `exit 2`.** Exit 1 and every other non-zero code are treated as
+   non-blocking — Claude reports the failure and proceeds. A hook that means to block and
+   returns 1 is decorative.
+2. **Hard denies belong in the permission system, not in a hook.** Hooks are best-effort
+   matching and can miss. Use the permission config for anything that must *never* happen,
+   and hooks for what should happen automatically.
+
+(Source: `SOURCES.md#hooks-are-advisory`. This corrects a line that previously read
+"hooks are enforced" in `verification.md`.)
 
 ---
 

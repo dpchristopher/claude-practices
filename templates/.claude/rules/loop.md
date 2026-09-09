@@ -1,0 +1,92 @@
+# Loop Rule
+
+> Auto-loaded at session start. Governs autonomous / self-correcting loops. The point is
+> not to babysit an agent move by move — it is to design a loop that runs without you, then
+> trust it because you built the brakes in.
+
+## Lean on native primitives — don't reinvent them
+- **`/goal`** is the iteration engine: state a checkable goal and a separate evaluator
+  re-checks it each turn, continuing until it holds. Use it instead of hand-rolling a loop.
+- **`/rewind`** is the safety net: per-change checkpoints you can roll back to. Use it
+  rather than scripting your own undo.
+
+This rule supplies only the discipline the platform does not.
+
+## The eight rules of a loop you can trust
+1. **Write the exit condition BEFORE the loop starts.** Concrete and machine-checkable —
+   "all tests pass AND lint clean; stop after 2 clean passes." A loop with no defined exit
+   burns tokens.
+2. **Maker ≠ checker.** The agent doing the work never grades itself. Route checking to a
+   fresh-context reviewer (Bob the verifier) or judge (Carl the evals-judge).
+3. **State lives on disk, not in context.** Progress, the exit condition, and open work go
+   in files (the plan, INVARIANTS.md, HANDOFF) so the loop resumes across sessions.
+4. **Earn autonomy in stages: L1 → L2 → L3.** L1 = loop reports, you apply fixes. L2 =
+   loop applies fixes, you review each. L3 = unattended. Never start at L3.
+5. **Checkpoint per iteration.** Each pass is a git commit — the diff is your audit trail.
+   (Rollback itself is `/rewind`; the commits are for the record.)
+6. **Detect a stuck loop.** If the same error repeats, or no new commit lands in N
+   iterations, STOP and surface to a human. Repetition is not progress. Use the `Monitor`
+   tool for event-driven watching (logs, processes, WebSocket) rather than hand-rolled
+   polling — and **match the failure patterns, not just the success one. Silence is not
+   success:** a filter that only greps for the happy path stays quiet through a crashloop,
+   and quiet looks identical to still-running. A quiet monitor is an assertion, not
+   evidence (see `verification.md`).
+7. **Loops open PRs; they never auto-merge.** The human merge is the final gate.
+8. **Route model choice per stage, not just per loop.** A single loop can mix cheap
+   mechanical stages (cheap model) with judgment/synthesis stages (strongest model) — state
+   the model per stage before running, not just once for the whole loop.
+
+## The checker must point at the WHOLE check
+Make the exit condition the full suite (all tests + lint), not the single failing item. A
+narrow checker is gameable — Claude can make test A pass by breaking test B if B isn't in
+the gate. Green must mean the whole thing is green. Pair with Bob reviewing the diff to
+catch "fixed X by gutting Y," and keep passing cases as regression tests so old wins can't
+silently break.
+
+## Split work only where context isolates cleanly
+Decompose a multi-agent task by WHERE context can be truly separated, not by problem phase.
+A naive plan→implement→test handoff chain shares too much context across steps and degrades
+like a telephone game — each handoff loses fidelity. Verification is the classic case that
+splits cleanly (a fresh-context checker needs the diff and the spec, nothing else); a
+sequential pipeline of loosely-related steps usually does not. Prefer a fresh-context
+verifier over a context-passing pipeline whenever the choice exists.
+
+## When the goal may be impossible
+A loop cannot achieve the impossible (e.g. an ML threshold the data can't support). That's
+what the brakes are for: it hits the iteration cap or stuck-loop detection and STOPS with
+an honest report of what it tried and why it failed — escalating to you rather than
+thrashing or faking a result. An honest "I can't, here's why" is the designed outcome.
+
+## When NOT to loop
+A single scoped prompt often beats the whole apparatus. Reach for a loop only when the
+goal is objectively checkable and iterative refinement provides measurable value. If you
+can describe the fix in one sentence, just make it.
+
+## L3 (unattended) requires containment, not just correctness
+The autonomy ladder's brakes (exit condition, stuck-loop detection, whole-check gate) govern
+CORRECTNESS. Before granting L3, also bound the BLAST RADIUS, independently:
+- Network egress limited or sandboxed — an unattended loop should not have open internet
+  access it doesn't need.
+- Credentials scoped to test/staging, never production, for anything that can write.
+- A hard spend cap on anything that can cost money (API calls, cloud resources).
+Correctness brakes and containment brakes are separate checks — a loop can be "correct" and
+still be dangerous if it runs unsandboxed with production credentials and no spend limit.
+Grant L3 only when both are satisfied.
+
+## Cost budgets — three limit systems, do not conflate them
+| System | Limit | Control |
+|---|---|---|
+| `Workflow` tool | 16 concurrent, 1,000 total per run | `/config` size guideline |
+| Subagent concurrency | 20 | `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` |
+| Subagent nesting depth | 3 (was up to 5 before v2.1.219) | `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` |
+
+No total-lifetime subagent cap exists. The repeated claim that "the 200-subagent cap was removed"
+is false — there was never a 200 cap (source: `SOURCES.md#subagent-limits`, `#workflow-limits`).
+
+Workflow-tool specifics: a "Large workflow" warning fires past 25 agents or ~1.5M projected
+tokens; a Stop-hook loop is force-ended after 8 consecutive blocks, so don't lean on it as your
+only brake; watch live spend in `/workflows` and the `SubagentStop` log. **State the agent-count
+and model-per-stage budget BEFORE starting an unattended loop.**
+
+**Design for 3 layers; do not restore 5.** The topology is main → orchestrator → worker. If the
+platform default moves again, that is not a reason to widen — breadth, not depth, burns sessions.

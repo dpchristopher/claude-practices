@@ -472,11 +472,9 @@ Pour energy into the plan. Execute in a fresh session.
 
 Run two features simultaneously in isolated directory copies.
 
-```bash
-git worktree add ../project-feature-a feature-a
-git worktree add ../project-feature-b feature-b
-# Open two Claude Code sessions, one in each worktree
-```
+Use the built-in tools rather than raw git: `EnterWorktree` creates one and switches the
+session into it; `ExitWorktree` leaves it with `keep` or `remove`. For subagents, the `Agent`
+tool's `isolation: "worktree"` mode covers the same ground per-agent.
 
 Use when: working on independent features simultaneously, or when you want
 to test something risky without affecting the main working tree.

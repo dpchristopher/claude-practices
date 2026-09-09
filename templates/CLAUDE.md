@@ -1,6 +1,17 @@
 # [Project Name] — Developer Context
 
-> **Session start:** Read META_ARCHITECTURE.md → check `.claude/plans/` → read `.claude/HANDOFF.md`. Do this before asking what to work on.
+## Reading Order — Session Start
+
+> **MANDATORY (the SessionStart hook puts these in context — confirm they're current):**
+> 1. `CLAUDE.md` (this file) — rules, stack, hard rules
+> 2. `META_ARCHITECTURE.md` (summary) — what exists, data flow, known gaps
+> 3. Active plan in `.claude/plans/` — current work
+> 4. `INVARIANTS.md` (in full) — durable contracts that must NOT break
+> 5. `.claude/HANDOFF.md` (in full) — last session blockers + next action
+>
+> **ON-DEMAND (named here; read when the work touches them):**
+> - `.claude/rules/*.md` — auto-load with this file; detailed doctrine
+> - `experiments/`, `docs/` — ML artifacts, deeper references
 
 ---
 
@@ -67,7 +78,7 @@ Write `.claude/HANDOFF.md` (replace, not append):
 ## Test state
 ```
 
-Append one row to `.claude/session-metrics.md` (goal met? · rollback? · interventions · friction · practices). Review monthly.
+Append one row to `.claude/session-metrics.md` (goal met? · rollback? · interventions · friction · practices — see `rules/measurement.md`). Review monthly.
 
 Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
@@ -80,4 +91,21 @@ Update `META_ARCHITECTURE.md` if tools, data flow, or toolkit changed.
 
 ---
 
-*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under ~90 lines.*
+*Detail lives in `.claude/rules/*.md` — auto-loads with CLAUDE.md. Keep this file under 90 lines.*
+
+---
+
+## Imports & Keeping This File Lean
+
+CLAUDE.md loads every session — only put things here that apply broadly. Move volatile or
+occasionally-relevant material (long roadmaps, big reference tables, detailed specs) OUT of
+this file and pull it in on demand with an `@`-import:
+
+```
+See the roadmap in @docs/roadmap.md and API notes in @docs/api-notes.md
+```
+
+`@path` references are read when relevant rather than loaded every turn. The prune test for
+anything in this file: *would removing it cause Claude to make a mistake?* If not, cut it or
+move it behind an `@`-import. A lean CLAUDE.md is one whose rules actually get followed —
+bloat causes rules to be ignored.

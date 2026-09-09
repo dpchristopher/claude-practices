@@ -139,7 +139,9 @@ Before closing any session:
 1. Update `META_ARCHITECTURE.md` if any tool, data flow, or gap changed
 2. **If any skills were added, removed, or renamed:** update the Toolkit table in `META_ARCHITECTURE.md` — add the new row, remove the stale one. The table is the single source of truth for which skills apply to this project. A stale table means plans won't embed the right skills next session.
 3. Run `/code-review` if significant code was written
-4. Write `.claude/HANDOFF.md` (replace, not append):
+4. **Re-verify affected invariants:** for any contract in `INVARIANTS.md` whose area this session touched, run its verification and update status with evidence. A disturbed-but-unverified invariant means the session is not done. (See `.claude/rules/invariants.md`.)
+5. **Feynman gate:** invoke `/feynman-explainer` — explain the session's changes in plain language. Stalls are comprehension gaps; resolve them. The resulting explanation is the HANDOFF body.
+6. Write `.claude/HANDOFF.md` (replace, not append):
    ```
    ## Completed
    - [bullet]
@@ -152,7 +154,7 @@ Before closing any session:
    ## Data/artifact state (if ML)
    - [bullet]
    ```
-5. Commit with session name in commit message: `"[session-name]: [what and why]"`
+7. Commit with session name in commit message: `"[session-name]: [what and why]"`
 
 ---
 

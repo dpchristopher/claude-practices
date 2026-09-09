@@ -12,6 +12,8 @@
 
 > If there's even a 1% chance a skill applies, invoke it before doing anything else.
 
+> Canonical per-project applicability lives in each project's `META_ARCHITECTURE.md` Toolkit table; full methodology in the `session-workflow` skill. This table is the always-on cross-project quick-reference only.
+
 | When... | Invoke |
 |---|---|
 | Starting ANY session or new project | `/session-workflow` then `/superpowers:brainstorming` |
@@ -27,8 +29,8 @@
 | Something feels off | `/assumption-archaeologist` |
 | Building an MCP server | `/mcp-builder` |
 | Significant code written | `/code-review` |
-| Before marking any non-trivial change done | `bob-verifier` (fresh-eyes checker) |
-| Grading a batch of model/agent/ML outputs | `carl-evals` (binary pass/fail) |
+| Before marking any non-trivial change done | dispatch `bob-verifier` (fresh-eyes checker) |
+| Grading a batch of model/agent/ML outputs | dispatch `carl-evals` (binary pass/fail) |
 | Session stuck, looping, or over-planned | `/failure-modes` |
 | [Your domain-specific task] | `/[your-skill]` |
 

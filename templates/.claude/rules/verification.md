@@ -1,50 +1,61 @@
-# Verification Rules
+# Verification Rule
 
-> Auto-loaded at session start. Governs how "done" is proven — evidence over assertion.
+> Auto-loaded at session start. Governs how "done" is proven.
 
----
+## Evidence over assertion
+Never claim work is done by asserting it. Show the evidence: the command you ran and its
+real output, the test result, or a screenshot. If you cannot produce evidence, the work
+is not done — say so.
 
-## The Core Rule: Evidence, Not Assertions
+## Verification taxonomy (prefer the strongest available)
+1. **Rules-based (best):** a deterministic check — tests pass, linter clean, schema
+   validates, type-checker green. Quote the failing/passing rules.
+2. **Visual:** for UI, a screenshot or rendered output confirming the change.
+3. **LLM-as-judge (weakest):** only for genuinely fuzzy criteria; least robust, so never
+   rely on it where a rules-based check is possible.
 
-Never claim work is done, fixed, or passing without showing proof. "Proof" means the command
-you ran and its actual output — test results, a build log, a screenshot — pasted into the
-conversation. If you cannot show it, it is not done.
+Reach for the strongest method the task allows. A rules-based check beats a confident paragraph.
 
-"Done" means the tests pass, not the agent feeling good about the work.
+## If you must use a judge, calibrate it first
+An uncalibrated judge is an opinion with a number attached. Before trusting one: label a
+sample yourself, measure how often the judge agrees with you, and treat its verdicts as usable
+only on the slices where it actually agrees. Re-calibrate when the task shifts — a judge tuned
+on one distribution silently degrades on another. Method from Hamel Husain's `validate-evaluator`
+(source: `SOURCES.md#judge-calibration`).
 
----
+## The trust-then-verify gap (named failure mode)
+The common failure: a plausible-looking implementation that doesn't handle an edge case
+or doesn't actually work end-to-end. Counter it: always provide a verification path, and
+test as a real user would (run it, click it, hit the endpoint). If you can't verify it,
+don't ship it.
 
-## Verification Hierarchy — Most Objective First
+## Maker ≠ checker
+The agent that wrote the change should not be the sole judge of it. For non-trivial work,
+have a fresh-context reviewer verify (see Bob the verifier). The writer is too forgiving
+of its own work.
 
-1. **Deterministic checks** — tests, linters, type-checkers, schema validation. Prefer these.
-2. **Visual / runtime** — run it, screenshot it, exercise it as a user would.
-3. **LLM-as-judge** — a model grading output. Least robust; use last, and only when 1 and 2
-   can't cover it.
+## Cite or retract (generation time, not review time)
+Every factual claim about code or data carries its evidence inline: a `file:line`, a
+quoted line, or the command whose output you are reporting. If a re-check finds no
+support for a claim you already made, retract it — do not soften it into a hedge and
+leave it standing. This is the upstream half of "evidence over assertion" above: that
+rule governs claiming *done*, this one governs every claim on the way there.
+Scope it to non-obvious claims; citing that a file exists is noise.
 
-Reach for a real check before asking a model whether something "looks right."
+## Say "I don't know" out loud
+When context or evidence is insufficient, say "insufficient information to confirm"
+and name what would settle it. An abstention is a usable answer; a confident guess
+sends the reader down a path that costs more to unwind than the question was worth.
+(Source: `SOURCES.md#abstention-and-citation`.)
 
----
+## Hooks back this up — but hooks are not a guarantee
+- `guard-secrets.sh` (PreToolUse) blocks writes to secret files deterministically.
+- `post-edit-format.sh` (PostToolUse) auto-formats edited files when a formatter exists.
+- `stop-verify.sh` (Stop, opt-in) can block turn-end until a project check passes.
 
-## Don't Mark Complete Without End-to-End Testing
-
-A terminal message ends the turn, not the task. Before saying "done":
-
-- Run the actual thing a user would run.
-- Confirm it works end-to-end, not just that the code compiles.
-- Paste the evidence.
-
-The most common failure: plausible-looking code that was never exercised end-to-end.
-
----
-
-## Use the Verifier and Evals Agents — Don't Grade Your Own Work
-
-A maker checking its own work justifies what it already did. Separate the maker from the checker:
-
-- **Before marking any non-trivial change done** → dispatch `bob-verifier` (fresh-context
-  reviewer; sees the diff + criteria, reports only correctness gaps).
-- **To grade a batch of model/agent/ML outputs against a rubric** → dispatch `carl-evals`
-  (binary PASS/FAIL, clusters failures by root cause). Pairs with `labarr-ml`.
-
-Guardrail: a reviewer told to find gaps will always find some. Flag only gaps that affect
-correctness or the stated requirements — not style preferences. Don't gold-plate.
+Hooks are **best-effort automation, not an enforcement boundary.** They can fail to
+fire — matcher misses, timeouts, a path the pattern didn't anticipate. For anything
+that must *never* happen, use the permission system, which is the actual allow/deny
+gate; use hooks for the things you want to happen automatically without remembering.
+A hook meant to block must `exit 2` — any other non-zero code is treated as
+non-blocking and the action proceeds. (Source: `SOURCES.md#hooks-are-advisory`.)
