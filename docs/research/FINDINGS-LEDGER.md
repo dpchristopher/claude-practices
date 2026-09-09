@@ -92,6 +92,27 @@ the same alarm being raised next month.
 | A4 | 12 unused capabilities documented in the phase file | mixed | OPEN | Full table in `phase1a-anthropic-changelog.md`; work through it in the one-by-one pass. |
 | A5 | Claude Managed Agents "dreaming/outcomes" claim | DISCARD | DONE | Direct fetch 404'd; sourced only from a search snippet. Flagged **not independently verified** per the standing rules rather than carried. |
 
+### From Phase 3b - Anduril / edge AI
+
+*Source: `phase3b-anduril-edge-ai.md`. The bar was a plain yes/no on transfer.*
+
+**Verdict: MOSTLY NO.** Anduril and Palmer Luckey publish heavily, but it is product
+marketing, recruiting, and geopolitics. Nothing discloses model sizes, quantization,
+latency budgets, or a verification methodology for high-stakes AI - the exact things
+this phase existed to find.
+
+| # | Finding | Bucket | Status | Note |
+|---|---|---|---|---|
+| D1 | Anduril public GitHub: 17 repos, Lattice SDKs in six languages plus sample apps. No ML code, no weights, no benchmarks. | DISCARD | DONE | Integration tooling, not AI engineering. |
+| D2 | Palmer's essays and interviews (Free Press, Axios, Fortune, 60 Minutes) carry one technical claim: "all Anduril's weapons have a kill switch." No testing protocols, error rates, or safety methodology. | DISCARD | DONE | Confirmed by direct read of the transcript. |
+| D3 | `sample-app-auto-reconnaissance` splits sensed data (Entities API, read-only) from commandable actions (Tasks API, interruptible and visible to an operator) | DOCTRINE | OPEN | The one genuine verifiable pattern found - and on inspection it **confirms a design this kit already has**: hooks returning `ask` as a visible, interruptible checkpoint. Convergent evidence, not a new idea. |
+| D4 | No individually-publishing Anduril engineers found despite several search angles | - | OPEN | A gap in the search, not proof none exist. Worth one recheck in a future sweep. |
+| D5 | Two sources (Medium-hosted Anduril post, Forbes on Palantir/Anduril offline AI) returned HTTP 403 | - | OPEN | Marked not-verified per the citation rule rather than cited from snippets. |
+
+**Phase verdict for the recurring sweep: CUT.** A full agent returned one pattern the kit
+already implements. Recording the negative result so next month does not re-run it on the
+same hope.
+
 ### From the changelog index (pre-read, now confirmed by Phase 1a)
 
 | # | Finding | Bucket | Status | Note |
@@ -110,7 +131,7 @@ the same alarm being raised next month.
 - **1d** GC inventory → `phase1d-gc-inventory.md` — LANDED
 - **2** Local models on this hardware — not started
 - **3** Named practitioners — not started
-- **3b** Anduril / edge AI — not started
+- **3b** Anduril / edge AI — LANDED (verdict: mostly no; cut from future sweeps)
 - **4** Academic — not started
 - **5** Client-facing — not started
 
