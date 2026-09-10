@@ -104,6 +104,16 @@
           }
         ]
       }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/precompact-handoff.sh"
+          }
+        ]
+      }
     ]
   }
 }

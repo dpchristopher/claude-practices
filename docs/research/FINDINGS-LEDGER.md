@@ -210,6 +210,52 @@ most candid sources.
 
 ---
 
+## TIER 4 + TIER 5 CLOSED — 2026-09-09
+
+### Adopted
+
+| # | Item | What shipped |
+|---|---|---|
+| C2 + G6 | A real measurement instrument | `scripts/usage-report.sh`. `/usage` could not be run (interactive panel, data not on disk), so the transcript corpus was used instead — the better instrument, and the one the GC pass already proved. First real usage data the kit has ever had. |
+| B5 | PreCompact handoff | `hooks/precompact-handoff.sh`, wired in template and live. Snapshots branch, HEAD, dirty files, recent commits and the prior handoff before compaction. Deliberately does **not** attempt to write HANDOFF.md — a hook cannot summarise intent. |
+| P4 | Carlini file-by-file sweep | `scripts/file-sweep.sh`. Prints the commands by default; `--run` executes serially. Generating work to approve beats a script that silently spends money. |
+| P3 | Cross-model review | Added to `output-accuracy.md`: a same-vendor reviewer shares the writer's blind spots. +12 lines, inside budget. |
+| G4 | Skill-overlap audit | `docs/skill-overlap-audit.md` — first run with usage data instead of guesses. |
+| B4 | Hook-lifecycle ideas | Mined: PreCompact came from here. The collection itself was not adopted wholesale. |
+
+### Deferred, with the reason
+
+| # | Item | Why not now |
+|---|---|---|
+| P2 | `sandbox-runtime` | Real and Anthropic-shipped, but it solves agent isolation for credential-touching work. No such workload exists yet. Revisit if client work moves onto this machine in a way that needs containment. |
+| L7 | Local embeddings | The one clean local-model win per Phase 2, but there is no retrieval use case to point it at. A solution shopping for a problem. |
+| B3 | `karanb192/claude-code-hooks` | Worth mining (`protect-secrets`, `instructions-audit`, `config-guard`), not adopting wholesale. `instructions-audit` is the interesting one and connects to B7/P5 — prompt-injection scanning on client content, which obra names as unsolved. |
+| B1 | `${CLAUDE_PLUGIN_ROOT}` Windows bug | Needs a local reproduction, not a doc read. Nothing observably broken in superpowers so far — it is measured as genuinely used (usage report) and has not failed. |
+| B8 | `cygpath` wrapper | Two Python one-liners hit Windows path breakage during the sweep, both in ad-hoc scripts rather than hooks. Not yet a hook problem. |
+| B10 | PreToolUse `exit 2` may stop rather than self-correct | Single user claim, unverified. `guard-secrets` and `guard-agent-ownership` both block this way and have behaved correctly when tested. Needs a primary source before acting. |
+
+### Discarded — recorded so they do not resurface
+
+`B9` Windows Desktop bug cluster (awareness only) · `B11` source-code-leak blog claims
+(uncorroborated) · `A5` Managed Agents "dreaming" claim (404 on fetch) · `D1`–`D5` Anduril
+(phase CUT from future sweeps) · `Q5` entropy-principle paper (credibility) · `Q6` 41–87% failure
+rate (abstract cites nothing, paper does not measure it) · `Q7` AdaptOrch (does not address
+fan-out) · `P6` ghuntley.com unreachable (retry next sweep) · `G3` `session-context.ps1`
+(allowlisted with a reason in INV-02) · `A1`/`L2` (dissolved on inspection — were Claude's
+errors, not the doctrine's).
+
+### The finding that outranks everything in both tiers
+
+**`session-workflow` fired 9 times in 39 sessions; `superpowers:brainstorming` 6.** `CLAUDE.md`
+says *"Both. That order. Every session."* That is ~23% and ~15% compliance on the most
+emphatically worded rule in the kit.
+
+Measured, not guessed. And it is not a wording problem — sharpening the text cannot fix a tier-3
+rule that depends on remembering. **It is a tier-demotion candidate**, the same move that fixed
+every item in Tier 1. Left for Daniel because it changes how every session starts.
+
+---
+
 ## Open question added by Daniel, 2026-09-08 - NOT YET RESEARCHED
 
 **"If RAM does not matter for local models, what can I do AI-wise with this laptop? What is the
