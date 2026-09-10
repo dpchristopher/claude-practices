@@ -29,6 +29,21 @@ CLV=$(grep -m1 -oE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md | tr -d '#[] ')
 [ -z "$(git status --porcelain)" ] && ok "working tree clean" || no "tree" "dirty"
 git fetch -q origin 2>/dev/null; [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/master)" ] && ok "master == origin/master" || no "sync" "diverged"
 
+echo "── 1b. No rule duplicated between global and template ──"
+# A rule in BOTH global-rules/ and templates/.claude/rules/ means a scaffolded project loads
+# it twice - once from ~/.claude/rules/ globally, once project-local - and the two copies
+# drift. Found 2026-09-09: kit-maintenance.md and loop-cost-discipline.md had diverged by 21
+# and 17 lines respectively, partly because a fix the night before was applied to only one.
+dupe=0
+for f in global-rules/*.md; do
+  n=$(basename "$f"); [ "$n" = "README.md" ] && continue
+  if [ -f "templates/.claude/rules/$n" ]; then
+    no "duplicate rule: $n" "exists in BOTH global-rules/ and templates/.claude/rules/"
+    dupe=1
+  fi
+done
+[ "$dupe" -eq 0 ] && ok "no rule duplicated between global-rules/ and templates/"
+
 echo "── 2. Hooks actually wired (not just installed) ──"
 for h in guard-secrets post-edit-format plan-router subagent-audit guard-verdict log-instructions-loaded session-metrics-stub guard-agent-ownership guard-fanout session-context; do
   grep -q "$h" "$S" && ok "wired: $h" || no "wired: $h" "absent from settings.json"

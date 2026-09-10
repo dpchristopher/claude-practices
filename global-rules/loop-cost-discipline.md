@@ -1,7 +1,8 @@
 # Loop Cost Discipline
 
 > Auto-loaded at session start. Applies to any iterative refinement loop or subagent fan-out.
-> Refinement has diminishing returns; spend accordingly.
+> Refinement has diminishing returns; spend accordingly. Pairs with
+> `templates/.claude/rules/safe-autonomy.md`, which caps what an unattended agent *can* do.
 
 ---
 
