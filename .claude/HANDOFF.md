@@ -1,60 +1,65 @@
-# HANDOFF — 2026-09-08 (kit repair + full capability sweep)
+# HANDOFF — 2026-09-09 (Tiers 1–5 closed)
 
 ## State
-v1.8.1 · master clean and pushed · `bash scripts/verify-kit.sh` → 41/41.
+v1.8.1 · master clean and pushed · `bash scripts/verify-kit.sh` → **42/42**
+PRs merged this session: #13, #14, #15, #16, #17
 
-## Part 1 — Kit repair (all merged: PRs #5, #6, #7, #8, #9, #12)
-- **Wave 9** corrected a wrong claim the kit had shipped for months: "hooks are enforced."
-  Hooks are best-effort; the **permission system** is the hard gate. Swept from three live files.
-- **INV-02 was structurally blind** — compared repo files to each other, never read the deployed
-  config, so it reported green while 8 hooks fired nowhere. Fixed; went red with 5 named
-  failures, then green after wiring.
-- **8 hooks wired**, 7 deny rules added (0 before), `stop-verify` gating all 5 projects,
-  `output-accuracy.md` loading globally, `C:\Clients` made a repo with shared client doctrine,
-  off-disk backup taken.
-- **`guard-fanout` counted the wrong thing** — session-lifetime, not concurrency. Fixed to a
-  rolling window. It had gated every dispatch after 4 for hours, and presented as "bypass
-  permissions is broken."
+## Completed — all five tiers of the capability sweep are closed
 
-## Part 2 — Capability sweep (all 5 phases landed; see `docs/research/`)
-`FINDINGS-LEDGER.md` is the index. ~45 findings, each with a bucket and status.
-**Nothing has been acted on. Daniel's call: go through them one by one.**
+**Tier 1 — things that ran and did nothing.** Three invariants could not fail and are now
+mutation-proven (INV-04 couldn't detect a fabricated statistic; INV-01 watched the repo while
+the installer wrote to `~/.claude`; INV-02 never checked exists→referenced). Fixing them
+immediately surfaced two genuinely uncited numbers in shipped doctrine and the fact that the
+template never shipped `guard-fanout.sh`. **8 GSD hooks removed** — measured at 859ms per
+invocation on a matcher covering effectively every tool call, all self-gating on a `.planning/`
+dir that exists nowhere: ~1s per Bash call, ~3.5s per Write/Edit recovered. Two hooks that
+logged 89 lines of `agent=unknown` now work and self-diagnose.
 
-Highest-value, all verified:
-1. **INV-01 and INV-04 cannot fail.** INV-04 was mutation-tested — a fabricated statistic
-   injected into a rule file still passed. INV-01 runs `git status` in the repo while
-   `install.sh` writes to `~/.claude`, so this session's stamped verification of it was
-   meaningless.
-2. **The GSD apparatus has never been used once** — 68 skills, 24 agents, 9 hooks, zero
-   `.planning/` dirs, zero dispatches. Those 9 hooks fire on every tool call regardless.
-3. **Two hooks record only garbage** — 89 of 89 lines read `agent=unknown`.
-4. **Auto Mode's classifier is not a hard gate.** Anthropic said so after a demonstrated ~80%
-   bypass. Contradicts `docs/mechanizing-doctrine.md`, written this same session.
-5. **Local models: RAM was never the constraint.** Chip-matched benchmark — 7B at 19.2 tok/s,
-   27B at 3.5–4.3. A 3B→27B jump is ~18–20× slower per call, not 8× more capable.
-6. **Client work on a personal Pro/Max account has no DPA.** Bears on the Betsey engagement.
-7. **Claude for Nonprofits: $8/user/month, 2-seat minimum** — and Team is the tier with a DPA,
-   so cheap and compliant coincide for The Caregiver Club.
+**Tier 2 — doctrine that was wrong.** The tier model conflated static `deny` rules (genuinely
+hard) with Auto Mode's classifier (best-effort, per Anthropic after a demonstrated ~80% bypass).
+The fan-out rule was wrong in both halves: the 3–4 cap was unevidenced and gated correct work
+twice, and "breadth not depth" was backwards. Replaced with structure-over-headcount, a
+depth/artifact requirement, and verification capacity as the real ceiling.
+
+**Tier 3 — client-facing.** Discussed, little actioned by choice. The DPA question dissolved:
+there is no written agreement with Betsey, so no confidentiality term to be inconsistent with.
+Daniel declined to pay for a Team seat.
+
+**Tier 4/5 — adopted four, deferred the rest with reasons.** `usage-report.sh` (first real usage
+data this kit has had), `precompact-handoff.sh` (wired), `file-sweep.sh`, cross-model review in
+`output-accuracy.md`, and the first skill-overlap audit run on data rather than guesses.
+
+**Created the two files the session protocol had been pointing at for months:**
+`META_ARCHITECTURE.md` and a project `CLAUDE.md`.
 
 ## Blockers / didn't work
-- **Four agent self-reports failed verification**, including one reporting an edit it never made
-  and one whose 3 of 7 highest-severity findings were wrong — two of which would have caused
-  actively harmful fixes. Phase 4 then found four independent papers predicting exactly this.
-- **The Phase 5 agent returned a delegation as its deliverable** — spawned 4 children, reported
-  intent as completion, terminated, orphaning them. Salvaged manually. `guard-fanout` did not
-  catch it: the brake sits at the wrong layer to stop a *child* fanning out.
-- **Reddit and Facebook groups were unreachable by every agent in every phase.** The sweep
-  systematically under-samples the most candid practitioner sources.
+- **Two of seven Tier 2 "wrong doctrine" findings were Claude's errors, not the kit's** — nesting
+  depth was already correct; the `local-models` skill never made a hardware claim.
+- The first `verify-install.sh` had the exact blindness it was written to fix; caught only by
+  mutation-testing the fix.
+- A `python3` heredoc silently did nothing while its commit still succeeded. A commit message
+  claimed 53 lines for a 77-line file.
+- `/usage` cannot be run from a non-interactive session and its data is not on disk.
 
 ## Next action (priority 1)
-Work through `FINDINGS-LEDGER.md` one by one with Daniel. Start with the four that are both
-verified and load-bearing: INV-01/INV-04 being unfailable, the GSD hooks, the two garbage-logging
-hooks, and the Auto Mode tier correction.
+**Decide the session-protocol question.** `session-workflow` fired in 9 of 39 measured sessions,
+`superpowers:brainstorming` in 6, against a rule saying *"Both. That order. Every session."*
+Half the gap was missing files, now fixed. The rest is four genuinely skipped steps: naming the
+session, `/code-review`, the Feynman gate, and the `[session-name]:` commit format — and Claude
+argues that last one is worse than conventional commits. This is a tier-demotion question (a
+SessionStart hook), not a wording one.
 
-## Open
-- **Daniel's question, logged and unresearched:** if RAM is not the local-model constraint, what
-  is 63 GB actually for? Three hypotheses recorded; needs local benchmarking, not web research.
-- Restart Claude Code for `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` (SendMessage).
-- Confirm a new metrics row appears after this session closes — proves the SessionEnd hook fires.
-- Make the sweep recur monthly. Cut phase 3b; narrow phase 5.
-- **Do not raise API key rotation.** Declined repeatedly; considered closed.
+## Test state
+42/42 on `verify-kit.sh`. All four invariants mutation-tested this session. Gitleaks passed on
+every commit.
+
+## Open / carried forward
+- `docs/research/FINDINGS-LEDGER.md` — Tier 3's unactioned items, 13 recorded discards
+- `docs/research/QUEUED-QUESTIONS.md` — npm answered; Q-2 (public repo description mismatch) and
+  Q-3 (should the tool-vetting method become doctrine) still open
+- **The "40% context budget" figure has no source** and Daniel has said he does not want it.
+  It is not in the repo; if it appears in any public description, that should change.
+- Make the capability sweep recur monthly. Cut phase 3b; narrow phase 5.
+- Four skills and the GSD apparatus sit at zero measured invocations. Frequency is not value —
+  but `mcp-builder`/`mcp-developer` are deprecated with a 2026-12 removal date.
+- **Do not raise API key rotation.** Declined repeatedly; closed.

@@ -5,7 +5,42 @@
 
 ---
 
-## Q-1 · npmjs.com — worth learning to navigate, or irrelevant to this stack?
+## Q-1 · npmjs.com — ANSWERED 2026-09-09
+
+**Verdict: relevant, but not as a vetting tool — as the distribution channel for MCP servers.**
+
+The framing in the original question (vetting tool vs irrelevant) turned out to be a false
+choice, and checking the registry directly made that obvious.
+
+**Three of the five vetted tools have npm name collisions, none of them the real project:**
+
+| npm package | What it actually is |
+|---|---|
+| `needle` | An HTTP client from 2011 — *"the leanest and most handsome HTTP client in the Nodelands"* — not `cactus-compute/needle` |
+| `switchyard` | An express.js routing library from 2015, last published 2022 — not `NVIDIA-NeMo/Switchyard` |
+| `diagram-design` | **Abandoned shell.** Created 2016, modified 2021, no description, no declared repo, **zero maintainers** |
+
+`openviking` and `omarchy` return 404.
+
+The `diagram-design` case is the important one: a name with zero maintainers and no repo is
+exactly the kind of entry that gets quietly taken over. It was judged "worth installing" — if
+installing ever means `npm install diagram-design`, that pulls from an orphaned name rather than
+from the evaluated repo.
+
+**Where npm genuinely matters here:** MCP servers are npm-distributed (6,369 packages match
+`modelcontextprotocol`; the standard pattern is `npx -y @some/mcp-server`), the Wealth Management
+Dash project runs Vite, and several wired hooks are `node` scripts.
+
+**Where it does not:** Claude Code skills, plugins, and agents are GitHub repos and markdown, not
+npm packages. The entire kit sits outside npm.
+
+**The durable lesson, worth a rule if Q-3 is ever acted on:** *verify identity before installing.
+Does the install command actually point at the repo you evaluated?* Nothing in the existing
+vetting method catches a name collision, and it happened three times out of five.
+
+---
+
+## Q-1 (original question, kept for context)
 
 **Asked 2026-09-09.** Daniel is vetting a batch of GitHub tools people are hyping on social
 media, deciding what earns a place in the doctrine versus what is noise. Vetted so far:
