@@ -49,11 +49,24 @@ each costs.** If you can't name both, you're not ready to dispatch.
 
 - A multi-part question is **not** a licence to spawn one child per part. Decompose the question
   first, then decide how many children the *answer* needs.
-- **Ad hoc `Agent` fan-out is capped at 3–4 children.** Anything larger goes through the `Workflow`
-  tool — real caps and visible spend (source: `SOURCES.md#workflow-limits`).
 - A child that returns nothing still costs full price. **Budget for the failure case.**
-- Breadth is the constraint, not depth (source: `SOURCES.md#subagent-limits`). Regression case:
-  `templates/.claude/rules/evals.md`, 2026-08-19.
+- Anything genuinely large goes through the `Workflow` tool — real caps and visible spend
+  (source: `SOURCES.md#workflow-limits`).
+
+### Fan-out: three constraints, revised 2026-09-09
+
+The old rule was a flat numeric cap of 3–4 children plus "breadth is the constraint, not depth."
+Both halves were wrong. Evidence and the regression cases: `docs/fan-out-constraints.md`.
+
+1. **No numeric breadth cap.** The 3–4 figure came from one incident and no literature supports
+   an optimal N in either direction. It gated correct work twice in 48 hours.
+2. **Structure, not headcount.** Before dispatching, ask *does any child disagree with the others
+   by design?* A fan-out of agreeing researchers is weaker than a smaller one with a dissenter.
+3. **A dispatched agent must produce the artifact itself.** Delegating is permitted; returning a
+   delegation as the deliverable is not. If it may spawn children it must synthesize them, or be
+   told it may spawn none.
+4. **The ceiling is verification capacity.** Fan out as wide as you can actually check. Fifty
+   confident claims you cannot verify are worth less than five you can.
 
 ---
 
