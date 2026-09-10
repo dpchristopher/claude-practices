@@ -28,4 +28,16 @@ it — especially a claim that something is fine, or that an action was taken.
 checked the wrong mechanism entirely — `.git/hooks/` instead of `core.hooksPath` — and concluded
 8 repos were unprotected when 6 were fine.)
 
+## When It Matters, Use a Different Vendor's Eyes
+
+A same-vendor reviewer shares the writer's blind spots. For a decision that would be expensive
+to get wrong, get the check from a different model family — Simon Willison's routine practice is
+having Claude and a competitor review each other's work.
+
+Cheap version: paste the artifact and the claim into another assistant and ask what is wrong
+with it. No integration required.
+
+*Sources: `SOURCES.md#abstention-and-citation`; practitioner detail in
+`docs/research/phase3-practitioners.md`.*
+
 *Source: `SOURCES.md#abstention-and-citation`.*
