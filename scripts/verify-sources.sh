@@ -35,15 +35,32 @@ fi
 #   "capped at 3-4 children" / "1,000 total"
 PATTERN='([0-9][0-9,]*(-[0-9]+)?[[:space:]]+(concurrent|total|agents|levels|deep|daily|children))|((concurrent|nesting depth|depth|cap(ped)? at)[[:space:]]+[0-9][0-9,]*)'
 
+# Proximity window: a limit number must have a SOURCES.md pointer within this many
+# lines either side. File-level was the original check and it could not fail on the files
+# that mattered -- one cited number anywhere made every other number in that file pass.
+# Mutation-proven 2026-09-08: injecting "99 concurrent agents and 4 levels deep" into
+# loop.md still returned CITATIONS OK.
+WINDOW=${VERIFY_SOURCES_WINDOW:-4}
+
 for f in $TARGETS; do
   hits=$(grep -nEi "$PATTERN" "$f" 2>/dev/null | grep -v "SOURCES.md")
   [ -z "$hits" ] && continue
 
-  if ! grep -q "SOURCES\.md" "$f"; then
-    echo "FAIL: $f quotes a limit number with no SOURCES.md pointer:"
-    echo "$hits" | sed 's/^/    /'
-    FAIL=1
-  fi
+  total=$(wc -l < "$f")
+  while IFS= read -r hit; do
+    [ -z "$hit" ] && continue
+    ln=${hit%%:*}
+    case "$ln" in (*[!0-9]*|"") continue ;; esac
+    lo=$(( ln - WINDOW )); [ "$lo" -lt 1 ] && lo=1
+    hi=$(( ln + WINDOW )); [ "$hi" -gt "$total" ] && hi=$total
+    if ! sed -n "${lo},${hi}p" "$f" | grep -q "SOURCES\.md"; then
+      echo "FAIL: $f:$ln quotes a limit number with no SOURCES.md pointer within $WINDOW lines:"
+      echo "    ${hit#*:}"
+      FAIL=1
+    fi
+  done <<EOF
+$hits
+EOF
 done
 
 if [ "$FAIL" -eq 0 ]; then

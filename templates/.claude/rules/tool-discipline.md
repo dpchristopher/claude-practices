@@ -33,6 +33,8 @@ One question: *I need work done elsewhere — which mechanism, and what does it 
 | **Cross-session message** | none — a thin text payload | the other work has its own long-lived session, repo, or machine state | thin payload is the point |
 | **Workflow tool** | per-agent, orchestrated | more than ~4 children, or the fan-out should be rerunnable and visible | real caps + budget visibility |
 
+*The ~4-children threshold is the ad-hoc fan-out cap from `loop-cost-discipline.md`; platform caps are in `SOURCES.md#workflow-limits`.*
+
 **Fork when you need the context; fresh subagent when you need the independence.**
 
 **A fork is not a valid maker≠checker checker.** It inherits the maker's context and therefore

@@ -74,6 +74,9 @@ still be dangerous if it runs unsandboxed with production credentials and no spe
 Grant L3 only when both are satisfied.
 
 ## Cost budgets — three limit systems, do not conflate them
+
+*Every number in this table is sourced: `SOURCES.md#subagent-limits`, `#workflow-limits`.*
+
 | System | Limit | Control |
 |---|---|---|
 | `Workflow` tool | 16 concurrent, 1,000 total per run | `/config` size guideline |

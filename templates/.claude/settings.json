@@ -43,6 +43,15 @@
             "command": "bash ~/.claude/hooks/guard-agent-ownership.sh"
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/guard-fanout.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [

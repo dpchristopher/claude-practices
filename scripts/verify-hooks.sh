@@ -57,6 +57,34 @@ else
   echo "SKIP: no deployed settings.json at $DEPLOYED — deployment parity not checked"
 fi
 
+# --- direction 4: EXISTS -> referenced -------------------------------------
+# The mirror of direction 1, and the clause that was missing. Mutation-tested 2026-09-08:
+# adding a hook file wired nowhere still returned HOOK PARITY OK, because nothing checked
+# this direction. An unreferenced hook is either dead weight or a wiring bug, and the kit
+# has shipped both.
+#
+# UNWIRED_BY_DESIGN lists hooks that intentionally have no settings.json entry, each with
+# its reason. An allowlist with stated reasons is the difference between a known exception
+# and an unnoticed orphan.
+#   stop-verify.sh         - opt-in per project via PROJECT_CHECK_CMD; wiring it globally
+#                            would block every turn in a repo with no test command.
+#   guard-readonly-bash.sh - invoked via `hooks:` in agent frontmatter (Kevin/Mel/Carl),
+#                            not settings.json. Global wiring would block rm/git commit/pip.
+#   session-context.ps1    - PowerShell sibling of session-context.sh, kept for parity (see
+#                            direction 2). Wired only by users who prefer the .ps1 SessionStart
+#                            command; the template ships the bash one.
+UNWIRED_BY_DESIGN="stop-verify.sh guard-readonly-bash.sh session-context.ps1"
+
+for f in "$HOOKS_DIR"/*; do
+  [ -f "$f" ] || continue
+  base=$(basename "$f")
+  case " $UNWIRED_BY_DESIGN " in (*" $base "*) continue ;; esac
+  if ! grep -rq "$base" templates/.claude/settings.json templates/.claude/agents/*.md 2>/dev/null; then
+    echo "FAIL: $base exists in hooks/ but is referenced by nothing (settings or agent frontmatter)"
+    FAIL=1
+  fi
+done
+
 # --- direction 2: .sh/.ps1 parity ------------------------------------------
 # Only enforced for hooks that already have a .ps1 sibling — we are not demanding
 # every bash hook be ported, only that existing pairs do not drift apart.
