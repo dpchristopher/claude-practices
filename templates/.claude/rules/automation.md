@@ -8,7 +8,9 @@ paths:
 
 # Automation Rules
 
-> Auto-loaded at session start. Apply to any scripted pipeline, scheduled task, or batch process.
+> **Path-scoped, NOT auto-loaded at session start.** The `paths:` frontmatter above means this
+> file loads only when work touches a pipeline, cron, scheduled, or `scripts/` file. Anything that
+> must apply to every session belongs in `global-rules/`, not here.
 
 ---
 

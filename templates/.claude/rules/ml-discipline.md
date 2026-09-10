@@ -8,7 +8,8 @@ paths:
 
 # ML Discipline Rules
 
-> Auto-loaded at session start. Apply to any ML, forecasting, analytics, or modeling work.
+> **Path-scoped, NOT auto-loaded at session start.** The `paths:` frontmatter above means this
+> file loads only when work touches a notebook, `experiments/`, or a model/train Python file.
 
 ---
 

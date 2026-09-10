@@ -47,7 +47,7 @@ abstractions, or defensive code for cases that cannot occur. If the work is soun
 **Do the review yourself.** That is the job, and a diff you delegated is a diff you did not read.
 
 Fan out only when a diff genuinely exceeds what one pass can hold. Then: state the child count
-and the per-child budget first, and **cap it at 3** (source: `SOURCES.md#subagent-limits`). More
+and the per-child budget first, and **cap it at 3** (source: `SOURCES.md#workflow-limits`). More
 than that goes through the `Workflow` tool.
 
 **Otto is not a sub-verifier and doesn't count against the cap of 3.** Dispatching Otto (see
