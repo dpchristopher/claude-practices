@@ -18,26 +18,22 @@ agent="$(printf '%s' "$input" \
   | grep -oE '"subagent_type"[[:space:]]*:[[:space:]]*"[^"]*"' \
   | head -1 | sed -E 's/.*"([^"]*)"$/\1/')"
 
-# --- Rule 2: verification work goes to bob-verifier, not the catch-all --------------
-# Added 2026-09-13. Measured across 41 sessions: 29 of 146 main-session general-purpose
-# dispatches were verification tasks ("Verify: ...", "Review ..."). That is not just a routing
-# miss - guard-verdict.sh enforces a verdict marker only on NAMED checker agents and exits 0
-# for everything else, so verification sent to general-purpose silently skipped the verdict
-# gate. The kit's maker!=checker enforcement was being bypassed by agent choice.
-#
-# Matches on the LEADING verb of the task description only, which is what made the
-# classification honest - a task that merely *mentions* something was verified is not a
-# verification task. Omitted subagent_type means general-purpose, so it is covered too.
-desc="$(printf '%s' "$input" | grep -oE '"description"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed -E 's/.*"([^"]*)"$/\1/' | tr '[:upper:]' '[:lower:]')"
-first="$(printf '%s' "$desc" | awk '{print $1}' | tr -d ':,.')"
-
-if [ -z "$agent" ] || [ "$agent" = "general-purpose" ]; then
-  case "$first" in
-    verify|review|audit|validate|confirm|re-verify|reverify)
-      echo "Blocked: this is a verification task ('$first ...') dispatched to general-purpose. Use bob-verifier. guard-verdict.sh enforces a verdict marker only on named checker agents, so verification sent to general-purpose skips the maker!=checker gate entirely. Re-dispatch with subagent_type=bob-verifier." >&2
-      exit 2 ;;
-  esac
-fi
+# --- Rule 2 was REMOVED 2026-09-13, same day it was added. Kept as a note on purpose. ---
+# It blocked general-purpose dispatches whose leading verb was verify/review/audit/validate/
+# confirm, on the grounds that 29 of 146 such dispatches skipped guard-verdict.sh (which only
+# guards named checker agents). bob-verifier's review of the branch found it was built on a
+# misread of the data:
+#   * 25 of the 29 came from ONE session - a /code-review run, which dispatches general-purpose
+#     reviewers by design. One skill doing its job was read as a pattern across the work.
+#   * superpowers' spec reviewer dispatches general-purpose "Review spec compliance for Task N".
+#     /beast-mode is built on that skill; the rule would have broken it.
+#   * dave-researcher's nested "Verify <fact>" web checks would have been redirected to
+#     bob-verifier, which has no WebSearch or WebFetch.
+#   * Ordinary implementation briefs ("Review and fix the parser", "Confirm the build passes then
+#     deploy") were blocked.
+# Excluding the one skill-driven session leaves 4 cases across 3 sessions: too few to justify a
+# blocking guard with that false-positive profile. See DECISIONS.md D-014. Same error as the
+# retracted "4x over-count" earlier that day - generalising from a single session.
 
 # --- Rule 1: GSD agents only inside a GSD project -----------------------------------
 case "$agent" in

@@ -8,6 +8,23 @@
 
 ---
 
+## D-014 · Remove the verification-routing guard the same day it was added
+**2026-09-13**
+
+**Decided:** remove Rule 2 from `guard-agent-ownership.sh`, which blocked `general-purpose` when a
+task's leading verb was verify/review/audit/validate/confirm.
+**Reason:** `bob-verifier` reviewed the branch and found it built on a misread of the data. 25 of
+the 29 cases came from one session — a `/code-review` run, which dispatches `general-purpose`
+reviewers by design. It would also have blocked the superpowers spec reviewer that `/beast-mode`
+depends on, and redirected `dave-researcher`'s web fact-checks to `bob-verifier`, which has no web
+tools. Excluding the one skill-driven session leaves 4 cases in 3 sessions.
+**Rejected:** narrowing the rule to change-review phrasing — still a blocking guard justified by
+four cases, with a false-positive profile nobody has measured.
+**The lesson:** the same error as the retracted "4× over-count" earlier that day — generalising
+from a single session. Two instances in one day of one reasoning error.
+**Reverse if:** verification dispatched to `general-purpose` is shown, across several sessions and
+excluding skill-driven runs, to be skipping review that should have happened.
+
 ## D-012 · Don't build beast mode or session-close until a Gru plan has been run by hand
 **2026-09-13** · *Superseded same day by D-013*
 
@@ -24,7 +41,7 @@ wires `session-workflow` §9 into one command. Beast mode executes a Gru plan th
 maker/checker agents.
 **Reason:** every piece exists (`jerry-docs`, `feynman-explainer`, `bob-verifier`,
 `subagent-driven-development`, the Workflow tool). The gap is that the checklist is never run —
-`feynman-explainer` has zero invocations in 41 sessions.
+`feynman-explainer` has zero invocations in 39 sessions.
 **Rejected:** new agents for either job — the Agent-Creation Gate in `kit-maintenance.md`.
 **Reverse if:** the first real run of either shows the thin version cannot do the job.
 
@@ -33,7 +50,7 @@ maker/checker agents.
 
 **Decided:** Opus stays the working tier. Reach for Fable deliberately.
 **Reason:** Fable's measured edge is agentic, not code quality — Terminal-Bench 4.0 is +13.8 points
-over Opus, CursorBench only +3.4. It wins when a long chain must recover from failure without a
+over Opus, CursorBench only +3.4 ([Anthropic, Introducing Claude Fable 5.1](https://www.anthropic.com/claude-fable-and-mythos-5-1): Terminal-Bench 4.0 55.8% vs 42.0%; CursorBench 3.2.0 73.4% vs 70.0%). It wins when a long chain must recover from failure without a
 human, and barely matters when someone is watching. Fable also consumes session limits faster.
 **Rejected:** switching the default, and upgrading `bob-verifier` — Bob's 2026-09-08 failures were
 looking-in-the-wrong-place errors, not reasoning errors.
@@ -43,7 +60,7 @@ looking-in-the-wrong-place errors, not reasoning errors.
 **2026-09-09**
 
 **Decided:** stay on the existing Max subscription for client work.
-**Reason:** Daniel declined further spend. There is no written agreement with Betsey Brown Travel,
+**Reason:** Daniel declined further spend. There is no written agreement with the paying client,
 so no confidentiality term exists for consumer-tier processing to conflict with.
 **Known cost, stated:** Anthropic's DPA covers only Claude for Work and the API. Client data is
 processed under consumer terms.

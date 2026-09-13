@@ -12,7 +12,7 @@ triggers:
 
 # Session Close
 
-`session-workflow` §9 lists seven end-of-session steps. Measured across 41 sessions, the
+`session-workflow` §9 lists seven end-of-session steps. Measured across 39 sessions, the
 comprehension gate at its centre (`feynman-explainer`) was invoked **zero** times — the
 checklist existed and was not run. This skill is §9 made into one command.
 
@@ -78,9 +78,10 @@ The resulting explanation becomes the body of `HANDOFF.md`.
 
 ### 6. Independent review — dispatch `bob-verifier`
 
-On the diff, for non-trivial changes. Must go to `bob-verifier` specifically: a verification task
-dispatched to `general-purpose` is blocked by `guard-agent-ownership.sh`, because
-`guard-verdict.sh` only enforces verdicts on named checker agents.
+On the diff, for non-trivial changes. Use `bob-verifier` rather than `general-purpose`:
+`guard-verdict.sh` enforces a verdict marker only on named checker agents, so a review sent to
+`general-purpose` runs without that gate. Nothing forces this choice — a hook that tried was removed
+(D-014) — so make it deliberately.
 
 Skip for trivial changes (typo, single-line doc fix) and **say you skipped it**.
 

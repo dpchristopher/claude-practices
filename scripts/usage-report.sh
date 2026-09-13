@@ -39,7 +39,8 @@ COUNT=$(printf '%s\n' "$FILES" | grep -c . )
 # Most transcripts are SIDECHAINS (subagent runs), not sessions. Reporting the raw file count
 # as "sessions" overstates the denominator by roughly 12x and makes per-session compliance look
 # far worse than it is. Counted separately on purpose.
-MAIN=$(printf "%s\n" "$FILES" | grep . | while read -r f; do head -1 "$f" 2>/dev/null | grep -q "\"isSidechain\":true" || echo x; done | grep -c .)
+MAIN=$(printf '%s
+' "$FILES" | grep . | grep -vc "/subagents/")
 OLDEST=$(find "$CORPUS" -name "*.jsonl" -printf '%T@\n' 2>/dev/null | sort -n | head -1 | cut -d. -f1)
 [ -n "$OLDEST" ] && OLDEST=$(date -d "@$OLDEST" +%Y-%m-%d 2>/dev/null || echo "?")
 

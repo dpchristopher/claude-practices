@@ -54,7 +54,11 @@ cb=0
 while IFS= read -r f; do
   [ -f "$f" ] || continue
   case "$f" in *.png|*.jpg|*.ico|*.zip|*.bin|*.pdf) continue ;; esac
-  if LC_ALL=C grep -q $'[\x01-\x08\x0b\x0c\x0e-\x1f]' "$f" 2>/dev/null; then
+  # grep -P with the escape in SINGLE quotes, so PCRE interprets \x00 rather than bash.
+  # A bash $'...' string cannot hold a NUL byte - it truncates there - which is why an earlier
+  # version of this line silently failed to detect NUL. -a stops a NUL making grep treat the
+  # file as binary and skip it.
+  if LC_ALL=C grep -qaP '[\x00-\x08\x0b\x0c\x0e-\x1f]' "$f" 2>/dev/null; then
     no "control byte in $f" "likely a Python octal-escape (\1 -> 0x01); write via a raw string"
     cb=1
   fi

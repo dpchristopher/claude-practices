@@ -16,8 +16,8 @@ minor = new capability, patch = fix/cleanup.
   would reverse it.
 - **`scripts/usage_count.py`** and the **`monthly-kit-sweep`** scheduled task (read-only; reports
   to a gitignored path because the repo is public).
-- **Verification routing** in `guard-agent-ownership.sh`: blocks `general-purpose` when a task's
-  leading verb is verify/review/audit/validate/confirm, and names `bob-verifier`.
+- ~~Verification routing in `guard-agent-ownership.sh`~~ — **added and removed the same day.**
+  See Notes and `DECISIONS.md` D-014.
 
 ### Fixed
 - **The usage counter missed every Agent call with no `subagent_type`** — 20 of 480. Replaced grep
@@ -27,13 +27,20 @@ minor = new capability, patch = fix/cleanup.
 ### Notes
 - **Retracted before shipping:** a "grep over-counts ~4×" conclusion drawn from one sample
   session. Corpus-wide the ratio is 0.99×. It had been written into a docstring.
-- **"Your specialists lose to the catch-all" was overstated.** Of 146 `general-purpose`
-  dispatches, 58 were implementation — correct, since no implementer agent exists. The genuine
-  miss was 29 verification tasks, which mattered because `guard-verdict.sh` only guards named
-  checker agents, so they silently skipped the verdict gate.
-- **The routing guard's first version never fired.** Python read `\1` in a sed backreference
-  as an octal escape and wrote byte 0x01 into the file. Caught by mutation tests; repo and
-  deployed hooks then scanned for the same byte. None.
+- **A verification-routing guard was built, fixed, and removed the same day.** It blocked
+  `general-purpose` when a task's leading verb was verify/review/audit. `bob-verifier`'s review
+  found 25 of its 29 justifying cases came from one `/code-review` session, which dispatches
+  `general-purpose` reviewers by design — and that the guard would have broken the superpowers spec
+  reviewer `/beast-mode` depends on, and redirected Dave's web fact-checks to Bob, who has no web
+  tools. Removed; see `DECISIONS.md` D-014. **Second instance in one day of generalising from a
+  single session.**
+- **Before removal, its first version never fired.** Python read a backslash-1 in a sed
+  backreference as an octal escape and wrote byte 0x01 into the file. Caught by mutation tests. The
+  same byte then reappeared inside this changelog entry, so `verify-kit.sh` check 1c now fails on
+  any control byte in a tracked file. Its first version could not detect NUL — a bash `$'...'`
+  string cannot hold one — and now uses PCRE.
+- **Session count corrected 41 → 39.** Two Workflow journal files were counted as main sessions by
+  a first-line sniff; now decided by path.
 - **Line budget: +0.** Both skills and all scripts are on-demand, not always-loaded.
 
 ## [1.8.1] — 2026-09-08 (guard-fanout: rolling window)

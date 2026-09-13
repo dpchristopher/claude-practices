@@ -28,16 +28,16 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-CORPUS = Path.home() / ".claude" / "projects"
+import os
+CORPUS = Path(os.environ.get("CLAUDE_CONFIG_DIR", Path.home() / ".claude")) / "projects"
 
 
 def is_sidechain(path: Path) -> bool:
-    try:
-        with path.open(encoding="utf-8", errors="replace") as fh:
-            first = fh.readline()
-        return '"isSidechain":true' in first.replace(" ", "")
-    except OSError:
-        return False
+    # Decided by PATH, not by sniffing the first line. The first-line version counted two
+    # Workflow journal files (subagents/workflows/wf_*/journal.jsonl, which begin
+    # {"type":"started"}) as main sessions, reporting 41 sessions where there were 39.
+    # Found by bob-verifier, 2026-09-13.
+    return "subagents" in path.parts
 
 
 def tool_uses(path: Path):

@@ -17,7 +17,7 @@ already assigns per task, and — for large plans — the `Workflow` tool.
 
 **Beast mode is where Fable earns its cost** (D-011). A long chain that must recover from failure
 without a human is exactly where Fable's measured edge sits — Terminal-Bench 4.0 is +13.8 points
-over Opus, versus +3.4 on in-editor coding. For a long unattended run, run the orchestrating
+over Opus, versus +3.4 on in-editor coding ([Anthropic, Introducing Claude Fable 5.1](https://www.anthropic.com/claude-fable-and-mythos-5-1): Terminal-Bench 4.0 55.8% vs 42.0%; CursorBench 3.2.0 73.4% vs 70.0%). For a long unattended run, run the orchestrating
 session on Fable. For a short plan you are watching, Opus is fine.
 
 ---
@@ -71,9 +71,11 @@ wrote exist and changed (`git diff --stat`). An agent's self-report is a claim, 
 the project check (`PROJECT_CHECK_CMD`, or `verify-kit.sh` in `claude-practices`). Paste the real
 output. **A mechanical check beats a reviewer's opinion; run it first and let it gate the rest.**
 
-**d. Checker** — dispatch `bob-verifier` on the task's diff. It must be Bob: verification sent to
-`general-purpose` is blocked by `guard-agent-ownership.sh`, because `guard-verdict.sh` only
-enforces verdicts on named checker agents.
+**d. Checker** — dispatch `bob-verifier` on the task's diff. Use Bob rather than
+`general-purpose`: `guard-verdict.sh` enforces a verdict marker only on named checker agents, so a
+review sent to `general-purpose` runs without that gate. This is a choice to make deliberately,
+**not** something a hook enforces — a guard that tried was removed the day it was added (D-014),
+because `/code-review` and the superpowers spec reviewer legitimately use `general-purpose`.
 
 **e. Mutation test, where the task built a check.** If the task added any guard, validator check,
 invariant, or hook: inject the fault, confirm it fails, restore, confirm it passes. **A check that
