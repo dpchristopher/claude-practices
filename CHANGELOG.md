@@ -3,6 +3,25 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.9.1] — 2026-09-13 (Remove beast mode; §9 is the close-out spec)
+### Removed
+- **`/beast-mode`** — deleted from the repo **and from `~/.claude/skills/`**, since `install.sh`
+  copies but never removes. Every piece of it already existed in Gru's plan format, the global
+  rules, or `superpowers:subagent-driven-development`; it contradicted the plan it executed on
+  commit format and discarded the parallelism Gru's dependency graph designed. See D-015.
+
+### Changed
+- **`/session-close`** reduced to a trigger over `session-workflow` §9 plus a report. Its first
+  version re-listed §9 and silently overrode two steps (`/code-review` → `bob-verifier`; commit
+  format). §9 is now the single spec.
+- **`session-workflow` §9** gains the two steps that were genuinely new: dispatch `jerry-docs` for
+  docs and verify its edits against `git diff`, and record decisions in `DECISIONS.md`. Now 8 steps.
+
+### Notes
+- **D-012 was right.** It said not to build beast mode until a Gru plan had run by hand. It was
+  superseded that afternoon; the build guessed wrong exactly as it predicted.
+- Line budget: **+0**. Skills are on-demand.
+
 ## [1.9.0] — 2026-09-13 (Bake-in: close, execute, measure, decide)
 ### Added
 - **`/session-close`** — `session-workflow` §9 as one command. Syncs docs via `jerry-docs`,

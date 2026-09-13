@@ -26,7 +26,7 @@ agent="$(printf '%s' "$input" \
 #   * 25 of the 29 came from ONE session - a /code-review run, which dispatches general-purpose
 #     reviewers by design. One skill doing its job was read as a pattern across the work.
 #   * superpowers' spec reviewer dispatches general-purpose "Review spec compliance for Task N".
-#     /beast-mode is built on that skill; the rule would have broken it.
+#     /beast-mode (since removed, D-015) was built on that skill; the rule would have broken it.
 #   * dave-researcher's nested "Verify <fact>" web checks would have been redirected to
 #     bob-verifier, which has no WebSearch or WebFetch.
 #   * Ordinary implementation briefs ("Review and fix the parser", "Confirm the build passes then
