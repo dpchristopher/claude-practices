@@ -3,6 +3,28 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.10.1] — 2026-09-13 (Detector fixes from the first real session-close)
+### Fixed
+- **Missed-close detector reported every commit in history on non-GNU systems.** `stat -c %Y`
+  is GNU-only; its `|| echo 0` fallback became epoch 0. Now uses the commit graph where the
+  handoff is tracked, and a portable `stat` that **skips** rather than guesses where it is not.
+  Found by `/code-review`.
+- **PR merge commits were counted as missed work.** Now `--no-merges`. On this repo 6 real
+  commits had been reported as 9. Found by `/code-review`.
+- **The detector would have fired every session in 6 of 8 repos.** The kit's own hooks write
+  `precompact-state.md` and `orchestration-log.txt` into `.claude/`, which those repos do not
+  gitignore. Filtered inside the hook. **Found by the `feynman-explainer` gate on its first run** —
+  after six test cases and `/code-review` had both passed the code. See D-016.
+- `META_ARCHITECTURE.md` described the detector as present in both `.sh` and `.ps1`; the `.ps1`
+  was never given it.
+
+### Notes
+- **First real run of `/session-close`.** Its comprehension gate had run zero times in 39 sessions.
+  On its first run it found a defect that tests and code review had both missed. That is the
+  strongest evidence yet that the step was worth reaching.
+- Tested: 9 cases, including squash merge — which had been reasoned about as safe and was only
+  then actually tested.
+
 ## [1.10.0] — 2026-09-13 (Missed-close detector)
 ### Added
 - **Missed-close detector** in `session-context.sh` (SessionStart). Computes whether the previous

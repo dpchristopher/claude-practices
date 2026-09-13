@@ -45,6 +45,7 @@ skills/
   labarr-ml/                       ← ML methodology (12-step workflow, algorithm families)
   feynman-explainer/SKILL.md       ← Comprehension gate (completes the thinking trio)
   failure-modes/SKILL.md           ← Known failure modes + escapes; MAST corroboration
+  session-close/SKILL.md           ← One-word trigger over session-workflow §9 close-out; reports, never blocks
 
 global-rules/                      ← Always-loaded layer → ~/.claude/rules/ (every project, every turn)
   kit-maintenance.md               ← Line budgets, quarterly prune, skill-overlap audit, agent-creation gate
@@ -73,6 +74,7 @@ backup-state.sh                    ← Snapshot un-tracked agent memory / local 
 SECURITY.md / BACKUP.md / ROLLBACK.md  ← Secret-defense, backup, and rollback procedures
 SOURCES.md                         ← Primary-source ledger; every limit number traces here
 INVARIANTS.md                      ← The kit's own durable contracts (it eats its own dog food)
+DECISIONS.md                       ← Dated decision log: the choice, the reason, what was rejected, what would reverse it
 
 docs/
   Coolest Thing Since Chrystal Ball.md  ← Complete loadout, mental models, patterns, anti-patterns

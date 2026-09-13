@@ -8,6 +8,29 @@
 
 ---
 
+## D-016 · The missed-close detector filters kit artifacts in the hook, and reads the commit graph
+**2026-09-13**
+
+**Decided:** (1) measure staleness by non-merge commits after the last commit that touched
+`HANDOFF.md`, not by comparing commit dates to the file's mtime; (2) exclude files the kit's own
+hooks generate from the uncommitted-files check, inside the hook itself.
+**Reason — the graph:** `/code-review` found the mtime version had two defects. GNU-only
+`stat -c` fell back to epoch 0 on failure, reporting every commit in history as missed work on
+macOS; and PR merge commits landing after the grace window counted as missed work — measured on
+this repo, 6 real commits became 9. The graph needs no clock, and `--no-merges` removes the merges.
+**Reason — the filter:** the `feynman-explainer` gate, on its first run after zero runs in 39
+sessions, found that in 6 of 8 repos on this machine `.claude/` is not gitignored, so
+`precompact-state.md` and `orchestration-log.txt` are permanently untracked. The detector would
+have fired every session — the exact wallpaper failure it exists to avoid. Six test cases and
+`/code-review` both missed it.
+**Rejected:** adding `.claude/` entries to the `.gitignore` of six repos, two of them client repos.
+That fixes it per repo and silently breaks again in the next repo that lacks the entry. One filter
+in the hook fixes it everywhere.
+**Known and not fixed here:** those artifacts still pollute `git status` in the same six repos.
+That is a separate problem from the detector and is carried forward.
+**Reverse if:** a kit hook starts writing a new artifact into `.claude/` — add it to
+`KIT_ARTIFACTS`, or the detector returns to firing every session.
+
 ## D-015 · Delete beast mode; make session-workflow §9 the single close-out spec
 **2026-09-13**
 
