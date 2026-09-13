@@ -35,7 +35,7 @@ to a deleted file survived there unnoticed.
 | Tool | Location | Entry point | Status |
 |---|---|---|---|
 | **Installer** | `install.sh` / `install.ps1` | `bash install.sh [--dry-run]` | ✅ Working — copies skills, hooks, agents, global-rules into `~/.claude/` |
-| **Kit audit** | `scripts/verify-kit.sh` | `bash scripts/verify-kit.sh` | ✅ 42 checks — repo state, hook wiring, permissions, rules, per-project gates, secrets guards, invariants, backup |
+| **Kit audit** | `scripts/verify-kit.sh` | `bash scripts/verify-kit.sh` | ✅ 43 checks — repo state, hook wiring, permissions, rules, per-project gates, secrets guards, invariants, backup, control-byte scan |
 | **INV-01** | `scripts/verify-install.sh` | `bash scripts/verify-install.sh` | ✅ Dry run writes nothing; `VERIFY_INSTALL_IDEMPOTENCE=1` adds a real-install comparison |
 | **INV-02** | `scripts/verify-hooks.sh` | `bash scripts/verify-hooks.sh` | ✅ Four directions: referenced→exists, exists→referenced, `.sh`/`.ps1` parity, template→deployed |
 | **INV-04** | `scripts/verify-sources.sh` | `bash scripts/verify-sources.sh` | ✅ Per-line citation proximity, 4-line window |
@@ -57,7 +57,8 @@ INV-02 enforces that those two agree.
 
 | Hook | Event | Purpose |
 |---|---|---|
-| `session-context.sh` / `.ps1` | SessionStart | Prints HANDOFF + context before the first turn |
+| `session-context.sh` | SessionStart | Prints HANDOFF + context before the first turn; computes a missed-close warning (commits since `HANDOFF.md` was last updated, uncommitted files) and stays silent when clean |
+| `session-context.ps1` | SessionStart (unwired) | PowerShell sibling. **Does not have the missed-close detector** — already drifted to about half the `.sh` file's length; recorded as a GC item rather than patched |
 | `guard-secrets.sh` | PreToolUse `Write\|Edit` | Blocks writes to secret files (`exit 2`) |
 | `guard-fanout.sh` | PreToolUse `Agent` | Asks past a rolling-window dispatch threshold |
 | `guard-agent-ownership.sh` | PreToolUse `Agent` | Blocks direct `gsd-*` dispatch outside a GSD project |
