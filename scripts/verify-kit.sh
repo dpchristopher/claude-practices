@@ -44,6 +44,27 @@ for f in global-rules/*.md; do
 done
 [ "$dupe" -eq 0 ] && ok "no rule duplicated between global-rules/ and templates/"
 
+echo "── 1c. No control bytes in tracked files ──"
+# Added 2026-09-13 after the same bug shipped twice in one session. Writing file content through
+# a non-raw Python string turns "\1" into byte 0x01 (octal escape). The first time it disabled a
+# hook: a sed backreference became an invisible byte, every description matched nothing, and the
+# guard looked correct while doing nothing. The second time it landed in the CHANGELOG entry
+# describing the first. Two occurrences of one bug class means eliminate it, not patch it again.
+cb=0
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  case "$f" in *.png|*.jpg|*.ico|*.zip|*.bin|*.pdf) continue ;; esac
+  # grep -P with the escape in SINGLE quotes, so PCRE interprets \x00 rather than bash.
+  # A bash $'...' string cannot hold a NUL byte - it truncates there - which is why an earlier
+  # version of this line silently failed to detect NUL. -a stops a NUL making grep treat the
+  # file as binary and skip it.
+  if LC_ALL=C grep -qaP '[\x00-\x08\x0b\x0c\x0e-\x1f]' "$f" 2>/dev/null; then
+    no "control byte in $f" "likely a Python octal-escape (\1 -> 0x01); write via a raw string"
+    cb=1
+  fi
+done < <(git ls-files)
+[ "$cb" -eq 0 ] && ok "no control bytes in any tracked text file"
+
 echo "── 2. Hooks actually wired (not just installed) ──"
 for h in guard-secrets post-edit-format plan-router subagent-audit guard-verdict log-instructions-loaded session-metrics-stub guard-agent-ownership guard-fanout session-context; do
   grep -q "$h" "$S" && ok "wired: $h" || no "wired: $h" "absent from settings.json"

@@ -39,7 +39,9 @@ to a deleted file survived there unnoticed.
 | **INV-01** | `scripts/verify-install.sh` | `bash scripts/verify-install.sh` | ✅ Dry run writes nothing; `VERIFY_INSTALL_IDEMPOTENCE=1` adds a real-install comparison |
 | **INV-02** | `scripts/verify-hooks.sh` | `bash scripts/verify-hooks.sh` | ✅ Four directions: referenced→exists, exists→referenced, `.sh`/`.ps1` parity, template→deployed |
 | **INV-04** | `scripts/verify-sources.sh` | `bash scripts/verify-sources.sh` | ✅ Per-line citation proximity, 4-line window |
-| **Usage report** | `scripts/usage-report.sh` | `bash scripts/usage-report.sh [days]` | ✅ Measures real skill/agent use from the transcript corpus |
+| **Usage report** | `scripts/usage-report.sh` | `bash scripts/usage-report.sh [days]` | ✅ Wraps `usage_count.py`; adds the installed-but-unseen list |
+| **Usage counter** | `scripts/usage_count.py` | `python scripts/usage_count.py [days]` | ✅ Parses transcripts as JSON, dedupes by tool-call id, splits main vs nested |
+| **Monthly sweep** | scheduled task `monthly-kit-sweep` | runs 09:00 on the 1st | ✅ Read-only. Writes `.claude/monthly-reports/YYYY-MM.md` (gitignored) |
 | **File sweep** | `scripts/file-sweep.sh` | `bash scripts/file-sweep.sh <glob> "<question>" [--run]` | ✅ Carlini one-file-at-a-time review; prints commands unless `--run` |
 | **Backup** | `backup-state.sh` | `bash backup-state.sh ~/OneDrive/claude-backups` | ✅ Manual, no scheduler. Covers the un-tracked precious paths |
 
@@ -89,6 +91,8 @@ globally would break normal work.
 | `/init` | Scaffolding a new project from this kit |
 | `/labarr-ml` | Any ML, forecasting, analytics, or modelling work |
 | `/code-review` | Significant code written |
+| `/session-close` | Wrapping up — syncs docs, records decisions, reviews, writes HANDOFF. Reports, never blocks |
+| `/beast-mode` | Executing an approved Gru plan end to end. Pauses at WITH DANIEL tasks |
 
 Ownership boundaries between the overlapping ones: `docs/skill-overlap-audit.md`.
 

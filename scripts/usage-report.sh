@@ -39,7 +39,8 @@ COUNT=$(printf '%s\n' "$FILES" | grep -c . )
 # Most transcripts are SIDECHAINS (subagent runs), not sessions. Reporting the raw file count
 # as "sessions" overstates the denominator by roughly 12x and makes per-session compliance look
 # far worse than it is. Counted separately on purpose.
-MAIN=$(printf "%s\n" "$FILES" | grep . | while read -r f; do head -1 "$f" 2>/dev/null | grep -q "\"isSidechain\":true" || echo x; done | grep -c .)
+MAIN=$(printf '%s
+' "$FILES" | grep . | grep -vc "/subagents/")
 OLDEST=$(find "$CORPUS" -name "*.jsonl" -printf '%T@\n' 2>/dev/null | sort -n | head -1 | cut -d. -f1)
 [ -n "$OLDEST" ] && OLDEST=$(date -d "@$OLDEST" +%Y-%m-%d 2>/dev/null || echo "?")
 
@@ -49,26 +50,17 @@ echo " $COUNT transcripts ($MAIN main sessions, $(( COUNT - MAIN )) subagent run
 echo " oldest retained ${OLDEST:-?}"
 echo "════════════════════════════════════════════════════════"
 
-# --- skills actually invoked ------------------------------------------------
-echo
-echo "── Skills invoked ──"
-printf '%s\n' "$FILES" | grep . | xargs grep -ho '"name"[[:space:]]*:[[:space:]]*"Skill"[^}]*"skill"[[:space:]]*:[[:space:]]*"[^"]*"' 2>/dev/null \
-  | grep -o '"skill"[[:space:]]*:[[:space:]]*"[^"]*"' | sed 's/.*"\([^"]*\)"$/\1/' \
-  | sort | uniq -c | sort -rn | head -40 | sed 's/^/  /'
-
-# --- agents actually dispatched ---------------------------------------------
-echo
-echo "── Agents dispatched ──"
-printf '%s\n' "$FILES" | grep . | xargs grep -ho '"subagent_type"[[:space:]]*:[[:space:]]*"[^"]*"' 2>/dev/null \
-  | sed 's/.*"\([^"]*\)"$/\1/' | sort | uniq -c | sort -rn | head -40 | sed 's/^/  /'
+# --- counts: delegated to the JSON parser -----------------------------------
+# These sections used to grep raw transcripts for "subagent_type" and "skill". That missed
+# every Agent call with no subagent_type field (20 of 480) and could not separate main-session
+# dispatches from nested ones. usage_count.py parses the JSON and dedupes by tool-use id.
+python "$(dirname "$0")/usage_count.py" "$DAYS"
 
 # --- installed but never seen ------------------------------------------------
 echo
 echo "── Installed but NOT seen in the corpus ──"
 echo "   (a candidate list, NOT a cut list — see the header)"
-SEEN=$(printf '%s\n' "$FILES" | grep . | xargs grep -hoE '"(skill|subagent_type)"[[:space:]]*:[[:space:]]*"[^"]*"' 2>/dev/null \
-  | sed 's/.*"\([^"]*\)"$/\1/' | sort -u)
-
+SEEN=$(python "$(dirname "$0")/usage_count.py" "$DAYS" 2>/dev/null | grep -E '^\s+[0-9]+\s' | awk '{print $2}' | sed 's/.*://' | sort -u)
 echo "  skills:"
 for d in "${CLAUDE_CONFIG_DIR:-$HOME/.claude}"/skills/*/; do
   [ -d "$d" ] || continue

@@ -3,6 +3,46 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.9.0] — 2026-09-13 (Bake-in: close, execute, measure, decide)
+### Added
+- **`/session-close`** — `session-workflow` §9 as one command. Syncs docs via `jerry-docs`,
+  records decisions, runs checks, gets `bob-verifier`'s review, writes HANDOFF. **Reports, never
+  blocks** — a close that can refuse to finish traps you when you need to leave.
+- **`/beast-mode`** — executes an approved Gru plan: maker → local claim verification →
+  mechanical check → `bob-verifier` → mutation test where a check was built → commit, per task.
+  **Pauses** at WITH DANIEL tasks, stops on a failed gate after 3 attempts, requires explicit
+  per-session go-ahead, never pushes. Encodes every failure mode hit in the prior two sessions.
+- **`DECISIONS.md`** — thirteen decisions, each with its reason, what was rejected, and what
+  would reverse it.
+- **`scripts/usage_count.py`** and the **`monthly-kit-sweep`** scheduled task (read-only; reports
+  to a gitignored path because the repo is public).
+- ~~Verification routing in `guard-agent-ownership.sh`~~ — **added and removed the same day.**
+  See Notes and `DECISIONS.md` D-014.
+
+### Fixed
+- **The usage counter missed every Agent call with no `subagent_type`** — 20 of 480. Replaced grep
+  with a JSON parser deduping by tool-call id. Also fixed plugin-prefixed skill names being
+  listed as unused (`daniel-context` showed as unused despite 4 invocations).
+
+### Notes
+- **Retracted before shipping:** a "grep over-counts ~4×" conclusion drawn from one sample
+  session. Corpus-wide the ratio is 0.99×. It had been written into a docstring.
+- **A verification-routing guard was built, fixed, and removed the same day.** It blocked
+  `general-purpose` when a task's leading verb was verify/review/audit. `bob-verifier`'s review
+  found 25 of its 29 justifying cases came from one `/code-review` session, which dispatches
+  `general-purpose` reviewers by design — and that the guard would have broken the superpowers spec
+  reviewer `/beast-mode` depends on, and redirected Dave's web fact-checks to Bob, who has no web
+  tools. Removed; see `DECISIONS.md` D-014. **Second instance in one day of generalising from a
+  single session.**
+- **Before removal, its first version never fired.** Python read a backslash-1 in a sed
+  backreference as an octal escape and wrote byte 0x01 into the file. Caught by mutation tests. The
+  same byte then reappeared inside this changelog entry, so `verify-kit.sh` check 1c now fails on
+  any control byte in a tracked file. Its first version could not detect NUL — a bash `$'...'`
+  string cannot hold one — and now uses PCRE.
+- **Session count corrected 41 → 39.** Two Workflow journal files were counted as main sessions by
+  a first-line sniff; now decided by path.
+- **Line budget: +0.** Both skills and all scripts are on-demand, not always-loaded.
+
 ## [1.8.1] — 2026-09-08 (guard-fanout: rolling window)
 ### Fixed
 - **`guard-fanout.sh` counted the wrong thing.** It tallied Agent dispatches for the life of the
