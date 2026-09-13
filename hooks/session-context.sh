@@ -61,6 +61,46 @@ if [ -f "INVARIANTS.md" ]; then
   cat "INVARIANTS.md"
 fi
 
+# --- Missed-close detector -------------------------------------------------
+# Added 2026-09-13. This hook used to end by asking Claude "does this context look current,
+# or is anything stale?" - a question that depends on being remembered, and in the session
+# this was written it was not asked. Staleness is computable, so compute it and print a FACT.
+# Silent when clean: a warning that fires every session becomes wallpaper and gets ignored.
+#
+# Deliberately NOT checked: whether the last session-metrics row still has "?" fields. The
+# SessionEnd stub writes "?" every session by design, so that signal would fire every time.
+STALE=""
+if git rev-parse --git-dir >/dev/null 2>&1; then
+  # 1. Commits made after HANDOFF.md was last written => the handoff was not refreshed.
+  #    Grace window: session-close writes the handoff and then commits it, so a commit a few
+  #    minutes after the file's mtime is the close itself, not missed work.
+  if [ -f ".claude/HANDOFF.md" ]; then
+    GRACE=${CLAUDE_HANDOFF_GRACE_SECS:-300}
+    H_MTIME=$(stat -c %Y ".claude/HANDOFF.md" 2>/dev/null || echo 0)
+    SINCE=$(( H_MTIME + GRACE ))
+    N_AFTER=$(git log --since="@$SINCE" --oneline 2>/dev/null | wc -l | tr -d ' ')
+    if [ "${N_AFTER:-0}" -gt 0 ]; then
+      H_DATE=$(date -d "@$H_MTIME" "+%Y-%m-%d %H:%M" 2>/dev/null || echo "unknown")
+      STALE="${STALE}   - ${N_AFTER} commit(s) made after HANDOFF.md was last written (${H_DATE}).
+     The handoff below does NOT reflect that work. Latest: $(git log -1 --format='%h %s' 2>/dev/null | cut -c1-70)
+"
+    fi
+  fi
+  # 2. Uncommitted files present before any work this session => left behind.
+  N_DIRTY=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+  if [ "${N_DIRTY:-0}" -gt 0 ]; then
+    STALE="${STALE}   - ${N_DIRTY} uncommitted file(s) left from a previous session:
+$(git status --porcelain 2>/dev/null | head -5 | sed 's/^/       /')
+"
+  fi
+fi
+if [ -n "$STALE" ]; then
+  echo ""
+  echo "⚠ LAST SESSION DID NOT CLOSE CLEANLY — computed, not guessed:"
+  printf '%s' "$STALE"
+  echo "   Consider /session-close before new work, or confirm this state is intentional."
+fi
+
 # Last session handoff
 if [ -f ".claude/HANDOFF.md" ]; then
   echo ""
@@ -77,7 +117,8 @@ echo "════════════════════════�
 echo "CONTEXT LOADED."
 echo ""
 echo "⚠️  MANDATORY STARTUP — DO THIS BEFORE RESPONDING:"
-echo "   1. Ask: does this context look current, or is anything stale?"
+echo "   1. If a missed-close warning appears above, deal with it first. Staleness is computed"
+echo "      now, not asked — no warning means the handoff is current"
 echo "   2. Invoke /session-workflow         (protocol + toolkit)"
 echo "   3. Invoke /superpowers:brainstorming (explore + plan)"
 echo "      Use /session-workflow as your operational reference"

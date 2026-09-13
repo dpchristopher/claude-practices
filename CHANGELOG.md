@@ -3,6 +3,28 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.10.0] — 2026-09-13 (Missed-close detector)
+### Added
+- **Missed-close detector** in `session-context.sh` (SessionStart). Computes whether the previous
+  session closed instead of asking: commits made after `HANDOFF.md` was last written (5-minute grace
+  for the close's own commit, `CLAUDE_HANDOFF_GRACE_SECS`), and uncommitted files present at start.
+  **Silent when clean.** Replaces the hook's closing instruction *"Ask: does this context look
+  current, or is anything stale?"* — a question that was not asked in the session this was built.
+
+### Notes
+- **First real run was a true positive.** On this repo it reported 7 commits since `HANDOFF.md`
+  was last written on 2026-09-09 — every commit of the session that built it, which had not closed.
+- **Deliberately not checked:** unfilled `?` fields in the metrics log. The SessionEnd stub writes
+  them every session by design, so that signal would fire every time and become wallpaper.
+- **Six cases tested:** clean close (silent), commit after handoff (fires), within grace (silent),
+  uncommitted files (fires), not a git repo (silent, no error), no handoff (silent, no crash).
+- **The first test harness was wrong.** It matched on the warning phrase, which the footer also
+  contained, so every case appeared to fire. Retested on a unique marker; footer reworded so the
+  phrase appears once.
+- **`session-context.ps1` was not updated.** It is 43 lines to the `.sh` file's 84 — already badly
+  drifted, and unwired anywhere. Porting a feature into a file nothing runs was not worth it; the
+  drift itself is a GC-pass item.
+
 ## [1.9.1] — 2026-09-13 (Remove beast mode; §9 is the close-out spec)
 ### Removed
 - **`/beast-mode`** — deleted from the repo **and from `~/.claude/skills/`**, since `install.sh`
