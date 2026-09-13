@@ -92,7 +92,6 @@ globally would break normal work.
 | `/labarr-ml` | Any ML, forecasting, analytics, or modelling work |
 | `/code-review` | Significant code written |
 | `/session-close` | Wrapping up — syncs docs, records decisions, reviews, writes HANDOFF. Reports, never blocks |
-| `/beast-mode` | Executing an approved Gru plan end to end. Pauses at WITH DANIEL tasks |
 
 Ownership boundaries between the overlapping ones: `docs/skill-overlap-audit.md`.
 

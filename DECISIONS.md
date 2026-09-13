@@ -8,6 +8,31 @@
 
 ---
 
+## D-015 · Delete beast mode; make session-workflow §9 the single close-out spec
+**2026-09-13**
+
+**Decided:** delete `/beast-mode`. Reduce `/session-close` to a trigger over `session-workflow` §9
+plus a report, restating none of §9's steps.
+**Reason — beast mode:** every piece of it already existed. Gru's plan carries tasks, owners,
+done-when commands, mutation tests, commits, and a dependency graph marking which tasks run in
+parallel. The go-ahead gate is a global hard rule; pausing at decisions is marked in the plan;
+the 3-attempt cap is `loop-cost-discipline.md`; verifying agent claims is `output-accuracy.md`;
+running tasks through agents is `superpowers:subagent-driven-development`. Beast mode was a second
+copy, not a layer — and it had already contradicted the plan it executed, specifying conventional
+commits where the plan specified `session-workflow`'s format. It also ran tasks strictly in
+sequence, discarding the parallelism Gru's dependency graph designed.
+**Reason — session-close:** its first version re-listed §9 and silently overrode two steps,
+swapping `/code-review` for `bob-verifier` and changing the commit format. Two specs for one job
+drift. §9 now carries the two steps that were genuinely new (dispatch `jerry-docs` for docs; record
+decisions in `DECISIONS.md`) and session-close points at it.
+**This is D-012 being right.** D-012 said not to build beast mode until a Gru plan had been run by
+hand, because automating a process never performed means guessing what it needs. It was superseded
+the same afternoon, and the build guessed wrong in exactly the way D-012 predicted.
+**To execute a Gru plan now:** say "execute the plan." `subagent-driven-development` runs it; the
+plan carries everything else.
+**Reverse if:** a Gru plan is executed by hand and a concrete, recurring gap appears that neither the
+plan format nor existing skills cover.
+
 ## D-014 · Remove the verification-routing guard the same day it was added
 **2026-09-13**
 
