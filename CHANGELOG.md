@@ -3,6 +3,39 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.9.0] — 2026-09-13 (Bake-in: close, execute, measure, decide)
+### Added
+- **`/session-close`** — `session-workflow` §9 as one command. Syncs docs via `jerry-docs`,
+  records decisions, runs checks, gets `bob-verifier`'s review, writes HANDOFF. **Reports, never
+  blocks** — a close that can refuse to finish traps you when you need to leave.
+- **`/beast-mode`** — executes an approved Gru plan: maker → local claim verification →
+  mechanical check → `bob-verifier` → mutation test where a check was built → commit, per task.
+  **Pauses** at WITH DANIEL tasks, stops on a failed gate after 3 attempts, requires explicit
+  per-session go-ahead, never pushes. Encodes every failure mode hit in the prior two sessions.
+- **`DECISIONS.md`** — thirteen decisions, each with its reason, what was rejected, and what
+  would reverse it.
+- **`scripts/usage_count.py`** and the **`monthly-kit-sweep`** scheduled task (read-only; reports
+  to a gitignored path because the repo is public).
+- **Verification routing** in `guard-agent-ownership.sh`: blocks `general-purpose` when a task's
+  leading verb is verify/review/audit/validate/confirm, and names `bob-verifier`.
+
+### Fixed
+- **The usage counter missed every Agent call with no `subagent_type`** — 20 of 480. Replaced grep
+  with a JSON parser deduping by tool-call id. Also fixed plugin-prefixed skill names being
+  listed as unused (`daniel-context` showed as unused despite 4 invocations).
+
+### Notes
+- **Retracted before shipping:** a "grep over-counts ~4×" conclusion drawn from one sample
+  session. Corpus-wide the ratio is 0.99×. It had been written into a docstring.
+- **"Your specialists lose to the catch-all" was overstated.** Of 146 `general-purpose`
+  dispatches, 58 were implementation — correct, since no implementer agent exists. The genuine
+  miss was 29 verification tasks, which mattered because `guard-verdict.sh` only guards named
+  checker agents, so they silently skipped the verdict gate.
+- **The routing guard's first version never fired.** Python read `\1` in a sed backreference
+  as an octal escape and wrote byte 0x01 into the file. Caught by mutation tests; repo and
+  deployed hooks then scanned for the same byte. None.
+- **Line budget: +0.** Both skills and all scripts are on-demand, not always-loaded.
+
 ## [1.8.1] — 2026-09-08 (guard-fanout: rolling window)
 ### Fixed
 - **`guard-fanout.sh` counted the wrong thing.** It tallied Agent dispatches for the life of the
