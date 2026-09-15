@@ -34,6 +34,9 @@ Runs in the main conversation, not as a subagent, so nothing is re-read from a c
 
    It stores the commit inside `.git`, so step 7 needs no shell variable — the Bash tool does not
    keep variables between calls, and a lost base once measured a 300-line change as zero.
+   **Run it, and every command below, from inside the project** (`cd <repo> && bash ...` in the
+   same call): the Bash tool resets its directory, and a session can start outside the repo. From
+   outside, `start` records nothing and `check` can only answer "unknown → review".
 2. **Premise.** Say the goal in one sentence, then the one assumption that would sink it. Check that
    assumption against the code or data and cite what you found (`file:line`, command output).
 3. **Context — only what this touches.** The files you will change and their tests; `INVARIANTS.md`;

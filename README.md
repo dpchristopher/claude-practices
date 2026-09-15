@@ -55,6 +55,7 @@ global-rules/                      ← Always-loaded layer → ~/.claude/rules/ 
 scripts/
   verify-hooks.sh                  ← INV-02: hook↔settings parity, sh/ps1 drift
   verify-sources.sh                ← INV-04: every limit number carries a SOURCES.md pointer
+  test-gru-lite.sh                 ← 63 behavioural cases for review-triggers.sh + plan-router.sh
 
 hooks/
   session-context.sh               ← SessionStart hook: auto-loads context every session (THIS IS CONTINUATION)
