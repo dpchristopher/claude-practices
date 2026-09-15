@@ -8,6 +8,28 @@
 
 ---
 
+## D-017 · Gru-lite: keep Gru's cheap habits, drop its overhead, review by computed risk
+**2026-09-13**
+
+**Decided:** a `gru-lite` skill for small and medium tasks, run in the main conversation. It keeps a
+premise check, a runnable done-when, tests first, and reading prior decisions. It drops the cold
+whole-project read, the kit-wide applicability table, the self-grading loop, and the plan file.
+`bob-verifier` reviews only when `review-triggers.sh` computes a trigger: size, risky path,
+invariant file, a done-when that needs judgment, a rough build, or an unmeasurable change.
+`plan-router.sh` now triages build intent so the skill is reached without being remembered.
+**Reason:** Daniel observed output without Gru is noticeably worse, and Gru is too expensive for
+small and medium work. Bob on every task costs a cold-start agent for nothing most of the time; Bob
+on none loses the independent check. Skills that must be remembered go unused —
+`feynman-explainer` ran 0 times in 39 sessions — hence the router.
+**Rejected:** trimming full Gru at the same time — it is the thing known to work, and changing both
+at once would make it impossible to tell which change did what. A new agent — the Agent-Creation
+Gate; this composes existing parts. Bob on every task.
+**Stated as a hypothesis:** that those habits carry most of Gru's quality, and that 100 lines / 3
+files are sensible thresholds. Neither is measured. `~/.claude/gru-lite-log.md` records every
+decision and outcome to test both.
+**Reverse if:** after 10–15 logged tasks, gru-lite output is not close to Gru's — or build triage
+fires on so many non-build prompts that it is ignored.
+
 ## D-016 · The missed-close detector filters kit artifacts in the hook, and reads the commit graph
 **2026-09-13**
 

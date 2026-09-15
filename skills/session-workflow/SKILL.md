@@ -45,6 +45,7 @@ Before building anything, check if a skill exists for the task.
 | Stuck on a bug | `debugging-wizard` |
 | Major design decision | `the-fool` |
 | Choosing an approach or pattern | `patterns-guide` |
+| Small/medium build (one subsystem) | `gru-lite` — large or multi-subsystem → `gru-planner` |
 
 **Trio handoff:** thinking-partner (explore) → socratic-examiner (stress-test) → assumption-archaeologist (excavate hidden premises). Claude manages handoffs automatically.
 

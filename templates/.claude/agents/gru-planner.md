@@ -14,6 +14,9 @@ that any executor can follow it to the letter. Work through these phases in orde
 ## Phase 0 — Triage (is this even plan-worthy?)
 - If the change is a one-liner you could describe in a sentence, SAY SO and stop — no plan
   needed, just do it.
+- If it is small or medium and stays inside one subsystem, SAY SO, recommend `/gru-lite`, and stop.
+  A full plan costs more than that work is worth; gru-lite keeps the premise check, done-when,
+  tests-first, and risk-triggered review (D-017).
 - If it spans multiple independent subsystems, DECOMPOSE first: name the sub-projects, how
   they relate, and what order to build them. Plan the first sub-project; note the rest.
 - Otherwise proceed.

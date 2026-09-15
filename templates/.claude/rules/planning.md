@@ -5,7 +5,8 @@
 > of the below end to end. This rule is the single source of truth for what a good plan contains.
 
 ## Before planning
-- **Triage:** one-liner → just do it, no plan. Multi-subsystem → decompose into sub-plans first.
+- **Triage:** one-liner → just do it, no plan. Small/medium in one subsystem → `/gru-lite`, no plan
+  file. Multi-subsystem → decompose into sub-plans first.
 - **Read the context:** the project `CLAUDE.md` (its law), `HANDOFF.md`, the active plan,
   `META_ARCHITECTURE.md`, `INVARIANTS.md`, and the rules/agents. Don't re-plan done work.
 - **Explore first if needed:** if the problem space is unexamined, run `/thinking-partner`

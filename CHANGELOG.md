@@ -3,6 +3,48 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.11.0] — 2026-09-13 (gru-lite)
+### Added
+- **`/gru-lite`** — Gru-quality execution for small and medium tasks with no plan file. Premise
+  check, runnable done-when, tests first, and `bob-verifier` only when computed risk calls for it.
+  See D-017.
+- **`skills/gru-lite/review-triggers.sh`** — decides whether Bob reviews: size (>100 lines or >3
+  files, starting guesses), risky paths (built-in list + project `.claude/risky-paths.txt`), files
+  named in `INVARIANTS.md` (path, file name, glob, or folder), a judgment-only done-when, a rough
+  build, or a change that can't be measured. `start` records the task's base inside `.git`. Kit
+  artifacts never count. Logs each decision and outcome to `~/.claude/gru-lite-log.md`.
+- **`scripts/test-gru-lite.sh`** — 60 behavioural cases in throwaway repos. Every trigger, router
+  branch, and review fix mutation-tested: disabling it turns at least one case red.
+
+### Fixed before release — found by `bob-verifier`, sent by the build's own review trigger
+`review-triggers.sh`, run on this build, said review (size, risky path, rough build). Bob found the
+script could say **"no review"** when it had really **failed to measure**:
+- An invalid `--base` hid a `git diff` error and measured 200 lines as 0.
+- The skill kept the base in a shell variable, which the Bash tool does not keep between calls; on a
+  repo whose default branch isn't `main`/`master`, 300 committed lines measured as 0. Now `start`
+  records the base inside `.git`, and a base that can't be resolved means review.
+- Renames (`scripts/g.sh` → `hooks/g.sh`) and non-ASCII paths slipped past the risky-path check.
+- Folder-scoped invariants (`templates/.claude/rules/*`) never matched; a file named `make` matched
+  `` `make check` ``. An untracked binary counted random newline bytes as lines. `--base` with no
+  value hung.
+- Router: a verb after an escaped newline, "do it", and an escaped quote before a comma went silent;
+  the planning check still read `cwd`. Observed live during the fix: a background-task notification
+  fired the build triage. Harness events are now ignored.
+- **Second Bob pass** (resumed with context) confirmed all ten fixed, and found the same "measured
+  zero" bug through the fallback: 300 lines committed on `master` with no `start` measured 0, because
+  the merge-base with `master` is HEAD itself. That base is now skipped, and `start` before the first
+  commit records the empty tree. Also: a prompt ending in `\` leaked `cwd` into the router; folder
+  tokens without a trailing slash and `./` prefixes missed; a bare `` `*` `` matched every path.
+
+### Changed
+- **`plan-router.sh`** triages build intent in one line (trivial / gru-lite / Gru). Planning intent
+  still goes to Gru and wins when both match. Questions and explanations stay silent. Reads only the
+  `prompt` field, so a word in `cwd` or `transcript_path` cannot fire it. Measured on 300 real past
+  prompts: fires on 22 (7%), about 17 of them real change requests.
+- **Gru's Phase 0** recommends `/gru-lite` and stops for small, single-subsystem work.
+- `planning.md` triage, the session-workflow toolkit table, and the global CLAUDE.md toolkit row
+  name gru-lite.
+
 ## [1.10.1] — 2026-09-13 (Detector fixes from the first real session-close)
 ### Fixed
 - **Missed-close detector reported every commit in history on non-GNU systems.** `stat -c %Y`
