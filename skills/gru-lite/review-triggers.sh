@@ -72,6 +72,9 @@ outcome)
   result="${1:-}"; note="${2:-}"
   case "$result" in found|clean|skipped) ;; *) usage ;; esac
   log_line "| $(now) | $(repo_name) | outcome: $result | ${note//|//} |"
+  # The outcome ends the task, so its recorded base ends too. Otherwise a later task that skips
+  # `start` is silently measured from this one's base — weeks of merged work (/code-review).
+  git rev-parse --git-dir >/dev/null 2>&1 && rm -f "$(git rev-parse --git-path gru-lite-base)"
   echo "logged: outcome $result"
   exit 0
   ;;
@@ -171,10 +174,11 @@ inv_match() {   # inv_match PATH — 0 if INVARIANTS.md names this path
     [ -z "$tok" ] && continue
     [ "$p" = "$tok" ] || [ "$b" = "$tok" ] && return 0
     case "$tok" in
-      */) [ "${p#"$tok"}" != "$p" ] && return 0 ;;
-      */*[!*?]) [ "${p#"$tok/"}" != "$p" ] && return 0 ;;   # a folder written without its slash
-      *'*'*) # shellcheck disable=SC2053
+      # Globs first: `rules/*.md` also fits the folder-without-slash shape below (/code-review).
+      *'*'*|*'?'*) # shellcheck disable=SC2053
              [[ "$p" == $tok ]] && return 0 ;;
+      */) [ "${p#"$tok"}" != "$p" ] && return 0 ;;
+      */*) [ "${p#"$tok/"}" != "$p" ] && return 0 ;;   # a folder written without its slash
     esac
   done <<< "$INV_TOKENS"
   return 1

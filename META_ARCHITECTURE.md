@@ -36,6 +36,7 @@ to a deleted file survived there unnoticed.
 |---|---|---|---|
 | **Installer** | `install.sh` / `install.ps1` | `bash install.sh [--dry-run]` | ✅ Working — copies skills, hooks, agents, global-rules into `~/.claude/` |
 | **Kit audit** | `scripts/verify-kit.sh` | `bash scripts/verify-kit.sh` | ✅ 43 checks — repo state, hook wiring, permissions, rules, per-project gates, secrets guards, invariants, backup, control-byte scan |
+| **gru-lite tests** | `scripts/test-gru-lite.sh` | `bash scripts/test-gru-lite.sh` | ✅ 63 behavioural cases — `skills/gru-lite/review-triggers.sh` (size/risky/invariant/judgment/rough triggers) and `hooks/plan-router.sh` (planning vs. build-intent routing) |
 | **INV-01** | `scripts/verify-install.sh` | `bash scripts/verify-install.sh` | ✅ Dry run writes nothing; `VERIFY_INSTALL_IDEMPOTENCE=1` adds a real-install comparison |
 | **INV-02** | `scripts/verify-hooks.sh` | `bash scripts/verify-hooks.sh` | ✅ Four directions: referenced→exists, exists→referenced, `.sh`/`.ps1` parity, template→deployed |
 | **INV-04** | `scripts/verify-sources.sh` | `bash scripts/verify-sources.sh` | ✅ Per-line citation proximity, 4-line window |

@@ -1,37 +1,52 @@
-# HANDOFF — 2026-09-13 (fort-mchenry)
+# HANDOFF — 2026-09-14 (gru-lite)
 
-## What this session did, plainly
-1. **Usage counter fixed.** It now reads transcripts as JSON and counts each agent/skill call once.
-   Real numbers: 39 sessions; `feynman-explainer` had run 0 times. An earlier "4x over-count" claim
-   came from one session and was retracted (corpus ratio 0.99x).
-2. **DECISIONS.md added** (D-001..D-016): why the kit is the way it is, and what would reverse it.
-3. **Two builds removed the same day.** A verification-routing guard (D-014 — built on one session's
-   data) and `/beast-mode` (D-015 — duplicated Gru's plan and broke its parallelism).
-   `/session-close` is now a one-word trigger over `session-workflow` §9 plus a report.
-4. **verify-kit check 1c** fails on invisible control bytes — a Python `\1` escape twice wrote byte
-   0x01 into files and silently broke a hook.
-5. **Missed-close detector** in `hooks/session-context.sh`: at session start it computes whether the
-   last session ended without a handoff (commits after HANDOFF.md, or files left uncommitted) and
-   prints a warning only when true. Silent when clean, so it never becomes wallpaper.
+## Completed
+- **gru-lite built, merged (PR #22), and installed.** Plain version: Gru writes good plans but is
+  too expensive for small tasks, and work done without Gru came out noticeably worse. gru-lite keeps
+  the cheap habits that probably carry Gru's quality — check the one assumption that could sink the
+  task, write "done when" as a runnable command, write tests first — and drops the expensive parts
+  (a cold agent re-reading everything, a kit-wide checklist, a plan file). It runs in the main
+  conversation. Decision record: D-017.
+- **Bob only when the change is risky, and risk is computed.** `skills/gru-lite/review-triggers.sh`
+  looks at the git diff: big (over 100 lines or 3 files), in a risky place (hooks, auth, settings…),
+  inside an invariant's scope, confirmable only by judgment, a rough build, or unmeasurable → Bob.
+  Otherwise no Bob. Every decision and outcome is logged to `~/.claude/gru-lite-log.md`.
+- **It fires without being remembered.** `plan-router.sh` now adds a one-line triage when a message
+  asks for a change (trivial / gru-lite / Gru). On 300 real past prompts it fires on 22 (7%), about
+  17 of them real requests. Questions, discussion, and harness notifications stay silent.
+- **Gru's Phase 0** now points small single-subsystem work to gru-lite instead of planning it.
+- **How we know it works:** 63 behavioural tests in throwaway repos; every trigger, router branch,
+  and fix mutation-tested (undo it → a test goes red). Installed copies tested too. HOOK PARITY OK,
+  CITATIONS OK, INSTALL OK, gitleaks clean.
+- **Reviews earned their cost on the build itself:** the build's own triggers sent Bob — two passes,
+  14 gaps. The worst were three separate ways the script said "no review" when it had actually
+  failed to measure. Session-close `/code-review` then found 2 more (globs with extensions never
+  matched; a recorded base never expired). All fixed, test-first or mutation-confirmed.
 
-## How we know it works
-9 test cases (clean close silent; commit after handoff fires; PR merge and squash merge silent;
-user file left uncommitted fires; kit-only artifacts silent; non-repo silent; broken `stat` silent).
-Hook deployed byte-identical to `~/.claude/hooks`. Invariants, citations, install parity, gitleaks pass.
+## Blockers / didn't work
+- **Public-repo slip (needs Daniel):** `git add -A` swept another session's untracked research files
+  (`docs/research/2026-09-14-personal-*`, `2026-09-15-grok-bots-*`) and its `.gitignore` edit into
+  the first push of PR #22. Removed from the branch within a minute; `master` never had them. GitHub
+  keeps orphan commit `90c7ff5` reachable from the PR — a full purge is a GitHub Support request only
+  Daniel can file. Those files are still uncommitted on disk, untouched, for that session to handle.
+- **Feynman gaps, stated honestly:**
+  1. gru-lite's full workflow (`start` → build → `check` → `outcome`) has never run on a real task. This
+     build used `--base master` directly. The first real task is the calibration.
+  2. Gru's new Phase 0 redirect has not been exercised.
+  3. The Bash tool here starts in the OneDrive copy, not a repo; the skill now says to `cd` into the
+     project in the same call. Resolved in docs; not yet seen in live use.
+- Bob did not see the last round of small fixes (N1–N4, CR1–CR2) — stopped at two passes per the loop
+  cap. They are tested and mutation-confirmed.
 
-## Gaps the Feynman gate found (all closed)
-- Kit hooks write `precompact-state.md` / `orchestration-log.txt` into un-ignored `.claude/` in 6 of 8
-  repos → detector would fire every session. Filtered in the hook (D-016).
-- META_ARCHITECTURE claimed the `.ps1` twin had the detector; it doesn't. Row split.
-- Squash merge was assumed safe, never tested. Now tested: silent.
+## Next action (priority 1)
+- Use gru-lite on the next small/medium task in any project. Afterwards, judge the output against a Gru
+  plan's, and note whether the router triage showed up and whether `review-triggers.sh` decided sensibly.
+- After 10–15 logged tasks, read `~/.claude/gru-lite-log.md`: cut triggers that never find anything,
+  add one for anything that slipped through.
+- Carried forward: click "Run now" on `monthly-kit-sweep` before Oct 1; kit artifacts pollute
+  `git status` in 6 repos; `session-context.ps1` drift; Civ verification plan unexecuted.
 
-## Next session
-- **Discuss "mini-Gru"** (Daniel's idea): elite execution for tasks too small for a Gru plan. First
-  pin down what "technically elite" concretely means; check plan mode, superpowers writing-plans,
-  TDD, verification-before-completion, bob-verifier before building anything (D-012/D-015 lesson).
-- Click "Run now" on the `monthly-kit-sweep` scheduled task before Oct 1 to pre-approve its tools.
-
-## Carried forward
-- Kit artifacts still pollute `git status` in 6 repos (detector filters them; repos not fixed).
-- `session-context.ps1` drift (unwired, ~half length) — GC item.
-- Widen `plan-router.sh` regex (offered, not done). Civ automation plan unexecuted. Tier 3 unactioned.
+## Test state
+- `bash scripts/test-gru-lite.sh` → 63 passed, 0 failed (repo and installed copies).
+- `verify-hooks.sh` HOOK PARITY OK · `verify-sources.sh` CITATIONS OK · `verify-install.sh` INSTALL OK.
+- `verify-kit.sh` (full, 43 checks) not re-run this session — it runs every project's stop gate and is slow.

@@ -156,6 +156,18 @@ out=$(decide); echo "$out" | grep -q "invariant file:.*install.sh" && ok "N3 ./i
 git add -A && git commit -qm b && BASE=$(git rev-parse HEAD); echo x > notes.txt
 out=$(decide); echo "$out" | grep -q "invariant file" && no "N4 bare *" "matched everything: $out" || ok "N4 a bare \`*\` token does not match every path"
 
+# ── /code-review at session close. ──
+d=$(new_repo globext); cd "$d"
+printf 'INV: every `templates/.claude/rules/*.md` cites sources\n' > INVARIANTS.md && git add -A && git commit -qm inv
+BASE=$(git rev-parse HEAD); mkdir -p templates/.claude/rules && echo x > templates/.claude/rules/planning.md
+out=$(decide); echo "$out" | grep -q "invariant file:.*planning.md" && ok "CR1 glob with a slash and an extension (rules/*.md) matches" || no "CR1 glob ext" "$out"
+
+d=$(new_repo stalebase); cd "$d"; git branch -m master trunk; git checkout -qb feat
+bash "$TRIG" start >/dev/null; echo x > a.py && git add -A && git commit -qm t1
+bash "$TRIG" check >/dev/null; bash "$TRIG" outcome skipped >/dev/null
+[ ! -f "$(git rev-parse --git-path gru-lite-base)" ] && ok "CR2 'outcome' ends the task and clears the recorded base" || no "CR2 base not cleared" "still recorded"
+out=$(bash "$TRIG" check 2>&1); echo "$out" | grep -q "unknown" && ok "CR2 next task without 'start' is not measured from the old base" || no "CR2 stale base reused" "$out"
+
 echo "── plan-router.sh ──"
 route() { printf '{"prompt":"%s"}' "$1" | bash "$ROUTER"; }
 

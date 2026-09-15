@@ -3,6 +3,26 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.11.1] — 2026-09-14 (gru-lite fixes from the session close)
+### Fixed
+- **Invariant globs with a slash and an extension never matched.** `templates/.claude/rules/*.md`
+  fit the folder-without-slash case first and never reached the glob match, so an edit inside that
+  invariant's scope said no review. Globs are now checked first. Found by `/code-review`; the
+  earlier tests only covered globs ending in `*`.
+- **A recorded base never expired.** A later task that skipped `start` was measured from an old
+  task's base, which counts weeks of merged work and forces review every time. `outcome` now ends
+  the task and clears its base. Found by `/code-review`.
+- `gru-lite` SKILL.md: run its commands from inside the project. The Bash tool resets its directory,
+  and this session's shell started outside any git repo, where `start` records nothing. Found by the
+  Feynman gate.
+
+### Notes
+- 63 cases. Both fixes mutation-tested: undoing either turns its cases red.
+- A process lesson, not a code change: while committing 1.11.0, `git add -A` swept another
+  session's untracked research files into a push to this public repo. They were removed from the
+  branch within a minute, but GitHub keeps the orphan commit reachable from the PR. With concurrent
+  sessions, stage explicit paths.
+
 ## [1.11.0] — 2026-09-13 (gru-lite)
 ### Added
 - **`/gru-lite`** — Gru-quality execution for small and medium tasks with no plan file. Premise
