@@ -46,6 +46,7 @@ skills/
   feynman-explainer/SKILL.md       ← Comprehension gate (completes the thinking trio)
   failure-modes/SKILL.md           ← Known failure modes + escapes; MAST corroboration
   session-close/SKILL.md           ← One-word trigger over session-workflow §9 close-out; reports, never blocks
+  gru-lite/                        ← Small/medium tasks at Gru quality, no plan file; Bob only when computed risk says so
 
 global-rules/                      ← Always-loaded layer → ~/.claude/rules/ (every project, every turn)
   kit-maintenance.md               ← Line budgets, quarterly prune, skill-overlap audit, agent-creation gate
@@ -62,7 +63,7 @@ hooks/
   guard-readonly-bash.sh           ← PreToolUse(Bash): blocks mutating commands on read-only reviewer agents
   post-edit-format.sh              ← PostToolUse: auto-format edited file (no-op-safe)
   stop-verify.sh                   ← Stop hook template (opt-in): block until project check passes
-  plan-router.sh                   ← UserPromptSubmit: routes planning intent to Gru
+  plan-router.sh                   ← UserPromptSubmit: planning intent → Gru; build intent → trivial / gru-lite / Gru triage
   guard-fanout.sh                  ← PreToolUse(Agent), OPT-IN: asks past 4 dispatches/session
   guard-verdict.sh                 ← SubagentStop: blocks a checker finishing without its verdict
   subagent-audit.sh                ← SubagentStop: diagnostic orchestration audit trail

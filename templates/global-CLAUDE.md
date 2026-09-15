@@ -28,6 +28,7 @@
 | Stress-testing a plan | `/socratic-examiner` |
 | Something feels off | `/assumption-archaeologist` |
 | Building an MCP server | `/mcp-builder` |
+| Small/medium build — bigger than one edit, one subsystem | `/gru-lite` (plan-router triages) |
 | Significant code written | `/code-review` |
 | Before marking any non-trivial change done | dispatch `bob-verifier` (fresh-eyes checker) |
 | Grading a batch of model/agent/ML outputs | dispatch `carl-evals` (binary pass/fail) |

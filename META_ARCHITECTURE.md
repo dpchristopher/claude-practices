@@ -63,7 +63,7 @@ INV-02 enforces that those two agree.
 | `guard-fanout.sh` | PreToolUse `Agent` | Asks past a rolling-window dispatch threshold |
 | `guard-agent-ownership.sh` | PreToolUse `Agent` | Blocks direct `gsd-*` dispatch outside a GSD project |
 | `post-edit-format.sh` | PostToolUse `Write\|Edit` | Auto-formats when a formatter exists |
-| `plan-router.sh` | UserPromptSubmit | Nudges planning intent |
+| `plan-router.sh` | UserPromptSubmit | Planning intent → Gru; build intent → one-line triage (trivial / gru-lite / Gru). Questions stay silent |
 | `subagent-audit.sh` | SubagentStop | Records which agent ran |
 | `guard-verdict.sh` | SubagentStop | Blocks a checker agent that emits no verdict |
 | `log-instructions-loaded.sh` | InstructionsLoaded | Records which context files loaded |
@@ -92,6 +92,7 @@ globally would break normal work.
 | `/init` | Scaffolding a new project from this kit |
 | `/labarr-ml` | Any ML, forecasting, analytics, or modelling work |
 | `/code-review` | Significant code written |
+| `/gru-lite` | Small/medium build: premise check, runnable done-when, tests first, Bob only when `review-triggers.sh` fires. Logs to `~/.claude/gru-lite-log.md` for calibration |
 | `/session-close` | Wrapping up — syncs docs, records decisions, reviews, writes HANDOFF. Reports, never blocks |
 
 Ownership boundaries between the overlapping ones: `docs/skill-overlap-audit.md`.
