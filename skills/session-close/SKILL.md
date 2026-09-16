@@ -40,24 +40,24 @@ hidden, never holding you there. A hard gate, if wanted, belongs in `stop-verify
 
 ## The report
 
-Stale and failing items first.
+**Short prose. No ASCII box, no step numbers, no skill or agent names** — Daniel asked for this
+format on 2026-09-14; the numbered box read as internal bookkeeping rather than a status report.
 
 ```
-SESSION CLOSE — <date>
+Session close — <date>
 
-⚠ NEEDS ATTENTION
-  - <anything failing, stale, skipped, or an agent claim that did not verify>
-  (or: nothing)
+Needs you:
+- <anything failing, stale, skipped, or an agent claim that did not verify — one line each,
+  each saying what Daniel has to do>
+(or: Nothing.)
 
-✓ DONE — by §9 step
-  1  META_ARCHITECTURE: <files, verified against git diff | no change needed>
-  2  toolkit table:     <updated | no skill changes>
-  3  code review:       <result | skipped — no significant code>
-  4  invariants:        <re-verified, pasted output | none touched>
-  5  decisions:         <D-### | none made>
-  6  feynman gate:      <comprehension gaps named | none>
-  7  handoff:           written
-  8  commit:            <sha> on <branch>
+Done: <one flowing sentence or two covering all eight §9 steps — docs, review, checks, decisions,
+comprehension, handoff, and the commit sha and branch. Name a step only when it produced
+something; a step that found nothing is "checks pass", not a list of clean rows.>
 ```
 
-A step that could not run goes under NEEDS ATTENTION with the reason — never silently omitted.
+Rules that survive the format change:
+- **Stale and failing first**, above everything else.
+- **A step that could not run is named under "Needs you" with the reason** — never silently dropped.
+- **Numbers and shas stay** (test counts, the merge sha): they are the evidence, not decoration.
+- Keep it under roughly ten lines. Detail belongs in `HANDOFF.md`, which is already written by then.

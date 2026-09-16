@@ -3,6 +3,12 @@
 All notable changes to claude-practices. Versions follow semver-ish intent:
 minor = new capability, patch = fix/cleanup.
 
+## [1.11.2] — 2026-09-15
+### Changed
+- **`/session-close` reports in short prose.** The numbered ASCII box read as internal bookkeeping;
+  Daniel asked for plain language. Stale-first, name-any-step-that-could-not-run, and keeping the
+  numbers and shas all survive the change.
+
 ## [1.11.1] — 2026-09-14 (gru-lite fixes from the session close)
 ### Fixed
 - **Invariant globs with a slash and an extension never matched.** `templates/.claude/rules/*.md`
