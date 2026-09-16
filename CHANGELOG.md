@@ -5,7 +5,7 @@ minor = new capability, patch = fix/cleanup.
 
 ## [1.11.2] — 2026-09-15
 ### Changed
-- **`/session-close` reports in short prose.** The numbered ASCII box read as internal bookkeeping;
+- **`/session-close` reports in short prose, under markdown headings.** The numbered ASCII box read as internal bookkeeping;
   Daniel asked for plain language. Stale-first, name-any-step-that-could-not-run, and keeping the
   numbers and shas all survive the change.
 

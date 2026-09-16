@@ -43,15 +43,19 @@ hidden, never holding you there. A hard gate, if wanted, belongs in `stop-verify
 **Short prose. No ASCII box, no step numbers, no skill or agent names** — Daniel asked for this
 format on 2026-09-14; the numbered box read as internal bookkeeping rather than a status report.
 
-```
-Session close — <date>
+Use real markdown headings, so the sections render large and are scannable at a glance
+(asked for 2026-09-15). `##` for the title, `###` for the two sections.
 
-Needs you:
+```
+## Session close — <date>
+
+### Needs you
 - <anything failing, stale, skipped, or an agent claim that did not verify — one line each,
   each saying what Daniel has to do>
 (or: Nothing.)
 
-Done: <one flowing sentence or two covering all eight §9 steps — docs, review, checks, decisions,
+### Done
+<one flowing sentence or two covering all eight §9 steps — docs, review, checks, decisions,
 comprehension, handoff, and the commit sha and branch. Name a step only when it produced
 something; a step that found nothing is "checks pass", not a list of clean rows.>
 ```
